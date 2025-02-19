@@ -1,6 +1,6 @@
 package model;
 
-public class PC extends MayTinh{
+public class PC extends Computer {
     private String mainBoard;
     private int congSuatNguon;
 
@@ -10,7 +10,6 @@ public class PC extends MayTinh{
         this.mainBoard = mainBoard;
     }
     public PC(){
-
     }
 
     public int getCongSuatNguon() {

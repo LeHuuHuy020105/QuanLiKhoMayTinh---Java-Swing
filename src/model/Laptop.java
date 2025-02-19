@@ -1,6 +1,6 @@
 package model;
 
-public class Laptop extends MayTinh{
+public class Laptop extends Computer {
     private double kichThuocMan;
     private String dungLuongPin;
 
