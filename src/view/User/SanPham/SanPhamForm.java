@@ -1,5 +1,9 @@
 package view.User.SanPham;
 
+import DAO.ProductsDAO;
+import model.Computer;
+import model.Laptop;
+
 import javax.swing.JPanel;
 import javax.swing.Box;
 import javax.swing.border.TitledBorder;
@@ -19,6 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class SanPhamForm extends JPanel {
 
@@ -204,7 +209,30 @@ public class SanPhamForm extends JPanel {
         		"Mã máy", "Tên máy", "Số lượng", "Đơn giá", "Bộ xử lí", "RAM", "Bộ nhớ", "Loại máy"
         	}
         ));
+        updateTableDataProduct();
         scrollPane.setViewportView(table);
-
+    }
+    public void updateTableDataProduct(){
+        DefaultTableModel model = (DefaultTableModel) table .getModel();
+        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        for(Computer computer : computers){
+            String loaiMay = "";
+            if(computer instanceof Laptop){
+                loaiMay= "Laptop";
+            }else {
+                loaiMay= "PC";
+            }
+            model.addRow(
+                    new Object[]{
+                        computer.getMaMay(),
+                        computer.getTenMay(),
+                        computer.getSoLuong(),
+                        computer.getGia(),
+                        computer.getCardManHinh(),
+                        computer.getRam(),
+                        computer.getDungLuongLuuTru(),
+                        loaiMay
+            });
+        }
     }
 }

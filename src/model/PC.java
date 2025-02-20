@@ -4,13 +4,12 @@ public class PC extends Computer {
     private String mainBoard;
     private int congSuatNguon;
 
-    public PC(String cardManHinh, double gia, String maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, int trangThai, String xuatXu, int congSuatNguon, String mainBoard) {
-        super(cardManHinh, gia, maMay, ram, rom, soLuong, tenCpu, tenMay, trangThai, xuatXu);
+    public PC(String cardManHinh, double gia, String maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, int congSuatNguon, String mainBoard, String maNhaCungCap , double dungLuongLuuTru) {
+        super(cardManHinh, gia, maMay, ram, rom, soLuong, tenCpu, tenMay, xuatXu,maNhaCungCap,dungLuongLuuTru);
         this.congSuatNguon = congSuatNguon;
         this.mainBoard = mainBoard;
     }
-    public PC(){
-    }
+
 
     public int getCongSuatNguon() {
         return congSuatNguon;
