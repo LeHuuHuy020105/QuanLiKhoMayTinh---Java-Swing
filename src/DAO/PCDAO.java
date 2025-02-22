@@ -18,7 +18,7 @@ public class PCDAO implements DAOInterface<PC> {
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Insert into product(mamay,tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "Insert into product(mamay,tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, pc.getMaMay());
             pst.setString(2, pc.getTenMay());
@@ -28,15 +28,15 @@ public class PCDAO implements DAOInterface<PC> {
             pst.setString(6, pc.getRam());
             pst.setString(7, pc.getXuatXu());
             pst.setString(8, pc.getCardManHinh());
-            pst.setString(13, pc.getRom());
             pst.setString(9, pc.getMainBoard());
             pst.setInt(10, pc.getCongSuatNguon());
             pst.setString(11, null);
             pst.setString(12, null);
+            pst.setString(13, pc.getRom());
             pst.setString(14, "PC");
             pst.setString(15, pc.getMaNhaCungCap());
             pst.setDouble(16, pc.getDungLuongLuuTru());
-            ketQua = pst.executeUpdate(sql);
+            ketQua = pst.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +46,32 @@ public class PCDAO implements DAOInterface<PC> {
 
     @Override
     public int update(PC pc) {
-        return 0;
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Update product set " +
+                    "tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , " +
+                    "mainboard =? ,congsuatnguon =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,pc.getTenMay());
+            pst.setInt(2,pc.getSoLuong());
+            pst.setDouble(3,pc.getGia());
+            pst.setString(4,pc.getTenCpu());
+            pst.setString(5,pc.getRam());
+            pst.setString(6,pc.getXuatXu());
+            pst.setString(7,pc.getMainBoard());
+            pst.setInt(8,pc.getCongSuatNguon());
+            pst.setString(9,pc.getRom());
+            pst.setString(10,"PC");
+            pst.setString(11,pc.getMaNhaCungCap());
+            pst.setDouble(12,pc.getDungLuongLuuTru());
+            pst.setString(13,pc.getMaMay());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override

@@ -6,28 +6,28 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import DAO.CountryDAO;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProducersDAO;
+import model.Country;
 import model.Laptop;
 import model.PC;
 import model.Producer;
 
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Window;
+import java.awt.event.*;
 import java.util.ArrayList;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class ThemSanPham extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private SanPhamForm sanPhamForm;
 	private JLabel label_IDproduct;
 	private JPanel contentPane;
 	private JTextField input_tenSanPham;
 	private JTextField input_gia;
-	private JTextField input_xuatXu;
 	private JTextField input_CPU;
 	private JTextField input_RAM;
 	private JTextField input_dungLuongLuuTru;
@@ -38,29 +38,18 @@ public class ThemSanPham extends JFrame {
 	private JTextField input_congSuatNguon;
 	private JComboBox comboBox_loaiSanPham;
 	private JTextField input_ROM;
-	private JSpinner spinner_soLuong;
 	private JComboBox comboBox_nhaCungCap;
+	private JComboBox cbx_xuatXu;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ThemSanPham frame = new ThemSanPham();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public ThemSanPham() {
+	public ThemSanPham(SanPhamForm sanPhamForm) {
+		this.sanPhamForm = sanPhamForm;;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 578);
 		setLocationRelativeTo(null);
@@ -111,11 +100,6 @@ public class ThemSanPham extends JFrame {
 		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_1_1.setBounds(10, 246, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1);
-		
-		input_xuatXu = new JTextField();
-		input_xuatXu.setColumns(10);
-		input_xuatXu.setBounds(10, 282, 202, 28);
-		contentPane.add(input_xuatXu);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("CPU");
 		lblNewLabel_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -253,15 +237,6 @@ public class ThemSanPham extends JFrame {
 		input_ROM.setBounds(888, 135, 202, 28);
 		contentPane.add(input_ROM);
 		
-		JLabel lblNewLabel_1_2_2_1_3_1 = new JLabel("Số lượng");
-		lblNewLabel_1_2_2_1_3_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_2_2_1_3_1.setBounds(879, 280, 73, 28);
-		contentPane.add(lblNewLabel_1_2_2_1_3_1);
-		
-		spinner_soLuong = new JSpinner();
-		spinner_soLuong.setBounds(973, 284, 127, 24);
-		contentPane.add(spinner_soLuong);
-		
 		JLabel lblNewLabel_1_2_2_2 = new JLabel("Loại sản phẩm");
 		lblNewLabel_1_2_2_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_2_2_2.setBounds(888, 174, 116, 28);
@@ -274,6 +249,30 @@ public class ThemSanPham extends JFrame {
 		}
 		comboBox_nhaCungCap.setBounds(888, 210, 202, 28);
 		contentPane.add(comboBox_nhaCungCap);
+		
+		ArrayList<Country>list_country = CountryDAO.getInstance().selectAll();
+		cbx_xuatXu = new JComboBox();
+		for(Country country : list_country) {
+			cbx_xuatXu.addItem(country.getTenQuocGia());
+		}
+		cbx_xuatXu.setBounds(10, 285, 202, 25);
+		contentPane.add(cbx_xuatXu);
+		JTextField textField = (JTextField) cbx_xuatXu.getEditor().getEditorComponent();
+		textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String input = textField.getText().toLowerCase();
+                cbx_xuatXu.removeAllItems();
+
+                for (Country country : list_country) {
+                    if (country.getTenQuocGia().toLowerCase().contains(input)) {
+						cbx_xuatXu.addItem(country.getTenQuocGia());
+                    }
+                }
+                textField.setText(input);
+				cbx_xuatXu.showPopup(); // Hiển thị danh sách gợi ý
+            }
+        });
 		cbxLoaiSanPhamMouseClicked();
 	}
 	public void resetCBXLoaiSanPham() {
@@ -309,12 +308,13 @@ public class ThemSanPham extends JFrame {
 		String CPU = input_CPU.getText().trim();
 		String RAM = input_RAM.getText().trim();
 		String ROM = input_ROM.getText().trim();
-		String cardManHinh = input_xuatXu.getText().trim();
-		String xuatXu = input_dungLuongLuuTru.getText().trim();
+		String cardManHinh = input_cardDoHoa.getText().trim();
+		String xuatXu = (String) cbx_xuatXu.getSelectedItem();
+		double dungLuongLuuTru = Double.parseDouble(input_dungLuongLuuTru.getText().trim());
 		String maNhaCungCap = (String) comboBox_nhaCungCap.getSelectedItem();
-		int soLuong = (int) spinner_soLuong.getValue();
 
-		double gia = 0, kichThuocMan = 0, dungLuongLuuTru = 0;
+		double gia = 0, kichThuocMan = 0;
+		dungLuongLuuTru = 0;
 		int congSuatNguon = 0;
 
 		// Kiểm tra tên sản phẩm
@@ -334,7 +334,6 @@ public class ThemSanPham extends JFrame {
 
 		// Kiểm tra dung lượng lưu trữ (double)
 		try {
-			dungLuongLuuTru = Double.parseDouble(input_dungLuongLuuTru.getText().trim());
 			if (dungLuongLuuTru <= 0) throw new NumberFormatException();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập dung lượng lưu trữ hợp lệ (số dương)!");
@@ -363,7 +362,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm Laptop
-			Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, RAM, ROM, soLuong, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+			Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
 			try {
 				LaptopDAO.getInstance().insert(newLaptop);
 				this.dispose();
@@ -394,7 +393,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm PC
-			PC newPC = new PC(cardManHinh, gia, maMay, RAM, ROM, soLuong, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+			PC newPC = new PC(cardManHinh, gia, maMay, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
 			try {
 				PCDAO.getInstance().insert(newPC);
 				this.dispose();
@@ -403,6 +402,7 @@ public class ThemSanPham extends JFrame {
 				e.printStackTrace();
 			}
 		}
+		this.sanPhamForm.updateTableDataProductFormDAO();
 	}
 
 	public void closeWindow() {

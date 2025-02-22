@@ -11,9 +11,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class ProductsDAO implements DAOInterface<Computer> {
-    public static ProductsDAO getInstance(){
+    public static ProductsDAO getInstance() {
         return new ProductsDAO();
     }
+
     @Override
     public int insert(Computer computer) {
         return 0;
@@ -26,7 +27,17 @@ public class ProductsDAO implements DAOInterface<Computer> {
 
     @Override
     public int delete(Computer computer) {
-        return 0;
+        int ketQua =0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Delete from product where mamay =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,computer.getMaMay());
+            ketQua = pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -53,12 +64,12 @@ public class ProductsDAO implements DAOInterface<Computer> {
                 if (loaiMay.equals("Laptop")) {
                     double kichThuocMan = rs.getDouble("kichthuocman");
                     String dungLuongPin = rs.getString("dungluongpin");
-                    Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan,maNhaCungCap,dungLuongLuuTru);
+                    Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
                     ketQua.add(newLaptop);
                 } else {
                     String mainBoard = rs.getString("mainboard");
                     int congSuatNguon = rs.getInt("congsuatnguon");
-                    PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard,maNhaCungCap,dungLuongLuuTru);
+                    PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
                     ketQua.add(newPC);
                 }
             }
@@ -67,5 +78,45 @@ public class ProductsDAO implements DAOInterface<Computer> {
             e.printStackTrace();
         }
         return ketQua;
+    }
+
+    public Computer searchByIDProduct(String idproduct) {
+        Computer computer = null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Select * from product where mamay=?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, idproduct);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                String maMay = rs.getString("mamay");
+                String tenMay = rs.getString("tenmay");
+                int soLuong = rs.getInt("soluong");
+                double gia = rs.getDouble("gia");
+                String tenCPU = rs.getString("tenCPU");
+                String RAM = rs.getString("ram");
+                String xuatXu = rs.getString("xuatxu");
+                String cardManHinh = rs.getString("cardmanhinh");
+                String ROM = rs.getString("rom");
+                String loaiMay = rs.getString("loaimay");
+                String maNhaCungCap = rs.getString("manhacungcap");
+                double dungLuongLuuTru = rs.getDouble("dungluongluutru");
+                if (loaiMay.equals("Laptop")) {
+                    double kichThuocMan = rs.getDouble("kichthuocman");
+                    String dungLuongPin = rs.getString("dungluongpin");
+                    computer = new Laptop(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+
+                } else {
+                    String mainBoard = rs.getString("mainboard");
+                    int congSuatNguon = rs.getInt("congsuatnguon");
+                    computer = new PC(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+                }
+            }
+            System.out.println(sql);
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return computer;
     }
 }

@@ -10,9 +10,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class LaptopDAO implements DAOInterface<Laptop> {
-    public static LaptopDAO getInstance(){
+    public static LaptopDAO getInstance() {
         return new LaptopDAO();
     }
+
     @Override
     public int insert(Laptop laptop) {
         int ketQua = 0;
@@ -47,7 +48,32 @@ public class LaptopDAO implements DAOInterface<Laptop> {
 
     @Override
     public int update(Laptop laptop) {
-        return 0;
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Update product set " +
+                    "tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , " +
+                    "kichthuocman =? ,dungluongpin =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,laptop.getTenMay());
+            pst.setInt(2,laptop.getSoLuong());
+            pst.setDouble(3,laptop.getGia());
+            pst.setString(4,laptop.getTenCpu());
+            pst.setString(5,laptop.getRam());
+            pst.setString(6,laptop.getXuatXu());
+            pst.setDouble(7,laptop.getKichThuocMan());
+            pst.setString(8,laptop.getDungLuongPin());
+            pst.setString(9,laptop.getRom());
+            pst.setString(10,"Laptop");
+            pst.setString(11,laptop.getMaNhaCungCap());
+            pst.setDouble(12,laptop.getDungLuongLuuTru());
+            pst.setString(13,laptop.getMaMay());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -78,7 +104,7 @@ public class LaptopDAO implements DAOInterface<Laptop> {
                 String dungLuongPin = rs.getString("dungluongpin");
                 String maNhaCungCap = rs.getString("manhacungcap");
                 double dungLuongLuuTru = rs.getDouble("dungluongluutru");
-                Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan,maNhaCungCap,dungLuongLuuTru);
+                Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
                 ketQua.add(newLaptop);
             }
             JDBCUtil.closeConnection(connection);

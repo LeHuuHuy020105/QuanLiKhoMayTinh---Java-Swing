@@ -5,6 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import DAO.Address.ProvinceDAO;
+import DAO.CountryDAO;
+import controller.ValueAddress;
+import model.Address.Province;
+import model.Country;
+import model.Producer;
+import view.User.SanPham.ThemSanPham;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -12,15 +21,25 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.JComboBox;
 
 public class ThemNhaCungCap extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private JComboBox cbx_Phuong;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField input_TenNCC;
+	private JTextField input_SDT;
+	private JComboBox cbx_ThanhPho;
+	private JTextField input_SoNha;
+	private JComboBox cbx_Quan;
 
 	/**
 	 * Launch the application.
@@ -43,7 +62,8 @@ public class ThemNhaCungCap extends JFrame {
 	 */
 	public ThemNhaCungCap() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 388, 494);
+		setLocationRelativeTo(null);
+		setBounds(100, 100, 388, 720);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -67,39 +87,40 @@ public class ThemNhaCungCap extends JFrame {
 		lblNewLabel_1.setBounds(10, 112, 169, 28);
 		contentPane.add(lblNewLabel_1);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 140, 328, 28);
-		contentPane.add(textField);
+		input_TenNCC = new JTextField();
+		input_TenNCC.setColumns(10);
+		input_TenNCC.setBounds(10, 140, 328, 28);
+		contentPane.add(input_TenNCC);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Số điện thoại");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1.setBounds(10, 197, 116, 28);
 		contentPane.add(lblNewLabel_1_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(10, 224, 328, 28);
-		contentPane.add(textField_1);
+		input_SDT = new JTextField();
+		input_SDT.setColumns(10);
+		input_SDT.setBounds(10, 224, 328, 28);
+		contentPane.add(input_SDT);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Địa chỉ");
+		JLabel lblNewLabel_1_1_1 = new JLabel("Thành phố");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_1.setBounds(10, 273, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(10, 302, 328, 28);
-		contentPane.add(textField_2);
-		
-		JButton btnNewButton_2_1 = new JButton("Thêm sản phẩm");
-		btnNewButton_2_1.setIcon(null);
-		btnNewButton_2_1.setForeground(Color.WHITE);
-		btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_2_1.setBorderPainted(false);
-		btnNewButton_2_1.setBackground(new Color(60, 179, 113));
-		btnNewButton_2_1.setBounds(10, 384, 131, 41);
-		contentPane.add(btnNewButton_2_1);
+		JButton btn_ThemSanPham = new JButton("Thêm sản phẩm");
+		btn_ThemSanPham.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ThemSanPhamMouseClicked();
+			}
+		});
+		btn_ThemSanPham.setIcon(null);
+		btn_ThemSanPham.setForeground(Color.WHITE);
+		btn_ThemSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btn_ThemSanPham.setBorderPainted(false);
+		btn_ThemSanPham.setBackground(new Color(60, 179, 113));
+		btn_ThemSanPham.setBounds(10, 611, 131, 41);
+		contentPane.add(btn_ThemSanPham);
 		
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
@@ -111,8 +132,70 @@ public class ThemNhaCungCap extends JFrame {
 		btnNewButton_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2_1_1.setBorderPainted(false);
 		btnNewButton_2_1_1.setBackground(Color.RED);
-		btnNewButton_2_1_1.setBounds(199, 384, 139, 41);
+		btnNewButton_2_1_1.setBounds(199, 611, 139, 41);
 		contentPane.add(btnNewButton_2_1_1);
-	}
 
+		ArrayList<Province>provinces = ProvinceDAO.getInstance().selectAll();
+		System.out.println(provinces);
+		cbx_ThanhPho = new JComboBox();
+		for(Province province : provinces) {
+			cbx_ThanhPho.addItem(province.getName());
+		}
+		JTextField textField_ThanhPho = (JTextField) cbx_ThanhPho.getEditor().getEditorComponent();
+		textField_ThanhPho.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				String input = textField_ThanhPho.getText().toLowerCase();
+				cbx_ThanhPho.removeAllItems();
+
+				for (Province province : provinces) {
+					if (province.getName().toLowerCase().contains(input)) {
+						cbx_ThanhPho.addItem(province.getName());
+					}
+				}
+				textField_ThanhPho.setText(input);
+				cbx_ThanhPho.showPopup(); // Hiển thị danh sách gợi ý
+			}
+		});
+		cbx_ThanhPho.setBounds(10, 300, 321, 28);
+		contentPane.add(cbx_ThanhPho);
+		
+		JLabel lblNewLabel_1_1_1_1 = new JLabel("Quận / Huyện");
+		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_1.setBounds(10, 350, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_1);
+		
+		JComboBox cbx_Quan = new JComboBox();
+		cbx_Quan.setBounds(10, 377, 321, 28);
+		contentPane.add(cbx_Quan);
+		
+		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Phường / Xã");
+		lblNewLabel_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_1_1.setBounds(10, 426, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_1_1);
+		
+		cbx_Phuong = new JComboBox();
+		cbx_Phuong.setBounds(10, 453, 321, 28);
+		contentPane.add(cbx_Phuong);
+		
+		JLabel lblNewLabel_1_1_2 = new JLabel("Số nhà");
+		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_2.setBounds(10, 505, 116, 28);
+		contentPane.add(lblNewLabel_1_1_2);
+		
+		input_SoNha = new JTextField();
+		input_SoNha.setColumns(10);
+		input_SoNha.setBounds(10, 533, 328, 28);
+		contentPane.add(input_SoNha);
+
+
+	}
+	public void ThemSanPhamMouseClicked(){
+		String tenNCC = input_TenNCC.getText().trim();
+		String SDT = input_SDT.getText().trim();
+		String maNCCString = tenNCC.toUpperCase();
+		String diaChi = ValueAddress.getValueAddressFrame(this, cbx_ThanhPho, cbx_Quan, cbx_Phuong, input_SoNha);
+		System.out.println(diaChi);
+		Producer producer = new Producer(diaChi,maNCCString,SDT,tenNCC);
+	}
 }
