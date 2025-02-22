@@ -40,13 +40,16 @@ public class DistrictDAO implements DAOInterface<District> {
             Connection connection = JDBCUtil.getConnection();
             String sql = "Select * from district where province_id = ?";
             PreparedStatement pst = connection.prepareStatement(sql);
+            System.out.println(province.getProvince_id());
             pst.setInt(1,province.getProvince_id());
             ResultSet rs = pst.executeQuery();
-            int district_id = rs.getInt("district_id");
-            int province_id = rs.getInt("province_id");
-            String name = rs.getString("name");
-            District district = new District(district_id,name,province_id);
-            ketQua.add(district);
+            while (rs.next()){
+                int district_id = rs.getInt("district_id");
+                int province_id = rs.getInt("province_id");
+                String name = rs.getString("name");
+                District district = new District(district_id,name,province_id);
+                ketQua.add(district);
+            }
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,10 +64,12 @@ public class DistrictDAO implements DAOInterface<District> {
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,nameDistrict);
             ResultSet rs = pst.executeQuery();
-            int district_id = rs.getInt("district_id");
-            int province_id = rs.getInt("province_id");
-            String name = rs.getString("name");
-            district = new District(district_id,name,province_id);
+            while (rs.next()){
+                int district_id = rs.getInt("district_id");
+                int province_id = rs.getInt("province_id");
+                String name = rs.getString("name");
+                district = new District(district_id,name,province_id);
+            }
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();

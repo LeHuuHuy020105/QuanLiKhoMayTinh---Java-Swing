@@ -402,7 +402,7 @@ public class ThemSanPham extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		this.sanPhamForm.updateTableDataProductFormDAO();
+		this.sanPhamForm.updateTableDataFormDAO();
 	}
 
 	public void closeWindow() {

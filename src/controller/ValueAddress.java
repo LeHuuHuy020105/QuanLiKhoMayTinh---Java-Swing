@@ -6,72 +6,110 @@ import DAO.Address.WardDAO;
 import model.Address.District;
 import model.Address.Province;
 import model.Address.Ward;
+import view.User.NhaCungCap.ThemNhaCungCap;
 
 import javax.swing.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class ValueAddress {
-    public static String getValueAddressFrame(JFrame jFrame,JComboBox cbx_ThanhPho , JComboBox cbx_Quan , JComboBox cbx_Phuong , JTextField input_SoNha){
-        String name_ThanhPho = cbx_ThanhPho.getSelectedItem()+"";
-        if (name_ThanhPho == ""){
-            JOptionPane.showMessageDialog(jFrame,"Vui lòng chọn thành phố");
-            return "N/A";
-        }else {
-            Province province_findName = ProvinceDAO.getInstance().ProvinceByName(name_ThanhPho);
-            ArrayList<District>districts = DistrictDAO.getInstance().selectAllByProvince(province_findName);
-            for(District district : districts){
-                cbx_ThanhPho.addItem(district.getName());
-            }
-            JTextField textField_Quan = (JTextField) cbx_Quan.getEditor().getEditorComponent();
-            textField_Quan.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    String input = textField_Quan.getText().toLowerCase();
-                    cbx_Quan.removeAllItems();
+    public static ValueAddress getInstance(){
+        return new ValueAddress();
+    }
+    public void loadQuanHuyen(JComboBox<String> cbx_ThanhPho, JComboBox<String> cbx_Quan, JComboBox<String> cbx_Phuong) {
+        cbx_Quan.removeAllItems();
+        cbx_Phuong.removeAllItems();
 
-                    for (District district : districts) {
-                        if (district.getName().toLowerCase().contains(input)) {
-                            cbx_ThanhPho.addItem(district.getName());
-                        }
-                    }
-                    textField_Quan.setText(input);
-                    cbx_Quan.showPopup(); // Hiển thị danh sách gợi ý
-                }
-            });
-            String name_District = cbx_Quan.getSelectedItem()+"";
-            if (name_District == "") {
-                JOptionPane.showMessageDialog(jFrame,"Vui lòng chọn quận huyện");
-                return "N/A";
-            }else {
-                District district_find = DistrictDAO.getInstance().DistrictByName(name_District);
-                ArrayList<Ward>wards = WardDAO.getInstance().selectAllByDistrict(district_find);
-                for(Ward ward : wards){
-                    cbx_Phuong.addItem(ward.getName());
-                }
-                JTextField textField_Phuong = (JTextField) cbx_Phuong.getEditor().getEditorComponent();
-                textField_Phuong.addKeyListener(new KeyAdapter() {
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                        String input = textField_Phuong.getText().toLowerCase();
-                        cbx_Phuong.removeAllItems();
-
-                        for (Ward ward : wards) {
-                            if (ward.getName().toLowerCase().contains(input)) {
-                                cbx_Phuong.addItem(ward.getName());
-                            }
-                        }
-                        textField_Phuong.setText(input);
-                        cbx_Phuong.showPopup(); // Hiển thị danh sách gợi ý
-                    }
-                });
-            }
+        ArrayList<Province>provinces = ProvinceDAO.getInstance().selectAll();
+        for(Province province : provinces) {
+            cbx_ThanhPho.addItem(province.getName());
         }
-        String soNha = input_SoNha.getText();
-        String phuong = cbx_Phuong.getSelectedItem()+"";
-        String quan = cbx_Quan.getSelectedItem()+"";
-        String thanhPho = cbx_ThanhPho.getSelectedItem()+"";
-        return soNha+","+phuong+","+quan+","+thanhPho;
+        loadQuan(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
+        cbx_ThanhPho.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                loadQuan(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
+            }
+        });
+        JTextField jTextField_cbxThanhPho = (JTextField) cbx_ThanhPho.getEditor().getEditorComponent();
+        jTextField_cbxThanhPho.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String input = jTextField_cbxThanhPho.getText().toLowerCase();
+                cbx_ThanhPho.removeAllItems();
+                for(Province province : provinces){
+                    if(province.getName().toLowerCase().contains(input)){
+                        cbx_ThanhPho.addItem(province.getName());
+                    }
+                }
+                jTextField_cbxThanhPho.setText(input);
+                cbx_ThanhPho.showPopup();
+            }
+        });
+
+    }
+    public void loadQuan(JComboBox<String> cbx_ThanhPho, JComboBox<String> cbx_Quan, JComboBox<String> cbx_Phuong){
+        cbx_Quan.removeAllItems();
+        cbx_Phuong.removeAllItems();
+        String tenTP = (String) cbx_ThanhPho.getSelectedItem();
+        if (tenTP == null) return;
+
+        Province province = ProvinceDAO.getInstance().ProvinceByName(tenTP);
+        ArrayList<District> districts = DistrictDAO.getInstance().selectAllByProvince(province);
+
+        for (District district : districts) {
+            cbx_Quan.addItem(district.getName());
+        }
+        loadPhuong(cbx_Quan,cbx_Phuong);
+        JTextField jTextField_cbxQuan = (JTextField) cbx_Quan.getEditor().getEditorComponent();
+
+        jTextField_cbxQuan.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String input = jTextField_cbxQuan.getText().toLowerCase();
+                cbx_Quan.removeAllItems();
+                for(District district : districts){
+                    if(district.getName().toLowerCase().contains(input)){
+                        cbx_Quan.addItem(district.getName());
+                    }
+                }
+                jTextField_cbxQuan.setText(input);
+                cbx_Quan.showPopup();
+            }
+        });
+        cbx_Quan.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                loadPhuong(cbx_Quan,cbx_Phuong);
+            }
+        });
+    }
+    public void loadPhuong(JComboBox<String> cbx_Quan, JComboBox<String> cbx_Phuong){
+        cbx_Phuong.removeAllItems();
+        String tenQuan = (String) cbx_Quan.getSelectedItem();
+        District district = DistrictDAO.getInstance().DistrictByName(tenQuan);
+        ArrayList<Ward>wards = WardDAO.getInstance().selectAllByDistrict(district);
+        for (Ward ward : wards) {
+            cbx_Phuong.addItem(ward.getName());
+        }
+        JTextField jTextField_cbxPhuong= (JTextField) cbx_Phuong.getEditor().getEditorComponent();
+
+        jTextField_cbxPhuong.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String input = jTextField_cbxPhuong.getText().toLowerCase();
+                cbx_Phuong.removeAllItems();
+                for(Ward ward : wards){
+                    if(ward.getName().toLowerCase().contains(input)){
+                        cbx_Phuong.addItem(ward.getName());
+                    }
+                }
+                jTextField_cbxPhuong.setText(input);
+                cbx_Phuong.showPopup();
+            }
+        });
+    }
+    public static String getValueAddressFrame(JFrame frame, JComboBox cbxTP, JComboBox cbxQuan, JComboBox cbxPhuong, JTextField soNha) {
+        return soNha.getText() + ", " + cbxPhuong.getSelectedItem() + ", " + cbxQuan.getSelectedItem() + ", " + cbxTP.getSelectedItem();
     }
 }

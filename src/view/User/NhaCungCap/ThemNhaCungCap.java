@@ -2,12 +2,12 @@ package view.User.NhaCungCap;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import DAO.Address.ProvinceDAO;
 import DAO.CountryDAO;
+import DAO.ProducersDAO;
 import controller.ValueAddress;
 import model.Address.Province;
 import model.Country;
@@ -15,20 +15,9 @@ import model.Producer;
 import view.User.SanPham.ThemSanPham;
 
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
-
-import javax.swing.JComboBox;
 
 public class ThemNhaCungCap extends JFrame {
 
@@ -61,9 +50,9 @@ public class ThemNhaCungCap extends JFrame {
 	 * Create the frame.
 	 */
 	public ThemNhaCungCap() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 388, 720);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -107,11 +96,11 @@ public class ThemNhaCungCap extends JFrame {
 		lblNewLabel_1_1_1.setBounds(10, 273, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1);
 		
-		JButton btn_ThemSanPham = new JButton("Thêm sản phẩm");
+		JButton btn_ThemSanPham = new JButton("Thêm");
 		btn_ThemSanPham.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ThemSanPhamMouseClicked();
+				ThemNhaCungCapMouseClicked();
 			}
 		});
 		btn_ThemSanPham.setIcon(null);
@@ -135,28 +124,7 @@ public class ThemNhaCungCap extends JFrame {
 		btnNewButton_2_1_1.setBounds(199, 611, 139, 41);
 		contentPane.add(btnNewButton_2_1_1);
 
-		ArrayList<Province>provinces = ProvinceDAO.getInstance().selectAll();
-		System.out.println(provinces);
 		cbx_ThanhPho = new JComboBox();
-		for(Province province : provinces) {
-			cbx_ThanhPho.addItem(province.getName());
-		}
-		JTextField textField_ThanhPho = (JTextField) cbx_ThanhPho.getEditor().getEditorComponent();
-		textField_ThanhPho.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				String input = textField_ThanhPho.getText().toLowerCase();
-				cbx_ThanhPho.removeAllItems();
-
-				for (Province province : provinces) {
-					if (province.getName().toLowerCase().contains(input)) {
-						cbx_ThanhPho.addItem(province.getName());
-					}
-				}
-				textField_ThanhPho.setText(input);
-				cbx_ThanhPho.showPopup(); // Hiển thị danh sách gợi ý
-			}
-		});
 		cbx_ThanhPho.setBounds(10, 300, 321, 28);
 		contentPane.add(cbx_ThanhPho);
 		
@@ -165,7 +133,7 @@ public class ThemNhaCungCap extends JFrame {
 		lblNewLabel_1_1_1_1.setBounds(10, 350, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
-		JComboBox cbx_Quan = new JComboBox();
+		cbx_Quan = new JComboBox();
 		cbx_Quan.setBounds(10, 377, 321, 28);
 		contentPane.add(cbx_Quan);
 		
@@ -188,14 +156,28 @@ public class ThemNhaCungCap extends JFrame {
 		input_SoNha.setBounds(10, 533, 328, 28);
 		contentPane.add(input_SoNha);
 
+		ValueAddress.getInstance().loadQuanHuyen(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
+	}
 
+	private void ThemNhaCungCapMouseClicked() {
+		try {
+			String tenNCC = input_TenNCC.getText().trim();
+			String SDT = input_SDT.getText().trim();
+			String diaChi = ValueAddress.getValueAddressFrame(this, cbx_ThanhPho, cbx_Quan, cbx_Phuong, input_SoNha);
+			if (tenNCC.isEmpty() || SDT.isEmpty() || diaChi.equals("N/A")) {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+				return;
+			}
+
+			String maNCC = tenNCC.toUpperCase();
+			Producer producer = new Producer(diaChi, maNCC, SDT, tenNCC);
+			ProducersDAO.getInstance().insert(producer);
+			JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
+			dispose();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhà cung cấp!");
+		}
 	}
-	public void ThemSanPhamMouseClicked(){
-		String tenNCC = input_TenNCC.getText().trim();
-		String SDT = input_SDT.getText().trim();
-		String maNCCString = tenNCC.toUpperCase();
-		String diaChi = ValueAddress.getValueAddressFrame(this, cbx_ThanhPho, cbx_Quan, cbx_Phuong, input_SoNha);
-		System.out.println(diaChi);
-		Producer producer = new Producer(diaChi,maNCCString,SDT,tenNCC);
-	}
+	
 }

@@ -41,11 +41,13 @@ public class WardDAO implements DAOInterface<Ward> {
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,district.getDistrict_id());
             ResultSet rs = pst.executeQuery();
-            int wards_id = rs.getInt("wards_id");
-            int district_id = rs.getInt("district_id");
-            String name = rs.getString("name");
-            Ward ward = new Ward(district_id,name,wards_id);
-            ketQua.add(ward);
+            while (rs.next()){
+                int wards_id = rs.getInt("wards_id");
+                int district_id = rs.getInt("district_id");
+                String name = rs.getString("name");
+                Ward ward = new Ward(district_id,name,wards_id);
+                ketQua.add(ward);
+            }
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();

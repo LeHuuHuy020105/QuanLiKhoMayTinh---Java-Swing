@@ -4,6 +4,7 @@ import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProductsDAO;
 import controller.SearchProduct;
+import controller.updateDataToTable;
 import model.Computer;
 import model.Laptop;
 
@@ -38,7 +39,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-public class SanPhamForm extends JPanel {
+public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
 
     private static final long serialVersionUID = 1L;
     private JTextField input_Search;
@@ -224,7 +225,7 @@ public class SanPhamForm extends JPanel {
         cbx_luaChon = new JComboBox(cbxLuaChonValues);
         cbx_luaChon.addItemListener(new ItemListener() {
         	public void itemStateChanged(ItemEvent e) {
-        		updateTableDataProductFormDAO();
+        		updateTableDataFormDAO();
         		input_Search.setText("");
         	}
         });
@@ -246,7 +247,7 @@ public class SanPhamForm extends JPanel {
         JButton btnNewButton_1 = new JButton("Làm mới");
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                updateTableDataProductFormDAO();
+                updateTableDataFormDAO();
             }
         });
         btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
@@ -266,7 +267,7 @@ public class SanPhamForm extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table_product);
         scrollPane.setBounds(10, 126, 1247, 774);
         add(scrollPane);
-        updateTableDataProductFormDAO();
+        updateTableDataFormDAO();
     }
 
     public void XemChiTietMouseClicked() {
@@ -282,32 +283,6 @@ public class SanPhamForm extends JPanel {
     public void ThemSanPhamMouseClicked() {
         ThemSanPham themSanPham = new ThemSanPham(this);
         themSanPham.setVisible(true);
-    }
-
-    public void updateTableDataProduct(ArrayList<Computer>computers) {
-        DecimalFormat df = new DecimalFormat("#,###");
-        DefaultTableModel model = (DefaultTableModel) table_product.getModel();
-        model.setRowCount(0);
-        for (Computer computer : computers) {
-            String loaiMay = "";
-            if (computer instanceof Laptop) {
-                loaiMay = "Laptop";
-            } else {
-                loaiMay = "PC";
-            }
-            System.out.println(computer.getGia());
-            model.addRow(
-                    new Object[]{
-                            computer.getMaMay(),
-                            computer.getTenMay(),
-                            computer.getSoLuong(),
-                            df.format(computer.getGia()) + " VND",
-                            computer.getCardManHinh(),
-                            computer.getRam(),
-                            computer.getDungLuongLuuTru(),
-                            loaiMay
-                    });
-        }
     }
 
     public Computer getComputerSelected() {
@@ -334,16 +309,12 @@ public class SanPhamForm extends JPanel {
         }
         return computer_Selected;
     }
-    public void updateTableDataProductFormDAO(){
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
-        updateTableDataProduct(computers);
-    }
     public void jTextFieldSearchKeyReleased(){
         String luaChon = cbx_luaChon.getSelectedItem()+"";
         String content_Search = input_Search.getText();
         ArrayList<Computer> result = SearchFn(luaChon,content_Search);
         System.out.println(luaChon);
-        updateTableDataProduct(result);
+        updateTableData(result);
     }
     public ArrayList<Computer> SearchFn(String luaChon , String content_Search){
         ArrayList<Computer> result = new ArrayList<>();
@@ -506,7 +477,7 @@ public class SanPhamForm extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updateTableDataProductFormDAO();
+        updateTableDataFormDAO();
     }
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
@@ -514,7 +485,40 @@ public class SanPhamForm extends JPanel {
         if(luaChon==JOptionPane.YES_OPTION){
             Computer computer_Selected = getComputerSelected();
             ProductsDAO.getInstance().delete(computer_Selected);
-            updateTableDataProductFormDAO();
+            updateTableDataFormDAO();
+        }
+    }
+
+    @Override
+    public void updateTableDataFormDAO() {
+        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        updateTableData(computers);
+    }
+
+    @Override
+    public void updateTableData(ArrayList<Computer> computers) {
+        DecimalFormat df = new DecimalFormat("#,###");
+        DefaultTableModel model = (DefaultTableModel) table_product.getModel();
+        model.setRowCount(0);
+        for (Computer computer : computers) {
+            String loaiMay = "";
+            if (computer instanceof Laptop) {
+                loaiMay = "Laptop";
+            } else {
+                loaiMay = "PC";
+            }
+            System.out.println(computer.getGia());
+            model.addRow(
+                    new Object[]{
+                            computer.getMaMay(),
+                            computer.getTenMay(),
+                            computer.getSoLuong(),
+                            df.format(computer.getGia()) + " VND",
+                            computer.getCardManHinh(),
+                            computer.getRam(),
+                            computer.getDungLuongLuuTru(),
+                            loaiMay
+                    });
         }
     }
 }

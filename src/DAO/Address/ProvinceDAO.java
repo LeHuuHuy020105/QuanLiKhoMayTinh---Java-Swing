@@ -52,13 +52,15 @@ public class ProvinceDAO implements DAOInterface<Province> {
         Province province =null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from province where name = ?";
+            String sql = "SELECT * FROM province WHERE name = ?";
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1,nameProvince);
+            pst.setString(1, nameProvince);
             ResultSet rs = pst.executeQuery();
-            int province_id = rs.getInt("province_id");
-            String name = rs.getString("name");
-            province = new Province(name,province_id);
+            while (rs.next()){
+                int province_id = rs.getInt("province_id");
+                String name = rs.getString("name");
+                province = new Province(name,province_id);
+            }
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
