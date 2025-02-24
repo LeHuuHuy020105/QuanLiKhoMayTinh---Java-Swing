@@ -1,7 +1,7 @@
 package model;
 
 public class Computer {
-    private String maMay;
+    private int maMay;
     private String tenMay;
     private int soLuong;
     private double gia;
@@ -16,7 +16,7 @@ public class Computer {
     public Computer() {
     }
 
-    public Computer(String cardManHinh, double gia, String maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru) {
+    public Computer(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru) {
         this.cardManHinh = cardManHinh;
         this.gia = gia;
         this.maMay = maMay;
@@ -54,7 +54,7 @@ public class Computer {
         this.gia = gia;
     }
 
-    public void setMaMay(String maMay) {
+    public void setMaMay(int maMay) {
         this.maMay = maMay;
     }
 
@@ -106,7 +106,7 @@ public class Computer {
         return ram;
     }
 
-    public String getMaMay() {
+    public int getMaMay() {
         return maMay;
     }
 

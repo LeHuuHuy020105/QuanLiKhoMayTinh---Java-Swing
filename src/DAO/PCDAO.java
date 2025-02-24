@@ -18,24 +18,23 @@ public class PCDAO implements DAOInterface<PC> {
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Insert into product(mamay,tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = Query.insertProduct;
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1, pc.getMaMay());
-            pst.setString(2, pc.getTenMay());
-            pst.setInt(3, pc.getSoLuong());
-            pst.setDouble(4, pc.getGia());
-            pst.setString(5, pc.getTenCpu());
-            pst.setString(6, pc.getRam());
-            pst.setString(7, pc.getXuatXu());
-            pst.setString(8, pc.getCardManHinh());
-            pst.setString(9, pc.getMainBoard());
-            pst.setInt(10, pc.getCongSuatNguon());
+            pst.setString(1, pc.getTenMay());
+            pst.setInt(2, pc.getSoLuong());
+            pst.setDouble(3, pc.getGia());
+            pst.setString(4, pc.getTenCpu());
+            pst.setString(5, pc.getRam());
+            pst.setString(6, pc.getXuatXu());
+            pst.setString(7, pc.getCardManHinh());
+            pst.setString(8, pc.getMainBoard());
+            pst.setInt(9, pc.getCongSuatNguon());
+            pst.setString(10, null);
             pst.setString(11, null);
-            pst.setString(12, null);
-            pst.setString(13, pc.getRom());
-            pst.setString(14, "PC");
-            pst.setString(15, pc.getMaNhaCungCap());
-            pst.setDouble(16, pc.getDungLuongLuuTru());
+            pst.setString(12, pc.getRom());
+            pst.setString(13, "PC");
+            pst.setString(14, pc.getMaNhaCungCap());
+            pst.setDouble(15, pc.getDungLuongLuuTru());
             ketQua = pst.executeUpdate();
 
         } catch (Exception e) {
@@ -49,9 +48,7 @@ public class PCDAO implements DAOInterface<PC> {
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Update product set " +
-                    "tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , " +
-                    "mainboard =? ,congsuatnguon =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+            String sql = Query.updatePC;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,pc.getTenMay());
             pst.setInt(2,pc.getSoLuong());
@@ -65,7 +62,7 @@ public class PCDAO implements DAOInterface<PC> {
             pst.setString(10,"PC");
             pst.setString(11,pc.getMaNhaCungCap());
             pst.setDouble(12,pc.getDungLuongLuuTru());
-            pst.setString(13,pc.getMaMay());
+            pst.setInt(13,pc.getMaMay());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
@@ -84,11 +81,11 @@ public class PCDAO implements DAOInterface<PC> {
         ArrayList<PC> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from product where loaimay = 'PC'";
+            String sql = Query.selectAllProductByType("PC");
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                String maMay = rs.getString("mamay");
+                int maMay = rs.getInt("mamay");
                 String tenMay = rs.getString("tenmay");
                 int soLuong = rs.getInt("soluong");
                 double gia = rs.getDouble("gia");

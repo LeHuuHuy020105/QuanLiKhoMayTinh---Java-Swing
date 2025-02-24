@@ -304,7 +304,7 @@ public class SuaSanPhamForm extends JFrame {
 	public void hienThiThongTinSanPham(){
 		Computer computer_Selected = sanPhamForm.getComputerSelected();
 		System.out.println(computer_Selected);
-		label_IDproduct.setText(computer_Selected.getMaMay());
+		label_IDproduct.setText(computer_Selected.getMaMay()+"");
 		input_tenSanPham.setText(computer_Selected.getTenMay());
 		input_gia.setText(computer_Selected.getGia()+"");
 		input_CPU.setText(computer_Selected.getTenCpu());
@@ -335,7 +335,6 @@ public class SuaSanPhamForm extends JFrame {
 
 		String cbxLoaiSanPham = comboBox_loaiSanPham.getSelectedItem().toString();
 		String tenMay = input_tenSanPham.getText().trim();
-		String maMay = label_IDproduct.getText().trim();
 		String CPU = input_CPU.getText().trim();
 		String RAM = input_RAM.getText().trim();
 		String ROM = input_ROM.getText().trim();
@@ -393,7 +392,7 @@ public class SuaSanPhamForm extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm Laptop
-			Laptop laptop_update = new Laptop(cardManHinh, gia, maMay, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+			Laptop laptop_update = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
 			try {
 				LaptopDAO.getInstance().update(laptop_update);
 				this.dispose();
@@ -424,7 +423,7 @@ public class SuaSanPhamForm extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm PC
-			PC pc_update = new PC(cardManHinh, gia, maMay, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+			PC pc_update = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
 			try {
 				PCDAO.getInstance().update(pc_update);
 				this.dispose();

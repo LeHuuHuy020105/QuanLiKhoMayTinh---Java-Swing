@@ -17,7 +17,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Insert into producer(manhacungcap,tennhacungcap,sodienthoai,diachi) VALUES (?,?,?,?)";
+            String sql = Query.insertProducer;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, producer.getMaNhaCungCap());
             pst.setString(2, producer.getTenNhaCungCap());
@@ -33,12 +33,35 @@ public class ProducersDAO implements DAOInterface<Producer>{
 
     @Override
     public int update(Producer producer) {
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = Query.updateProducer;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,producer.getMaNhaCungCap());
+            pst.setString(2,producer.getDiaChi());
+            pst.setString(3,producer.getSdt());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
     @Override
     public int delete(Producer producer) {
-        return 0;
+        int ketQua =0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = Query.deleteProducer;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,producer.getMaNhaCungCap());
+            ketQua = pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -46,7 +69,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
         ArrayList<Producer>ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from producer";
+            String sql = Query.selectAllProducer;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -61,5 +84,45 @@ public class ProducersDAO implements DAOInterface<Producer>{
             e.printStackTrace();
         }
         return ketQua;
+    }
+    public Producer producerByID(String id){
+        Producer producer = null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = Query.producerByID;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,id);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                String maNCC = rs.getString("manhacungcap");
+                String tenNCC = rs.getString("tennhacungcap");
+                String SDT = rs.getString("sodienthoai");
+                String diaChi = rs.getString("diachi");
+                producer = new Producer(diaChi,maNCC,SDT,tenNCC);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return producer;
+    }
+    public Producer producerByName(String tennhacungcap){
+        Producer producer = null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = Query.producerByName;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,tennhacungcap);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                String maNCC = rs.getString("manhacungcap");
+                String tenNCC = rs.getString("tennhacungcap");
+                String SDT = rs.getString("sodienthoai");
+                String diaChi = rs.getString("diachi");
+                producer = new Producer(diaChi,maNCC,SDT,tenNCC);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return producer;
     }
 }

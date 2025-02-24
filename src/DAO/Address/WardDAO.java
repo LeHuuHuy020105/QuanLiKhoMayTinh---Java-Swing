@@ -1,6 +1,7 @@
 package DAO.Address;
 
 import DAO.DAOInterface;
+import DAO.Query;
 import database.JDBCUtil;
 import model.Address.District;
 import model.Address.Ward;
@@ -37,7 +38,7 @@ public class WardDAO implements DAOInterface<Ward> {
         ArrayList<Ward> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from wards where district_id = ?";
+            String sql = Query.selectAllByDistrict;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,district.getDistrict_id());
             ResultSet rs = pst.executeQuery();

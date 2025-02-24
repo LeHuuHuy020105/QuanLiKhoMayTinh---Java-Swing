@@ -18,7 +18,7 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua=0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "INSERT INTO USER (username,password,fullname,status,email,role) VALUES (?,?,?,?,?,?)";
+            String sql = Query.insertProducer;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, user.getUserName());
             pst.setString(2, user.getPassword());
@@ -51,7 +51,7 @@ public class UserDAO implements DAOInterface<User>{
     public User getCurrentUser(String Username, String Password) throws SQLException {
     	User user = null;
     	Connection connection = JDBCUtil.getConnection();
-        String sql = "SELECT * FROM USER WHERE username =? && password =?" ;
+        String sql = Query.getCurrentUser;
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setString(1, Username);
         pst.setString(2, Password);

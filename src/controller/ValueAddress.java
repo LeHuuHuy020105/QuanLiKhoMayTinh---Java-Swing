@@ -46,6 +46,14 @@ public class ValueAddress {
                 cbx_ThanhPho.showPopup();
             }
         });
+        cbx_ThanhPho.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    loadQuan(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
+                }
+            }
+        });
 
     }
     public void loadQuan(JComboBox<String> cbx_ThanhPho, JComboBox<String> cbx_Quan, JComboBox<String> cbx_Phuong){
@@ -80,7 +88,9 @@ public class ValueAddress {
         cbx_Quan.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                loadPhuong(cbx_Quan,cbx_Phuong);
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    loadPhuong(cbx_Quan,cbx_Phuong);
+                }
             }
         });
     }
@@ -92,15 +102,14 @@ public class ValueAddress {
         for (Ward ward : wards) {
             cbx_Phuong.addItem(ward.getName());
         }
-        JTextField jTextField_cbxPhuong= (JTextField) cbx_Phuong.getEditor().getEditorComponent();
-
+        JTextField jTextField_cbxPhuong = (JTextField) cbx_Phuong.getEditor().getEditorComponent();
         jTextField_cbxPhuong.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String input = jTextField_cbxPhuong.getText().toLowerCase();
                 cbx_Phuong.removeAllItems();
-                for(Ward ward : wards){
-                    if(ward.getName().toLowerCase().contains(input)){
+                for (Ward ward : wards) {
+                    if (ward.getName().toLowerCase().contains(input)) {
                         cbx_Phuong.addItem(ward.getName());
                     }
                 }
@@ -110,6 +119,6 @@ public class ValueAddress {
         });
     }
     public static String getValueAddressFrame(JFrame frame, JComboBox cbxTP, JComboBox cbxQuan, JComboBox cbxPhuong, JTextField soNha) {
-        return soNha.getText() + ", " + cbxPhuong.getSelectedItem() + ", " + cbxQuan.getSelectedItem() + ", " + cbxTP.getSelectedItem();
+        return soNha.getText() + "," + cbxPhuong.getSelectedItem() + "," + cbxQuan.getSelectedItem() + "," + cbxTP.getSelectedItem();
     }
 }

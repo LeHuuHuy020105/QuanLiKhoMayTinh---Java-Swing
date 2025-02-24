@@ -30,9 +30,9 @@ public class ProductsDAO implements DAOInterface<Computer> {
         int ketQua =0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Delete from product where mamay =?";
+            String sql =Query.deleteProduct;
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1,computer.getMaMay());
+            pst.setInt(1,computer.getMaMay());
             ketQua = pst.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,11 +45,11 @@ public class ProductsDAO implements DAOInterface<Computer> {
         ArrayList<Computer> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from product";
+            String sql =Query.selectAllProduct;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                String maMay = rs.getString("mamay");
+                int maMay = rs.getInt("mamay");
                 String tenMay = rs.getString("tenmay");
                 int soLuong = rs.getInt("soluong");
                 double gia = rs.getDouble("gia");
@@ -84,12 +84,12 @@ public class ProductsDAO implements DAOInterface<Computer> {
         Computer computer = null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from product where mamay=?";
+            String sql =Query.selectroductByID;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, idproduct);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
-                String maMay = rs.getString("mamay");
+                int maMay = rs.getInt("mamay");
                 String tenMay = rs.getString("tenmay");
                 int soLuong = rs.getInt("soluong");
                 double gia = rs.getDouble("gia");

@@ -7,13 +7,11 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import DAO.CountryDAO;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProducersDAO;
-import model.Computer;
-import model.Laptop;
-import model.PC;
-import model.Producer;
+import model.*;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -260,16 +258,16 @@ public class ChiTietSanPham extends JFrame {
 	}
 	public void hienThiThongTinSanPham(){
 		Computer computer_Selected = sanPhamForm.getComputerSelected();
-		label_IDproduct.setText(computer_Selected.getMaMay());
+		label_IDproduct.setText(computer_Selected.getMaMay()+"");
 		input_tenSanPham.setText(computer_Selected.getTenMay());
 		input_gia.setText(computer_Selected.getGia()+"");
-		input_xuatXu.setText(computer_Selected.getXuatXu());
+		Country country_selected = CountryDAO.getInstance().CountryByID(computer_Selected.getXuatXu());
+		input_xuatXu.setText(country_selected.getTenQuocGia());
 		input_CPU.setText(computer_Selected.getTenCpu());
 		input_RAM.setText(computer_Selected.getRam());
 		input_cardDoHoa.setText(computer_Selected.getCardManHinh());
 		input_ROM.setText(computer_Selected.getRom());
 		input_dungLuongLuuTru.setText(computer_Selected.getDungLuongLuuTru()+"");
-		System.out.println("manhacungcap"+computer_Selected.getMaNhaCungCap());
 		comboBox_nhaCungCap.setSelectedItem(computer_Selected.getMaNhaCungCap());
 		spinner_soLuong.setValue(computer_Selected.getSoLuong());
 		String loaiMay ="";

@@ -1,0 +1,47 @@
+create table country(
+	maquocgia varchar(50) primary key,
+	tenquocgia varchar (50) not null
+)
+CREATE TABLE product (
+    mamay INT AUTO_INCREMENT PRIMARY KEY,
+    tenmay VARCHAR(50) NOT NULL,
+    soluong INT(11) NOT NULL,
+    gia DOUBLE NOT NULL,
+    tenCPU VARCHAR(50) NOT NULL,
+    ram VARCHAR(50) NOT NULL,
+    xuatxu VARCHAR(50) NOT NULL,
+    cardmanhinh VARCHAR(50) NOT NULL,
+    mainboard VARCHAR(50),
+    congsuatnguon INT(11),
+    kichthuocman DOUBLE,
+    dungluongpin VARCHAR(50),
+    rom VARCHAR(50) NOT NULL,
+    loaimay VARCHAR(50) NOT NULL,
+    manhacungcap VARCHAR(50) NOT NULL,
+    dungluongluutru DOUBLE NOT NULL,
+    FOREIGN KEY (xuatxu) REFERENCES country(maquocgia),
+    FOREIGN KEY (manhacungcap) REFERENCES producer(manhacungcap)
+);
+create table producer (
+	manhacungcap varchar(50) primary key,
+	tennhacungcap varchar(50) not null,
+	sodientthoai varchar(50) not null,
+	diachi varchar(150) not null
+)
+create table entryform(
+	maphieunhap int auto_increment primary key,
+	mamay int not null,
+	soluong int not null,
+	manguoidung int not null,
+	foreign key (mamay) references product(mamay),
+	foreign key (manguoidung) references user(manguoidung)
+)
+create table user (
+	manguoidung int auto_increment primary key,
+	username varchar(50) unique not null,
+	password varchar(50) not null,
+	fullname varchar(50) not null,
+	status int not null,
+	email varchar(100) not null,
+	role varchar(50) not null
+)

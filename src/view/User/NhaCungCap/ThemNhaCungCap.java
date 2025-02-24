@@ -4,11 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import DAO.Address.ProvinceDAO;
 import DAO.CountryDAO;
 import DAO.ProducersDAO;
 import controller.ValueAddress;
+import controller.updateDataToTable;
 import model.Address.Province;
 import model.Country;
 import model.Producer;
@@ -19,7 +21,7 @@ import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class ThemNhaCungCap extends JFrame {
+public class ThemNhaCungCap extends JFrame  {
 
 	private static final long serialVersionUID = 1L;
 	private JComboBox cbx_Phuong;
@@ -179,5 +181,4 @@ public class ThemNhaCungCap extends JFrame {
 			JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhà cung cấp!");
 		}
 	}
-	
 }

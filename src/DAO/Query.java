@@ -1,0 +1,53 @@
+package DAO;
+
+public class Query {
+//    Product
+    public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    public static String updatePC = "Update product set \" +\n" +
+            "\"tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , \" +\n" +
+            "\"mainboard =? ,congsuatnguon =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+
+    public static String updateLaptop ="Update product set \" +\n" +
+            "\"tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , \" +\n" +
+            "\"kichthuocman =? ,dungluongpin =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+
+    public static String selectAllProductByType(String typeProduct){
+        return "Select * from product where loaimay = '"+typeProduct+"'";
+    }
+    public static String selectroductByID = "Select * from product where mamay=?";
+    public static String selectAllProduct = "Select * from product";
+    public static String deleteProduct = "Delete from product where mamay =?";
+
+//    Country
+    public static String selectAllCountry ="Select * from country";
+    public static String selectCountryByName ="Select * from country where tenquocgia=?";
+    public static String selectCountryByID ="Select * from country where maquocgia=?";
+
+//    Producer
+    public static String insertProducer = "Insert into producer(manhacungcap,tennhacungcap,sodienthoai,diachi) VALUES (?,?,?,?)";
+    public static String updateProducer ="update " +
+            "Set tennhacungcap =?, diachi =? , sodienthoai =?" +
+            "from producer where manhacungcap =?";
+    public static String selectAllProducer = "Select * from producer";
+    public static String producerByID = "select * from producer where manhacungcap =?";
+    public static String deleteProducer ="delete from producer where manhacungcap =?";
+    public static String producerByName ="select * from producer where lower(tennhacungcap) like ?";
+
+
+//    User
+    public static String insertUser = "INSERT INTO USER (username,password,fullname,status,email,role) VALUES (?,?,?,?,?,?)";
+    public static String getCurrentUser = "SELECT * FROM USER WHERE username =? && password =?" ;
+
+//    District
+    public static String selectAllByProvince="Select * from district where province_id = ?";
+    public static String districtByName="Select * from district where name = ?";
+
+//    Province
+    public static String selectAllProvince ="Select * from province";
+    public static String provinceByName = "SELECT * FROM province WHERE name = ?";
+
+//    Ward
+    public static String selectAllByDistrict ="Select * from wards where district_id = ?";
+
+}

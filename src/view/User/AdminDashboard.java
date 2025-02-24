@@ -71,30 +71,13 @@ public class AdminDashboard extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        SanPhamForm sanPham = new SanPhamForm();
-        NhaCungCapForm nhaCungCapPanel = new NhaCungCapForm();
-        PhieuNhapForm phieuNhapForm = new PhieuNhapForm();
-        PhieuXuatForm phieuXuatForm = new PhieuXuatForm();
-        ThongKeForm thongKeForm = new ThongKeForm();
-        QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm();
-        TonKhoForm tonKhoForm = new TonKhoForm();
-        NhapHangForm nhapHangForm = new NhapHangForm();
-        XuatHangForm xuatHangForm = new XuatHangForm();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.setBounds(239, 0, 1257, 911);
         contentPane.add(cardPanel);
 
-        cardPanel.add(sanPham, "Sản phẩm");
-        cardPanel.add(nhaCungCapPanel, "Nhà cung cấp");
-        cardPanel.add(phieuNhapForm, "Phiếu nhập");
-        cardPanel.add(phieuXuatForm, "Phiếu xuất");
-        cardPanel.add(thongKeForm, "Thống kê");
-        cardPanel.add(qlTaiKhoanForm, "Quản lí tài khoản");
-        cardPanel.add(tonKhoForm, "Tồn kho");
-        cardPanel.add(nhapHangForm, "Nhập hàng");
-        cardPanel.add(xuatHangForm, "Xuất hàng");
+
 
         JPanel panel = new JPanel();
         panel.setBounds(0, 0, 239, 911);
@@ -415,6 +398,8 @@ public class AdminDashboard extends JFrame {
         btn_Admin_XuatHang.setFont(new Font("Tahoma", Font.BOLD, 14));
         btn_Admin_XuatHang.setBounds(0, 0, 239, 38);
         panel_Admin_XuatHang.add(btn_Admin_XuatHang);
+
+        SanPhamMouseClicked();
     }
 
     public void resetMenu() {
@@ -444,6 +429,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_NhaCungCap.setBackground(sideColor);
         panel_Admin_NhaCungCap.setBackground(selectionColor);
+        NhaCungCapForm nhaCungCapPanel = new NhaCungCapForm();
+        cardPanel.add(nhaCungCapPanel, "Nhà cung cấp");
         cardLayout.show(cardPanel, "Nhà cung cấp");
     }
 
@@ -451,6 +438,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_SanPham.setBackground(sideColor);
         panel_Admin_SanPham.setBackground(selectionColor);
+        SanPhamForm sanPham = new SanPhamForm();
+        cardPanel.add(sanPham, "Sản phẩm");
         cardLayout.show(cardPanel, "Sản phẩm");
     }
 
@@ -458,6 +447,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_NhapHang.setBackground(sideColor);
         panel_Admin_NhapHang.setBackground(selectionColor);
+        NhapHangForm nhapHangForm = new NhapHangForm();
+        cardPanel.add(nhapHangForm, "Nhập hàng");
         cardLayout.show(cardPanel, "Nhập hàng");
     }
 
@@ -465,6 +456,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_PhieuNhap.setBackground(sideColor);
         panel_Admin_PhieuNhap.setBackground(selectionColor);
+        PhieuNhapForm phieuNhapForm = new PhieuNhapForm();
+        cardPanel.add(phieuNhapForm, "Phiếu nhập");
         cardLayout.show(cardPanel, "Phiếu nhập");
     }
 
@@ -472,6 +465,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_PhieuXuat.setBackground(sideColor);
         panel_Admin_PhieuXuat.setBackground(selectionColor);
+        PhieuXuatForm phieuXuatForm = new PhieuXuatForm();
+        cardPanel.add(phieuXuatForm, "Phiếu xuất");
         cardLayout.show(cardPanel, "Phiếu xuất");
     }
 
@@ -479,6 +474,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_TonKho.setBackground(sideColor);
         panel_Admin_TonKho.setBackground(selectionColor);
+        TonKhoForm tonKhoForm = new TonKhoForm();
+        cardPanel.add(tonKhoForm, "Tồn kho");
         cardLayout.show(cardPanel, "Tồn kho");
     }
 
@@ -486,6 +483,8 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_TaiKhoan.setBackground(sideColor);
         panel_Admin_TaiKhoan.setBackground(selectionColor);
+        QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm();
+        cardPanel.add(qlTaiKhoanForm, "Quản lí tài khoản");
         cardLayout.show(cardPanel, "Quản lí tài khoản");
     }
 
@@ -493,12 +492,16 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_ThongKe.setBackground(sideColor);
         panel_Admin_ThongKe.setBackground(selectionColor);
+        ThongKeForm thongKeForm = new ThongKeForm();
+        cardPanel.add(thongKeForm, "Thống kê");
         cardLayout.show(cardPanel, "Thống kê");
     }
     public void XuatHangMouseClicked() {
     	resetMenu();
         side_Admin_XuatHang.setBackground(sideColor);
         panel_Admin_XuatHang.setBackground(selectionColor);
+        XuatHangForm xuatHangForm = new XuatHangForm();
+        cardPanel.add(xuatHangForm, "Xuất hàng");
         cardLayout.show(cardPanel, "Xuất hàng");
 	}
 }

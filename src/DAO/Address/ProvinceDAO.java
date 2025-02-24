@@ -1,6 +1,7 @@
 package DAO.Address;
 
 import DAO.DAOInterface;
+import DAO.Query;
 import database.JDBCUtil;
 import model.Address.District;
 import model.Address.Province;
@@ -34,7 +35,7 @@ public class ProvinceDAO implements DAOInterface<Province> {
         ArrayList<Province> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from province";
+            String sql = Query.selectAllProvince;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -52,7 +53,7 @@ public class ProvinceDAO implements DAOInterface<Province> {
         Province province =null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "SELECT * FROM province WHERE name = ?";
+            String sql = Query.provinceByName;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, nameProvince);
             ResultSet rs = pst.executeQuery();

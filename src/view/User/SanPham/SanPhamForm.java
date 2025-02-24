@@ -3,8 +3,7 @@ package view.User.SanPham;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProductsDAO;
-import controller.SearchProduct;
-import controller.updateDataToTable;
+import controller.*;
 import model.Computer;
 import model.Laptop;
 
@@ -21,31 +20,26 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import model.PC;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Iterator;
-import java.util.Vector;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
+public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,ExcelIntrerface{
 
     private static final long serialVersionUID = 1L;
     private JTextField input_Search;
     private JTable table_product;
-    private Color btn_hoverColor = new Color(192, 192, 192);
-    private Color default_btn_hover = new Color(240, 240, 240);
     private JFileChooser jChooser = new JFileChooser();
 	private JComboBox cbx_luaChon;
 
@@ -71,53 +65,31 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         panel_5_1.setLayout(null);
         verticalBox.add(panel_5_1);
 
-        JButton btnNewButton = new JButton("Thêm");
-        btnNewButton.addMouseListener(new MouseAdapter() {
+        JButton btn_Them = new JButton("Thêm");
+        btn_Them.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 ThemSanPhamMouseClicked();
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btnNewButton.setBackground(btn_hoverColor);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                btnNewButton.setBackground(default_btn_hover);
-            }
         });
-        btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
-        btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btnNewButton.setFocusPainted(false);
-        btnNewButton.setContentAreaFilled(false);
-        btnNewButton.setBorderPainted(false);
-        btnNewButton.setOpaque(true);
-        btnNewButton.setBackground(UIManager.getColor("Button.background"));
-        btnNewButton.setBounds(10, 0, 70, 52);
-        panel_5_1.add(btnNewButton);
+        btnEffect.effectBtnHover(btn_Them);
+        btn_Them.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn_Them.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
+        btn_Them.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn_Them.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        btn_Them.setFocusPainted(false);
+        btn_Them.setContentAreaFilled(false);
+        btn_Them.setBorderPainted(false);
+        btn_Them.setOpaque(true);
+        btn_Them.setBackground(UIManager.getColor("Button.background"));
+        btn_Them.setBounds(10, 0, 70, 52);
+        panel_5_1.add(btn_Them);
 
         JButton btnXemChiTiet = new JButton("Xem chi tiết");
-        btnXemChiTiet.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-            }
-        });
         btnXemChiTiet.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 XemChiTietMouseClicked();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btnXemChiTiet.setBackground(btn_hoverColor);
-            }
-
-            public void mouseExited(MouseEvent e) {
-                btnXemChiTiet.setBackground(default_btn_hover);
             }
         });
         btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -173,15 +145,6 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
             public void mouseClicked(MouseEvent e) {
                 SuaSanPhamMouseClicked();
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btnSua.setBackground(btn_hoverColor);
-            }
-
-            public void mouseExited(MouseEvent e) {
-                btnSua.setBackground(default_btn_hover);
-            }
         });
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
@@ -221,7 +184,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         verticalBox_1.add(panel_5_1_1);
         panel_5_1_1.setLayout(null);
 
-        String [] cbxLuaChonValues = new String[] {"Tất cả", "Mã máy", "Tên máy","Số lượng","Đơn giá","RAM","CPU","Dung lượng","Card màn hình","Xuất xứ"};
+        String [] cbxLuaChonValues = new String[] {"Tất cả","Tên máy","Số lượng","Đơn giá","RAM","CPU","Dung lượng","Card màn hình","Xuất xứ"};
         cbx_luaChon = new JComboBox(cbxLuaChonValues);
         cbx_luaChon.addItemListener(new ItemListener() {
         	public void itemStateChanged(ItemEvent e) {
@@ -268,6 +231,12 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         scrollPane.setBounds(10, 126, 1247, 774);
         add(scrollPane);
         updateTableDataFormDAO();
+        btnEffect.effectBtnHover(btn_Them);     // Nút Thêm
+        btnEffect.effectBtnHover(btnXemChiTiet);   // Nút Xem chi tiết
+        btnEffect.effectBtnHover(btnXuatExcel);    // Nút Xuất Excel
+        btnEffect.effectBtnHover(btnNhapExcel);    // Nút Nhập Excel
+        btnEffect.effectBtnHover(btnSua);          // Nút Sửa
+        btnEffect.effectBtnHover(btnXoa);          // Nút Xoá
     }
 
     public void XemChiTietMouseClicked() {
@@ -293,13 +262,12 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
 
             // Kiểm tra xem có hàng nào được chọn không
             if (i_row == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn một máy để chỉnh sửa!");
+                JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
                 return null; // Trả về null nếu không có hàng nào được chọn
             }
 
             // Lấy mã máy từ hàng được chọn
             String maMay = model.getValueAt(i_row, 0) + "";
-            System.out.println("Mã máy được chọn: " + maMay);
 
             // Tìm kiếm máy trong cơ sở dữ liệu
             computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);
@@ -313,7 +281,6 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         String luaChon = cbx_luaChon.getSelectedItem()+"";
         String content_Search = input_Search.getText();
         ArrayList<Computer> result = SearchFn(luaChon,content_Search);
-        System.out.println(luaChon);
         updateTableData(result);
     }
     public ArrayList<Computer> SearchFn(String luaChon , String content_Search){
@@ -322,9 +289,6 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         switch (luaChon) {
             case "Tất cả":
                 result = searchProduct.searchTatCa(content_Search);
-                break;
-            case "Mã máy":
-                result = searchProduct.searchMaMay(content_Search);
                 break;
             case "Tên máy":
                 result = searchProduct.searchTenMay(content_Search);
@@ -353,6 +317,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         }
         return result;
     }
+    @Override
     public void XuatExcelMouseClicked(){
         jChooser.setDialogTitle("Chọn nơi lưu file Excel");
         jChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
@@ -398,10 +363,10 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
                     workbook.write(fileOut);
                 }
 
-                JOptionPane.showMessageDialog(null, "Xuất Excel thành công!\nLưu tại: " + file.getAbsolutePath());
+                JOptionPane.showMessageDialog(null,Notification.success_ExportExcel  + file.getAbsolutePath());
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Lỗi xuất Excel!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, Notification.error_SaveExcel,"Lỗi",JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -412,12 +377,13 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
         style.setFont(font);
         return style;
     }
+    @Override
     public void NhapExelMouseClicked() {
         jChooser.showOpenDialog(null);
         File file = jChooser.getSelectedFile();
         if (!file.getName().endsWith("xlsx")) {
             JOptionPane.showMessageDialog(null,
-                    "Vui lòng chọn file Excel.",
+                    Notification.not_SelectedExcel,
                     "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             fillData(file);
@@ -460,7 +426,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
                     String dungluongpin = row.getCell(10).getStringCellValue(); // Sử dụng String vì constructor yêu cầu
 
                     // Tạo đối tượng Laptop với đúng tham số
-                    Laptop laptop = new Laptop(cardmanhinh, gia, mamay, ram, rom, soluong, tenCPU, tenmay, xuatxu, dungluongpin, kichthuocman, manhacungcap, dungluongluutru);
+                    Laptop laptop = new Laptop(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, dungluongpin, kichthuocman, manhacungcap, dungluongluutru);
                     LaptopDAO.getInstance().insert(laptop);
                 } else {
                     int soLuongPC = PCDAO.getInstance().selectAll().size();
@@ -469,11 +435,11 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer> {
                     int congsuatnguon = (int) row.getCell(8).getNumericCellValue();
 
                     // Tạo đối tượng PC với đúng tham số
-                    PC pc = new PC(cardmanhinh, gia, mamay, ram, rom, soluong, tenCPU, tenmay, xuatxu, congsuatnguon, mainboard, manhacungcap, dungluongluutru);
+                    PC pc = new PC(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, congsuatnguon, mainboard, manhacungcap, dungluongluutru);
                     PCDAO.getInstance().insert(pc);
                 }
             }
-            JOptionPane.showMessageDialog(this, "Nhập Excel thành công !");
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
         } catch (IOException e) {
             e.printStackTrace();
         }

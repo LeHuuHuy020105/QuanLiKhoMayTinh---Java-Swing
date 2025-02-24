@@ -34,7 +34,7 @@ public class CountryDAO implements DAOInterface<Country>{
         ArrayList<Country> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Select * from country";
+            String sql = Query.selectAllCountry;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -48,5 +48,43 @@ public class CountryDAO implements DAOInterface<Country>{
             e.printStackTrace();
         }
         return ketQua;
+    }
+    public Country CountryByName(String name){
+        Country country =null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql =Query.selectCountryByName ;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,name);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String maQuocGia = rs.getString("maquocgia");
+                String tenQuocGia = rs.getString("tenquocgia");
+                country = new Country(maQuocGia,tenQuocGia);
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return country;
+    }
+    public Country CountryByID(String id){
+        Country country =null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = Query.selectCountryByID;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,id);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String maQuocGia = rs.getString("maquocgia");
+                String tenQuocGia = rs.getString("tenquocgia");
+                country = new Country(maQuocGia,tenQuocGia);
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return country;
     }
 }
