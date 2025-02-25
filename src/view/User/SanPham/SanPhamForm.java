@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import model.PC;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import view.Icon;
 
 import javax.swing.table.TableModel;
 import java.io.File;
@@ -74,7 +75,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         });
         btnEffect.effectBtnHover(btn_Them);
         btn_Them.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btn_Them.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
+        btn_Them.setIcon(new ImageIcon(Icon.add));
         btn_Them.setHorizontalTextPosition(SwingConstants.CENTER);
         btn_Them.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btn_Them.setFocusPainted(false);
@@ -93,7 +94,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             }
         });
         btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
+        btnXemChiTiet.setIcon(new ImageIcon(Icon.eye));
         btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXemChiTiet.setFocusPainted(false);
@@ -111,7 +112,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         	}
         });
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
+        btnXuatExcel.setIcon(new ImageIcon(Icon.xuatExcel));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXuatExcel.setFocusPainted(false);
@@ -129,7 +130,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             }
         });
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
+        btnNhapExcel.setIcon(new ImageIcon(Icon.nhapExcel));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnNhapExcel.setFocusPainted(false);
@@ -147,7 +148,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             }
         });
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
+        btnSua.setIcon(new ImageIcon(Icon.edit));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSua.setFocusPainted(false);
@@ -165,7 +166,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         	}
         });
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+        btnXoa.setIcon(new ImageIcon(Icon.delete));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXoa.setFocusPainted(false);
@@ -213,7 +214,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                 updateTableDataFormDAO();
             }
         });
-        btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
+        btnNewButton_1.setIcon(new ImageIcon(Icon.refesh));
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(491, 9, 114, 30);
         panel_5_1_1.add(btnNewButton_1);

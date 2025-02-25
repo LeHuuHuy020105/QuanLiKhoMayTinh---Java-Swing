@@ -29,6 +29,8 @@ import java.awt.event.ActionEvent;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import view.Icon;
+
 import javax.swing.*;
 import java.io.FileOutputStream;
 
@@ -82,7 +84,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         panel_5_1_1.add(input_Search);
 
         JButton btnNewButton_1 = new JButton("Làm mới");
-        btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
+        btnNewButton_1.setIcon(new ImageIcon(Icon.refesh));
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(476, 9, 139, 30);
         panel_5_1_1.add(btnNewButton_1);
@@ -126,7 +128,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         	}
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
+        btnNewButton.setIcon(new ImageIcon(Icon.xuatExcel));
         btnNewButton.setBounds(686, 569, 139, 41);
         add(btnNewButton);
 
@@ -141,7 +143,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         		SuaSoLuongMouseClicked();
         	}
         });
-        btnSaSLng.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
+        btnSaSLng.setIcon(new ImageIcon(Icon.edit));
         btnSaSLng.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnSaSLng.setBounds(853, 569, 160, 41);
         add(btnSaSLng);
@@ -157,7 +159,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         		XoaMouseClicked();
         	}
         });
-        btn_XoaSanPham.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+        btn_XoaSanPham.setIcon(new ImageIcon(Icon.delete));
         btn_XoaSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btn_XoaSanPham.setBounds(1038, 569, 176, 41);
         add(btn_XoaSanPham);
@@ -185,7 +187,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         });
         btnNewButton_2.setBackground(new Color(60, 179, 113));
         btnNewButton_2.setBorderPainted(false);
-        btnNewButton_2.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
+        btnNewButton_2.setIcon(new ImageIcon(Icon.add));
         btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_2.setForeground(Color.WHITE); // Đặt màu chữ
         btnNewButton_2.setBounds(357, 638, 139, 41);

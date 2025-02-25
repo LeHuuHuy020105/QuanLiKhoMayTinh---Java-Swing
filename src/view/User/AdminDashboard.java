@@ -12,6 +12,7 @@ import java.awt.Container;
 import java.awt.Font;
 
 import model.User;
+import view.Icon;
 import view.User.NhaCungCap.NhaCungCapForm;
 import view.User.NhapHang.NhapHangForm;
 import view.User.PhieuNhap.PhieuNhapForm;
@@ -111,7 +112,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_SanPham.add(side_Admin_SanPham);
 
         JLabel lblNewLabel_2 = new JLabel("");
-        lblNewLabel_2.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\product_dark.png"));
+        lblNewLabel_2.setIcon(new ImageIcon(Icon.product_dark));
         lblNewLabel_2.setBounds(20, 0, 31, 38);
         panel_Admin_SanPham.add(lblNewLabel_2);
 
@@ -140,7 +141,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_NhaCungCap.add(side_Admin_NhaCungCap);
 
         JLabel lblNewLabel_2_1 = new JLabel("");
-        lblNewLabel_2_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhacungcap.png"));
+        lblNewLabel_2_1.setIcon(new ImageIcon(Icon.nhacungcap));
         lblNewLabel_2_1.setBounds(20, 0, 31, 38);
         panel_Admin_NhaCungCap.add(lblNewLabel_2_1);
 
@@ -169,7 +170,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_NhapHang.add(side_Admin_NhapHang);
 
         JLabel lblNewLabel_2_2 = new JLabel("");
-        lblNewLabel_2_2.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhaphang.png"));
+        lblNewLabel_2_2.setIcon(new ImageIcon(Icon.nhaphang));
         lblNewLabel_2_2.setBounds(20, 0, 31, 38);
         panel_Admin_NhapHang.add(lblNewLabel_2_2);
 
@@ -198,7 +199,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_PhieuNhap.add(side_Admin_PhieuNhap);
 
         JLabel lblNewLabel_2_3 = new JLabel("");
-        lblNewLabel_2_3.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\phieunhap.png"));
+        lblNewLabel_2_3.setIcon(new ImageIcon(Icon.phieunhap));
         lblNewLabel_2_3.setBounds(20, 0, 31, 38);
         panel_Admin_PhieuNhap.add(lblNewLabel_2_3);
 
@@ -227,7 +228,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_PhieuXuat.add(side_Admin_PhieuXuat);
 
         JLabel lblNewLabel_2_4 = new JLabel("");
-        lblNewLabel_2_4.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\phieuxuat.png"));
+        lblNewLabel_2_4.setIcon(new ImageIcon(Icon.phieuxuat));
         lblNewLabel_2_4.setBounds(20, 0, 31, 38);
         panel_Admin_PhieuXuat.add(lblNewLabel_2_4);
 
@@ -256,7 +257,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_TonKho.add(side_Admin_TonKho);
 
         JLabel lblNewLabel_2_5 = new JLabel("");
-        lblNewLabel_2_5.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\tonkho.png"));
+        lblNewLabel_2_5.setIcon(new ImageIcon(Icon.tonkho));
         lblNewLabel_2_5.setBounds(20, 0, 31, 38);
         panel_Admin_TonKho.add(lblNewLabel_2_5);
 
@@ -285,7 +286,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_TaiKhoan.add(side_Admin_TaiKhoan);
 
         JLabel lblNewLabel_2_6 = new JLabel("");
-        lblNewLabel_2_6.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\user_dark.png"));
+        lblNewLabel_2_6.setIcon(new ImageIcon(Icon.userdark));
         lblNewLabel_2_6.setBounds(20, 0, 31, 38);
         panel_Admin_TaiKhoan.add(lblNewLabel_2_6);
 
@@ -314,7 +315,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_ThongKe.add(side_Admin_ThongKe);
 
         JLabel lblNewLabel_2_7 = new JLabel("");
-        lblNewLabel_2_7.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\statistical_dark.png"));
+        lblNewLabel_2_7.setIcon(new ImageIcon(Icon.statistical_dark));
         lblNewLabel_2_7.setBounds(20, 0, 31, 38);
         panel_Admin_ThongKe.add(lblNewLabel_2_7);
 
@@ -332,7 +333,7 @@ public class AdminDashboard extends JFrame {
         btn_Admin_ThongKe.setFont(new Font("Tahoma", Font.BOLD, 14));
 
         JLabel lblNewLabel_2_8_1 = new JLabel("");
-        lblNewLabel_2_8_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\dangxuat.png"));
+        lblNewLabel_2_8_1.setIcon(new ImageIcon(Icon.dangxuat));
         lblNewLabel_2_8_1.setBounds(22, 847, 31, 38);
         panel.add(lblNewLabel_2_8_1);
         
@@ -348,7 +349,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_XuatHang.add(side_Admin_XuatHang);
         
         JLabel lblNewLabel_2_2_1 = new JLabel("");
-        lblNewLabel_2_2_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuathang.png"));
+        lblNewLabel_2_2_1.setIcon(new ImageIcon(Icon.xuathang));
         lblNewLabel_2_2_1.setBounds(20, 0, 31, 38);
         panel_Admin_XuatHang.add(lblNewLabel_2_2_1);
         
@@ -377,7 +378,7 @@ public class AdminDashboard extends JFrame {
         panel_Admin_ThongTinTK.add(side_Admin_SanPham_1);
         
         JLabel lblNewLabel_2_8 = new JLabel("");
-        lblNewLabel_2_8.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\info.png"));
+        lblNewLabel_2_8.setIcon(new ImageIcon(Icon.info));
         lblNewLabel_2_8.setBounds(20, 0, 31, 38);
         panel_Admin_ThongTinTK.add(lblNewLabel_2_8);
         
@@ -396,7 +397,7 @@ public class AdminDashboard extends JFrame {
         panel.add(btn_Admin_Logout);
         
         JLabel lblNewLabel_2_7_1 = new JLabel("");
-        lblNewLabel_2_7_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\dangxuat.png"));
+        lblNewLabel_2_7_1.setIcon(new ImageIcon(Icon.dangxuat));
         lblNewLabel_2_7_1.setBounds(22, 672, 31, 38);
         panel.add(lblNewLabel_2_7_1);
 

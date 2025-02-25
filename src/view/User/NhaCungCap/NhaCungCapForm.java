@@ -5,6 +5,7 @@ import controller.*;
 import model.Producer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import view.Icon;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -76,7 +77,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         });
         btnEffect.effectBtnHover(btn_ThemNCC);
         btn_ThemNCC.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btn_ThemNCC.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
+        btn_ThemNCC.setIcon(new ImageIcon(Icon.add));
         btn_ThemNCC.setHorizontalTextPosition(SwingConstants.CENTER);
         btn_ThemNCC.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btn_ThemNCC.setFocusPainted(false);
@@ -95,7 +96,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         });
         btnEffect.effectBtnHover(btnXuatExcel);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
+        btnXuatExcel.setIcon(new ImageIcon(Icon.xuatExcel));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXuatExcel.setFocusPainted(false);
@@ -114,7 +115,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         });
         btnEffect.effectBtnHover(btnNhapExcel);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
+        btnNhapExcel.setIcon(new ImageIcon(Icon.nhapExcel));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnNhapExcel.setFocusPainted(false);
@@ -133,7 +134,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         });
         btnEffect.effectBtnHover(btnSua);
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
+        btnSua.setIcon(new ImageIcon(Icon.edit));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSua.setFocusPainted(false);
@@ -152,7 +153,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         });
         btnEffect.effectBtnHover(btnXoa);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+        btnXoa.setIcon(new ImageIcon(Icon.delete));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXoa.setFocusPainted(false);
@@ -217,7 +218,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
             }
         });
 
-        btn_LamMoi.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
+        btn_LamMoi.setIcon(new ImageIcon(Icon.refesh));
         btn_LamMoi.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
