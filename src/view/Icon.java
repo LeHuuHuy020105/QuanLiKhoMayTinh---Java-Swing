@@ -19,5 +19,7 @@ public class Icon {
     public static String edit = "D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png";
     public static String delete = "D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png";
     public static String refesh = "D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png";
+    public static String logo = "D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\ShoppingOnline\\src\\icon\\logo.png";
+    public static String hiddenpassword ="D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\ShoppingOnline\\src\\icon\\hidden_password.png";
 
 }

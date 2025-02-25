@@ -2,6 +2,7 @@ package view.login;
 
 import DAO.UserDAO;
 import model.User;
+import view.Icon;
 import view.User.AdminDashboard;
 import view.User.QuanLiNhapHangForm;
 import view.User.QuanLiXuatHangForm;
@@ -54,7 +55,7 @@ public class Login extends JFrame {
         contentPane.setLayout(null);
 
         JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\ShoppingOnline\\src\\icon\\logo.png"));
+        lblNewLabel.setIcon(new ImageIcon(Icon.logo));
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 10));
         lblNewLabel.setBounds(0, 0, 470, 493);
         contentPane.add(lblNewLabel);
@@ -88,7 +89,7 @@ public class Login extends JFrame {
 
         JLabel lblNewLabel_3 = new JLabel("");
         lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_3.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\ShoppingOnline\\src\\icon\\hidden_password.png"));
+        lblNewLabel_3.setIcon(new ImageIcon(Icon.hiddenpassword));
         lblNewLabel_3.setBounds(937, 270, 44, 22);
         contentPane.add(lblNewLabel_3);
 
