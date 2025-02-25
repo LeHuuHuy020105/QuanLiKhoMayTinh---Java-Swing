@@ -52,6 +52,7 @@ public class AdminDashboard extends JFrame {
     private JPanel panel_Admin_ThongKe;
 	private JPanel panel_Admin_XuatHang;
 	private JPanel side_Admin_XuatHang;
+    private User currentUser;
 
     /**
      * Launch the application.
@@ -61,9 +62,10 @@ public class AdminDashboard extends JFrame {
      * Create the frame.
      */
     public AdminDashboard(User currentUser) {
+        this.currentUser = currentUser;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Phần mềm quản lí kho hàng máy tính");
-        setBounds(100, 100, 1500, 950);
+        setBounds(100, 100, 1510, 764);
         setLocationRelativeTo(null);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -80,7 +82,7 @@ public class AdminDashboard extends JFrame {
 
 
         JPanel panel = new JPanel();
-        panel.setBounds(0, 0, 239, 911);
+        panel.setBounds(0, 0, 239, 764);
         panel.setBackground(new Color(144, 238, 144));
         contentPane.add(panel);
         panel.setLayout(null);
@@ -329,42 +331,6 @@ public class AdminDashboard extends JFrame {
         btn_Admin_ThongKe.setHorizontalAlignment(SwingConstants.CENTER);
         btn_Admin_ThongKe.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-        JPanel panel_Admin_ThongTinTK = new JPanel();
-        panel_Admin_ThongTinTK.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-            }
-        });
-        panel_Admin_ThongTinTK.setLayout(null);
-        panel_Admin_ThongTinTK.setBackground(new Color(245, 255, 250));
-        panel_Admin_ThongTinTK.setBounds(0, 798, 239, 38);
-        panel_Admin_ThongTinTK.setBackground(new Color(144, 238, 144));
-        panel.add(panel_Admin_ThongTinTK);
-
-        JPanel side_Admin_SanPham_1 = new JPanel();
-        side_Admin_SanPham_1.setBackground(new Color(144, 238, 144));
-        side_Admin_SanPham_1.setBounds(0, 0, 10, 38);
-        panel_Admin_ThongTinTK.add(side_Admin_SanPham_1);
-
-        JLabel lblNewLabel_2_8 = new JLabel("");
-        lblNewLabel_2_8.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\info.png"));
-        lblNewLabel_2_8.setBounds(20, 0, 31, 38);
-        panel_Admin_ThongTinTK.add(lblNewLabel_2_8);
-
-        JLabel btn_Admin_SanPham_1 = new JLabel("Thông tin tài khoản");
-        btn_Admin_SanPham_1.setIcon(null);
-        btn_Admin_SanPham_1.setHorizontalAlignment(SwingConstants.CENTER);
-        btn_Admin_SanPham_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btn_Admin_SanPham_1.setBounds(0, 0, 239, 38);
-        panel_Admin_ThongTinTK.add(btn_Admin_SanPham_1);
-
-        JLabel btn_Admin_Logout = new JLabel("Đăng xuất");
-        btn_Admin_Logout.setIcon(null);
-        btn_Admin_Logout.setHorizontalAlignment(SwingConstants.CENTER);
-        btn_Admin_Logout.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btn_Admin_Logout.setBounds(0, 847, 239, 38);
-        panel.add(btn_Admin_Logout);
-
         JLabel lblNewLabel_2_8_1 = new JLabel("");
         lblNewLabel_2_8_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\dangxuat.png"));
         lblNewLabel_2_8_1.setBounds(22, 847, 31, 38);
@@ -398,6 +364,41 @@ public class AdminDashboard extends JFrame {
         btn_Admin_XuatHang.setFont(new Font("Tahoma", Font.BOLD, 14));
         btn_Admin_XuatHang.setBounds(0, 0, 239, 38);
         panel_Admin_XuatHang.add(btn_Admin_XuatHang);
+        
+        JPanel panel_Admin_ThongTinTK = new JPanel();
+        panel_Admin_ThongTinTK.setLayout(null);
+        panel_Admin_ThongTinTK.setBackground(new Color(245, 255, 250));
+        panel_Admin_ThongTinTK.setBounds(0, 635, 239, 38);
+        panel.add(panel_Admin_ThongTinTK);
+        
+        JPanel side_Admin_SanPham_1 = new JPanel();
+        side_Admin_SanPham_1.setBackground(new Color(144, 238, 144));
+        side_Admin_SanPham_1.setBounds(0, 0, 10, 38);
+        panel_Admin_ThongTinTK.add(side_Admin_SanPham_1);
+        
+        JLabel lblNewLabel_2_8 = new JLabel("");
+        lblNewLabel_2_8.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\info.png"));
+        lblNewLabel_2_8.setBounds(20, 0, 31, 38);
+        panel_Admin_ThongTinTK.add(lblNewLabel_2_8);
+        
+        JLabel btn_Admin_SanPham_1 = new JLabel("Thông tin tài khoản");
+        btn_Admin_SanPham_1.setIcon(null);
+        btn_Admin_SanPham_1.setHorizontalAlignment(SwingConstants.CENTER);
+        btn_Admin_SanPham_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+        btn_Admin_SanPham_1.setBounds(0, 0, 239, 38);
+        panel_Admin_ThongTinTK.add(btn_Admin_SanPham_1);
+        
+        JLabel btn_Admin_Logout = new JLabel("Đăng xuất");
+        btn_Admin_Logout.setIcon(null);
+        btn_Admin_Logout.setHorizontalAlignment(SwingConstants.CENTER);
+        btn_Admin_Logout.setFont(new Font("Tahoma", Font.BOLD, 14));
+        btn_Admin_Logout.setBounds(0, 672, 239, 38);
+        panel.add(btn_Admin_Logout);
+        
+        JLabel lblNewLabel_2_7_1 = new JLabel("");
+        lblNewLabel_2_7_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\dangxuat.png"));
+        lblNewLabel_2_7_1.setBounds(22, 672, 31, 38);
+        panel.add(lblNewLabel_2_7_1);
 
         SanPhamMouseClicked();
     }
@@ -447,7 +448,7 @@ public class AdminDashboard extends JFrame {
         resetMenu();
         side_Admin_NhapHang.setBackground(sideColor);
         panel_Admin_NhapHang.setBackground(selectionColor);
-        NhapHangForm nhapHangForm = new NhapHangForm();
+        NhapHangForm nhapHangForm = new NhapHangForm(currentUser);
         cardPanel.add(nhapHangForm, "Nhập hàng");
         cardLayout.show(cardPanel, "Nhập hàng");
     }

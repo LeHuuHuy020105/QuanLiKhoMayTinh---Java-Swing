@@ -135,6 +135,7 @@ public class SearchProduct {
         return ketQua;
     }
     public ArrayList<Computer>searchTenNhaCungCap(String tenNCC){
+        tenNCC = tenNCC.toLowerCase();
         ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
         ArrayList<Computer> ketQua = new ArrayList<>();
         String maNCC = ProducersDAO.getInstance().producerByName(tenNCC).getMaNhaCungCap();

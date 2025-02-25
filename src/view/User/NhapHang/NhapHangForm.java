@@ -1,18 +1,22 @@
 package view.User.NhapHang;
 
-import DAO.ProducersDAO;
-import DAO.ProductsDAO;
+import DAO.*;
+import com.itextpdf.text.pdf.PdfWriter;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.Computer;
+import model.DetailImportProducts;
+import model.ImportProducts;
+import model.User;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
+import java.io.FileOutputStream;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -20,25 +24,36 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import javax.swing.*;
+import java.io.FileOutputStream;
 
 public class NhapHangForm extends JPanel implements updateDataToTable<Computer> {
 
     private static final long serialVersionUID = 1L;
     private JTextField input_Search;
     private JTable table_product;
-    private JTextField textField_2;
+    private JTextField input_NguoiTaoPhieu;
     private JTable table_nhapHang;
     private JTextField input_SoLuong;
     private JButton btnNewButton_2;
     private JComboBox cbx_luaChon;
-    private JTextField textField_4;
+    private User currentUser ;
+    private ArrayList<DetailImportProducts> detailImportProducts;
+	private JLabel label_TotalPrice;
 
     /**
      * Create the panel.
      */
-    public NhapHangForm() {
+    public NhapHangForm(User user) {
+        this.detailImportProducts = new ArrayList<>();
+        this.currentUser = user;
         setLayout(null);
-        setSize(1257, 911);
+        setSize(1257, 735);
 
         Box verticalBox_1 = Box.createVerticalBox();
         verticalBox_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
@@ -63,17 +78,17 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             }
         });
         input_Search.setColumns(10);
-        input_Search.setBounds(156, 11, 335, 30);
+        input_Search.setBounds(156, 11, 310, 30);
         panel_5_1_1.add(input_Search);
 
         JButton btnNewButton_1 = new JButton("Làm mới");
         btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton_1.setBounds(501, 9, 114, 30);
+        btnNewButton_1.setBounds(476, 9, 139, 30);
         panel_5_1_1.add(btnNewButton_1);
 
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 121, 637, 678);
+        scrollPane.setBounds(10, 121, 637, 490);
         add(scrollPane);
 
         table_product = new JTable();
@@ -81,23 +96,18 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 new Object[][]{
                 },
                 new String[]{
-                        "Mã máy", "Tên máy", "Nhà cung cấp", "Đơn giá",
+                        "Mã máy", "Tên máy", "Nhà cung cấp", "Số lượng", "Đơn giá",
                 }
         ));
         scrollPane.setViewportView(table_product);
 
-        JLabel lblNewLabel_1 = new JLabel("Nhà cung cấp");
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_1.setBounds(676, 31, 123, 27);
-        add(lblNewLabel_1);
-
-        textField_2 = new JTextField();
-        textField_2.setColumns(10);
-        textField_2.setBounds(834, 87, 390, 27);
-        add(textField_2);
+        input_NguoiTaoPhieu = new JTextField();
+        input_NguoiTaoPhieu.setColumns(10);
+        input_NguoiTaoPhieu.setBounds(824, 45, 390, 27);
+        add(input_NguoiTaoPhieu);
 
         JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(676, 147, 559, 552);
+        scrollPane_1.setBounds(676, 121, 559, 427);
         add(scrollPane_1);
 
         table_nhapHang = new JTable();
@@ -105,40 +115,68 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 new Object[][]{
                 },
                 new String[]{
-                        "Mã máy", "Tên máy", "Số lương", "Đơn giá"
+                		"Mã máy", "Tên máy", "Nhà cung cấp","Số lượng","Đơn giá",
                 }
         ));
         scrollPane_1.setViewportView(table_nhapHang);
 
         JButton btnNewButton = new JButton("Nhập Excel");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
-        btnNewButton.setBounds(676, 739, 139, 41);
+        btnNewButton.setBounds(686, 569, 139, 41);
         add(btnNewButton);
 
         JButton btnSaSLng = new JButton("Sửa số lượng");
+        btnSaSLng.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        btnSaSLng.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		SuaSoLuongMouseClicked();
+        	}
+        });
         btnSaSLng.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
         btnSaSLng.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnSaSLng.setBounds(871, 739, 160, 41);
+        btnSaSLng.setBounds(853, 569, 160, 41);
         add(btnSaSLng);
 
-        JButton btnXoSnPhm = new JButton("Xoá sản phẩm");
-        btnXoSnPhm.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
-        btnXoSnPhm.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnXoSnPhm.setBounds(1076, 739, 148, 41);
-        add(btnXoSnPhm);
+        JButton btn_XoaSanPham = new JButton("Xoá sản phẩm");
+        btn_XoaSanPham.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        btn_XoaSanPham.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		XoaMouseClicked();
+        	}
+        });
+        btn_XoaSanPham.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+        btn_XoaSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btn_XoaSanPham.setBounds(1038, 569, 176, 41);
+        add(btn_XoaSanPham);
 
         JLabel lblNewLabel_2 = new JLabel("Số lượng");
         lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_2.setBounds(166, 837, 65, 41);
+        lblNewLabel_2.setBounds(146, 638, 65, 41);
         add(lblNewLabel_2);
 
         input_SoLuong = new JTextField();
-        input_SoLuong.setBounds(250, 839, 86, 41);
+        input_SoLuong.setBounds(238, 640, 86, 41);
         add(input_SoLuong);
         input_SoLuong.setColumns(10);
 
         btnNewButton_2 = new JButton("Thêm\r\n");
+        btnNewButton_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btnNewButton_2.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -150,42 +188,47 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         btnNewButton_2.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
         btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_2.setForeground(Color.WHITE); // Đặt màu chữ
-        btnNewButton_2.setBounds(359, 837, 139, 41);
+        btnNewButton_2.setBounds(357, 638, 139, 41);
         add(btnNewButton_2);
 
         JLabel lblNewLabel_2_1 = new JLabel("Tổng tiền :");
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel_2_1.setBounds(721, 836, 108, 41);
+        lblNewLabel_2_1.setBounds(718, 637, 108, 41);
         add(lblNewLabel_2_1);
 
-        JLabel lblNewLabel_2_1_1 = new JLabel("140000000");
-        lblNewLabel_2_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_2_1_1.setForeground(new Color(255, 0, 0));
-        lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblNewLabel_2_1_1.setBounds(853, 836, 197, 41);
-        add(lblNewLabel_2_1_1);
+        label_TotalPrice = new JLabel("0");
+        label_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
+        label_TotalPrice.setForeground(new Color(255, 0, 0));
+        label_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 18));
+        label_TotalPrice.setBounds(853, 637, 197, 41);
+        add(label_TotalPrice);
 
-        JButton btnNewButton_2_1 = new JButton("Nhập Hàng");
-        btnNewButton_2_1.setIcon(null);
-        btnNewButton_2_1.setForeground(Color.WHITE);
-        btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton_2_1.setBorderPainted(false);
-        btnNewButton_2_1.setBackground(new Color(60, 179, 113));
-        btnNewButton_2_1.setBounds(1076, 837, 139, 41);
-        add(btnNewButton_2_1);
+        JButton btn_NhapHang = new JButton("Nhập Hàng");
+        btn_NhapHang.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		NhapHangMouseClicked();
+        	}
+        });
+        btn_NhapHang.setIcon(null);
+        btn_NhapHang.setForeground(Color.WHITE);
+        btn_NhapHang.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btn_NhapHang.setBorderPainted(false);
+        btn_NhapHang.setBackground(new Color(60, 179, 113));
+        btn_NhapHang.setBounds(1076, 638, 139, 41);
+        add(btn_NhapHang);
 
         JLabel lblNewLabel_1_1 = new JLabel("Người tạo phiếu");
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_1_1.setBounds(676, 85, 123, 27);
+        lblNewLabel_1_1.setBounds(676, 43, 123, 27);
         add(lblNewLabel_1_1);
-
-        textField_4 = new JTextField();
-        textField_4.setColumns(10);
-        textField_4.setBounds(834, 33, 381, 27);
-        add(textField_4);
         updateTableDataFormDAO();
+        loadNhaphangForm();
     }
-
+    public void loadNhaphangForm(){
+        input_NguoiTaoPhieu.setText(currentUser.getFullName());
+        input_NguoiTaoPhieu.setEditable(false);
+    }
     public void jTextFieldSearchKeyReleased() {
         String luaChon = (String) cbx_luaChon.getSelectedItem();
         String input = input_Search.getText();
@@ -231,12 +274,13 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                             computer.getMaMay(),
                             computer.getTenMay(),
                             tenNCC,
+                            computer.getSoLuong(),
                             df.format(computer.getGia()) + " VND",
                     });
         }
     }
 
-    public Computer getComputerSelected() {
+    public Computer getComputerSelectedTableProduct() {
         Computer computer = null;
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         int i_row = table_product.getSelectedRow();
@@ -244,36 +288,219 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
             return null;
         }
-        String maMay = model.getValueAt(i_row, 0) + "";
+        int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
         computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
         return computer;
     }
 
     public void ThemMouseClicked() {
-        double soLuong = 0;
+        int soLuong = 0;
         boolean hasError = false;
         try {
-            soLuong= Double.parseDouble(input_SoLuong.getText());
+            soLuong= Integer.parseInt(input_SoLuong.getText());
             if(soLuong <=0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đơn giá hợp lệ (số dương)!");
+            JOptionPane.showMessageDialog(this, Notification.isValidNumber);
             hasError = true;
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelected();
-        updateDataToTableNhapHangForm(computer_selected,table_nhapHang);
+        Computer computer_selected = getComputerSelectedTableProduct();
+        int maMay =computer_selected.getMaMay();
+
+        DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,0,soLuong);
+        this.detailImportProducts.add(detailImportProducts1);
+        updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
         input_SoLuong.setText("");
+        setTotalPrice();
     }
-    public void updateDataToTableNhapHangForm(Computer computer , JTable jTable){
+    public void updateDataToTableNhapHangForm(ArrayList<DetailImportProducts> detailImportProducts, JTable jTable){
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        model.setRowCount(0);
         DecimalFormat df = new DecimalFormat("#,###");
-        int soLuong = Integer.parseInt(input_SoLuong.getText());
-        model.addRow(new Object[]{
-                computer.getMaMay(),
-                computer.getTenMay(),
-                soLuong,
-                df.format(computer.getGia()) + " VND",
-        });
+        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            String tenNCC = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
+            model.addRow(new Object[]{
+                    computer.getMaMay(),
+                    computer.getTenMay(),
+                    tenNCC,
+                    detailImportProducts1.getSoluong(),
+                    df.format(computer.getGia()) + " VND",
+            });
+        }
+    }
+    public Computer getComputerSelectedTableNhapHang() {
+        Computer computer = null;
+        DefaultTableModel model = (DefaultTableModel) table_nhapHang.getModel();
+        int i_row = table_nhapHang.getSelectedRow();
+        if (i_row == -1) {
+            JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
+            return null;
+        }
+        int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
+        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        return computer;
+    }
+    public DetailImportProducts EntryFormByProductID(ArrayList<DetailImportProducts> detailImportProducts, Computer computer){
+        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
+            if(detailImportProducts1.getMaMay() == computer.getMaMay()){
+                return detailImportProducts1;
+            }
+        }
+        return null;
+    }
+    public void SuaSoLuongMouseClicked() {
+        boolean hasError = false;
+        String newSL = JOptionPane.showInputDialog(this, "Nhập số lượng cần thay đổi", "Thay đổi số lượng", JOptionPane.QUESTION_MESSAGE);
+        int soLuong =0;
+        try {
+            soLuong = Integer.parseInt(newSL);
+        } catch (Exception e) {
+            hasError=true;
+           JOptionPane.showMessageDialog(this,Notification.isValidNumber);
+        }
+        if(hasError)return;
+        Computer computer_selected = getComputerSelectedTableNhapHang();
+        DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_selected);
+        detailImportProducts1.setSoluong(soLuong);
+        updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
+    }
+    public void XoaMouseClicked() {
+        int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
+                JOptionPane.YES_NO_OPTION);
+        if(luaChon==JOptionPane.YES_OPTION){
+            Computer computer_Selected = getComputerSelectedTableNhapHang();
+            DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_Selected);
+            this.detailImportProducts.remove(detailImportProducts1);
+        }
+        updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+        setTotalPrice();
+	}
+    public double CountTotalPrice(){
+        double totalPrice = 0;
+        for(DetailImportProducts detailImportProducts1 : this.detailImportProducts){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            double donGia = computer.getGia();
+            int soLuong = detailImportProducts1.getSoluong();
+            totalPrice+=donGia*soLuong;
+        }
+        return totalPrice;
+    }
+    public void setTotalPrice(){
+        DecimalFormat df = new DecimalFormat("#,###");
+        double totalPrice = CountTotalPrice();
+        label_TotalPrice.setText(df.format(totalPrice)+" VND");
+    }
+    public void NhapHangMouseClicked() {
+        if(detailImportProducts.size()==0){
+            JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để nhập hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }else {
+            int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
+            if(check == JOptionPane.YES_OPTION){
+                double TongTien =CountTotalPrice();
+                int maNguoiDung = currentUser.getIdUser();
+                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung);
+                int maphieunhap = ImportProductsDAO.getInstance().insertImportProduct(importProducts);
+                updateDatabaseImportProducts(maphieunhap);
+                int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
+                if(check_pdf==JOptionPane.YES_OPTION){
+                    exportPDF(detailImportProducts);
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
+        resetNhapHang();
+
+	}
+    public void updateDatabaseImportProducts(int maphieunhap){
+        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
+            detailImportProducts1.setMaphieunhap(maphieunhap);
+            DetailImportProductsDAO.getInstance().insert(detailImportProducts1);
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            int soLuongMay = computer.getSoLuong()+detailImportProducts1.getSoluong();
+            System.out.println(soLuongMay);
+            computer.setSoLuong(soLuongMay);
+            ProductsDAO.getInstance().update(computer);
+            updateTableDataFormDAO();
+        }
+    }
+    public void resetNhapHang(){
+        detailImportProducts.clear();
+        updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+        label_TotalPrice.setText("");
+    }
+    public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
+//        try {
+//            com.itextpdf.text.Document document = new Document();
+//            PdfWriter.getInstance(document, new FileOutputStream("PhieuNhap.pdf"));
+//            document.open();
+//
+//            // Font setting
+//            BaseFont baseFont = BaseFont.createFont("times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//            com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 14, Font.BOLD);
+//            com.itextpdf.text.Font textFont = new com.itextpdf.text.Font(baseFont, 12);
+//
+//            // Title
+//            Paragraph title = new Paragraph("THÔNG TIN PHIẾU NHẬP", titleFont);
+//            title.setAlignment(Element.ALIGN_CENTER);
+//            document.add(title);
+//
+//            document.add(new Paragraph("\n"));
+//
+//
+//            int maPhieu = detailImportProducts.get(0).getMaphieunhap();
+//            ImportProducts importProducts = ImportProductsDAO.getInstance().getImportProductsByMaPhieuNhap(maPhieu);
+//            Timestamp thoiGian =importProducts .getTimestamp();
+//            String nguoiTao = UserDAO.getInstance().getUsetById(importProducts.getManguoidung()).getFullName();
+//
+//            // Information
+//            document.add(new Paragraph("Mã phiếu: " + maPhieu, textFont));
+//            document.add(new Paragraph("Thời gian tạo: " + thoiGian, textFont));
+//            document.add(new Paragraph("Người tạo: " + nguoiTao, textFont));
+//
+//            document.add(new Paragraph("\n"));
+//
+//            // Table
+//            PdfPTable table = new PdfPTable(5);
+//            table.setWidthPercentage(100);
+//            table.setWidths(new float[]{2, 5, 3, 2, 3});
+//
+//            String[] headers = {"Mã máy", "Tên máy", "Đơn giá", "SL", "Tổng tiền"};
+//            for (String header : headers) {
+//                PdfPCell cell = new PdfPCell(new Phrase(header, textFont));
+//                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+//                table.addCell(cell);
+//            }
+//            // Duyệt qua mảng detailImportProducts để tạo dữ liệu cho bảng
+//            DecimalFormat df = new DecimalFormat("#,###");
+//            for (DetailImportProducts detail : detailImportProducts) {
+//                Computer computer = ProductsDAO.getInstance().searchByIDProduct(detail.getMaMay());
+//                String tenMay = computer.getTenMay();
+//                String donGia = df.format(computer.getGia()) + " VND";
+//                int soLuong = detail.getSoluong();
+//                double tongTien = importProducts.getTongTien();
+//                String tongTienFormatted = df.format(tongTien) + " VND";
+//
+//                // Thêm dữ liệu vào bảng
+//                table.addCell(new PdfPCell(new Phrase(String.valueOf(detail.getMaMay()), textFont)));
+//                table.addCell(new PdfPCell(new Phrase(tenMay, textFont)));
+//                table.addCell(new PdfPCell(new Phrase(donGia, textFont)));
+//                table.addCell(new PdfPCell(new Phrase(String.valueOf(soLuong), textFont)));
+//                table.addCell(new PdfPCell(new Phrase(tongTienFormatted, textFont)));
+//            }
+//            document.add(table);
+//
+//            // Total amount
+//            document.add(new Paragraph("\nTổng thanh toán: "+importProducts.getTongTien() , textFont));
+//            document.close();
+//
+//            JOptionPane.showMessageDialog(null, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }
+        System.out.println("abc");
     }
 }
 

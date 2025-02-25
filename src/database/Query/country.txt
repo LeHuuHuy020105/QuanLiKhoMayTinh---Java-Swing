@@ -28,12 +28,18 @@ create table producer (
 	sodientthoai varchar(50) not null,
 	diachi varchar(150) not null
 )
-create table entryform(
-	maphieunhap int auto_increment primary key,
+create table detailimportproducts(
+	maphieunhap int not null,
 	mamay int not null,
 	soluong int not null,
-	manguoidung int not null,
 	foreign key (mamay) references product(mamay),
+	foreign key (maphieunhap) references importproducts(maphieunhap)
+)
+create table importproducts(
+	maphieunhap int auto_increment primary key,
+	tongtien double not null,
+	thoidiemtaophieu TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	manguoidung int not null,
 	foreign key (manguoidung) references user(manguoidung)
 )
 create table user (

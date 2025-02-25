@@ -50,7 +50,7 @@ public class LaptopDAO implements DAOInterface<Laptop> {
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql =Query.updatePC;
+            String sql =Query.updateLaptop;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,laptop.getTenMay());
             pst.setInt(2,laptop.getSoLuong());

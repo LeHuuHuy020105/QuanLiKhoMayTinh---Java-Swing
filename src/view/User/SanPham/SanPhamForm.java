@@ -48,7 +48,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
      */
     public SanPhamForm() {
         setLayout(null);
-        setSize(1257, 911);
+        setSize(1500, 950);
         Box verticalBox = Box.createVerticalBox();
         verticalBox.setBorder(new TitledBorder(
                 new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
@@ -267,7 +267,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             }
 
             // Lấy mã máy từ hàng được chọn
-            String maMay = model.getValueAt(i_row, 0) + "";
+            int maMay = Integer.parseInt(model.getValueAt(i_row, 0)+"");
 
             // Tìm kiếm máy trong cơ sở dữ liệu
             computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);

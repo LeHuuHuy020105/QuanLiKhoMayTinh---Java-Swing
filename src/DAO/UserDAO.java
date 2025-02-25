@@ -57,15 +57,39 @@ public class UserDAO implements DAOInterface<User>{
         pst.setString(2, Password);
         ResultSet rs = pst.executeQuery();
         while (rs.next()) {
+            int idUser = rs.getInt("manguoidung");
 			String username = rs.getString("username");
 			String email = rs.getString("email");
 			String password = rs.getString("password");
 			String fullname = rs.getString("fullname");
 			int status = rs.getInt("status");
 			String role= rs.getString("role");
-			user = new User(email,fullname,password,role,status,username);
+			user = new User(email,fullname,password,role,status,username,idUser);
 		}
         JDBCUtil.closeConnection(connection);
         return user;
 	}
+    public User getUsetById(int idUser){
+        User user = null;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "select * from user where manguoidung =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,idUser);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                int maNguoiDung = rs.getInt("manguoidung");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String fullname = rs.getString("fullname");
+                int status = rs.getInt("status");
+                String role= rs.getString("role");
+                user = new User(email,fullname,password,role,status,username,maNguoiDung);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 }

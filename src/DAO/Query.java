@@ -4,13 +4,9 @@ public class Query {
 //    Product
     public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-    public static String updatePC = "Update product set \" +\n" +
-            "\"tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , \" +\n" +
-            "\"mainboard =? ,congsuatnguon =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+    public static String updatePC = "update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,mainboard=?,congsuatnguon=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
 
-    public static String updateLaptop ="Update product set \" +\n" +
-            "\"tenmay=? , soluong=? , gia=?, tenCPU=? , ram=?, xuatxu=? , \" +\n" +
-            "\"kichthuocman =? ,dungluongpin =?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+    public static String updateLaptop ="update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,kichthuocman =?,dungluongpin=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
 
     public static String selectAllProductByType(String typeProduct){
         return "Select * from product where loaimay = '"+typeProduct+"'";
@@ -50,4 +46,11 @@ public class Query {
 //    Ward
     public static String selectAllByDistrict ="Select * from wards where district_id = ?";
 
+//    DetailImportProduct
+    public static String insertDetailImportProduct ="insert into detailimportproducts (maphieunhap,mamay,soluong) values (?,?,?)";
+//     ImportProduct
+    public static String insertImportProduct ="insert into importproducts (tongtien,thoidiemtaophieu,manguoidung) values (?,?,?)";
+
+// Branch
+    public static String insertBranch = "insert into branch(diachi,sodienthoai) values (?,?)";
 }

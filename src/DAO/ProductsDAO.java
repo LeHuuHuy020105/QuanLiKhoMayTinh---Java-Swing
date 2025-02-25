@@ -22,6 +22,13 @@ public class ProductsDAO implements DAOInterface<Computer> {
 
     @Override
     public int update(Computer computer) {
+        if(computer instanceof Laptop){
+            Laptop laptop = (Laptop) computer;
+            LaptopDAO.getInstance().update(laptop);
+        }else {
+            PC pc = (PC) computer;
+            PCDAO.getInstance().update(pc);
+        }
         return 0;
     }
 
@@ -80,13 +87,13 @@ public class ProductsDAO implements DAOInterface<Computer> {
         return ketQua;
     }
 
-    public Computer searchByIDProduct(String idproduct) {
+    public Computer searchByIDProduct(int idproduct) {
         Computer computer = null;
         try {
             Connection connection = JDBCUtil.getConnection();
             String sql =Query.selectroductByID;
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1, idproduct);
+            pst.setInt(1, idproduct);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 int maMay = rs.getInt("mamay");
@@ -112,7 +119,6 @@ public class ProductsDAO implements DAOInterface<Computer> {
                     computer = new PC(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
                 }
             }
-            System.out.println(sql);
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,4 +8,5 @@ public class Notification {
     public static String success_ExportExcel ="Xuất Excel thành công!\nLưu tại: ";
     public static String success_ImportExcel ="Nhập Excel thành công !";
     public static String error_SaveExcel ="Lỗi xuất Excel!";
+    public static String isValidNumber = "Vui lòng nhập số hợp lệ (số dương)!";
 }

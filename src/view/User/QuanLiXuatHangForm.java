@@ -31,6 +31,7 @@ public class QuanLiXuatHangForm extends JFrame {
     private Color default_sideColor = new Color(144, 238, 144);
 	private JPanel panel_Admin_XuatHang;
 	private JPanel side_Admin_XuatHang;
+    private User currentUser;
 
     /**
      * Launch the application.
@@ -40,6 +41,7 @@ public class QuanLiXuatHangForm extends JFrame {
      * Create the frame.
      */
     public QuanLiXuatHangForm(User currenUser) {
+        this.currentUser = currenUser;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Phần mềm quản lí kho hàng máy tính");
         setBounds(100, 100, 1500, 950);
@@ -57,7 +59,7 @@ public class QuanLiXuatHangForm extends JFrame {
         ThongKeForm thongKeForm = new ThongKeForm();
         QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm();
         TonKhoForm tonKhoForm = new TonKhoForm();
-        NhapHangForm nhapHangForm = new NhapHangForm();
+        NhapHangForm nhapHangForm = new NhapHangForm(currenUser);
         XuatHangForm xuatHangForm = new XuatHangForm();
 
         cardLayout = new CardLayout();

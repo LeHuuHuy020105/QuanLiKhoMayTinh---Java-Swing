@@ -1,14 +1,14 @@
 package model;
 
-public class ExitForm {
+public class ExportProducts {
     private String maMay;
     private int soLuong;
     private String maChiNhanh;
 
-    public ExitForm() {
+    public ExportProducts() {
     }
 
-    public ExitForm(String maChiNhanh, String maMay, int soLuong) {
+    public ExportProducts(String maChiNhanh, String maMay, int soLuong) {
         this.maChiNhanh = maChiNhanh;
         this.maMay = maMay;
         this.soLuong = soLuong;

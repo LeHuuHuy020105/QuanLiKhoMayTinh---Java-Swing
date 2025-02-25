@@ -31,7 +31,7 @@ public class QuanLiNhapHangForm extends JFrame {
     private Color sideColor = new Color(135, 206, 250);
     private Color default_selectionColor = new Color(144, 238, 144);
     private Color default_sideColor = new Color(144, 238, 144);
-
+    private User currenUser;
     /**
      * Launch the application.
      */
@@ -41,6 +41,7 @@ public class QuanLiNhapHangForm extends JFrame {
      * Create the frame.
      */
     public QuanLiNhapHangForm(User currentUser) {
+        this.currenUser = currentUser;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Phần mềm quản lí kho hàng máy tính");
         setBounds(100, 100, 1500, 950);
@@ -58,7 +59,7 @@ public class QuanLiNhapHangForm extends JFrame {
         ThongKeForm thongKeForm = new ThongKeForm();
         QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm();
         TonKhoForm tonKhoForm = new TonKhoForm();
-        NhapHangForm nhapHangForm = new NhapHangForm();
+        NhapHangForm nhapHangForm = new NhapHangForm(currentUser);
         XuatHangForm xuatHangForm = new XuatHangForm();
 
         cardLayout = new CardLayout();

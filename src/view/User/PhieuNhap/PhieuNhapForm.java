@@ -1,37 +1,38 @@
 package view.User.PhieuNhap;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
-public class PhieuNhapForm extends JPanel {
+import DAO.ImportProductsDAO;
+import DAO.UserDAO;
+import com.toedter.calendar.JDateChooser;
+import controller.updateDataToTable;
+import model.ImportProducts;
+import model.User;
+
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportProducts> {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	private JTable table;
+	private JTable table_importProducts;
 
 	/**
 	 * Create the panel.
 	 */
 	public PhieuNhapForm() {
 		setLayout(null);
-		setSize(1257,911);
+		setSize(1257,718);
 		
 		Box verticalBox = Box.createVerticalBox();
 		verticalBox.setBorder(new TitledBorder(
@@ -56,19 +57,25 @@ public class PhieuNhapForm extends JPanel {
 		panel_5_1.setLayout(null);
 		verticalBox.add(panel_5_1);
 		
-		JButton btnNewButton = new JButton("Thêm");
-		btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
-		btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnNewButton.setFocusPainted(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBackground(UIManager.getColor("Button.background"));
-		btnNewButton.setBounds(10, 0, 70, 52);
-		panel_5_1.add(btnNewButton);
+		JButton btn_Xoa = new JButton("Xoá");
+		btn_Xoa.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btn_Xoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+		btn_Xoa.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn_Xoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btn_Xoa.setFocusPainted(false);
+		btn_Xoa.setContentAreaFilled(false);
+		btn_Xoa.setBorderPainted(false);
+		btn_Xoa.setBackground(UIManager.getColor("Button.background"));
+		btn_Xoa.setBounds(10, 0, 70, 52);
+		panel_5_1.add(btn_Xoa);
 		
 		JButton btnXemChiTiet = new JButton("Xem chi tiết");
+		btnXemChiTiet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ChiTietMouseClicked();
+			}
+		});
 		btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
 		btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -138,7 +145,7 @@ public class PhieuNhapForm extends JPanel {
 		JButton btnNewButton_1 = new JButton("Làm mới");
 		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(546, 9, 114, 30);
+		btnNewButton_1.setBounds(532, 9, 128, 30);
 		panel_5_1_1.add(btnNewButton_1);
 		
 		Box verticalBox_1_1 = Box.createVerticalBox();
@@ -198,17 +205,62 @@ public class PhieuNhapForm extends JPanel {
 		panel_5_1_1_2.add(textField_2);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 216, 1247, 684);
+		scrollPane.setBounds(10, 193, 1247, 524);
 		add(scrollPane);
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		table_importProducts = new JTable();
+		table_importProducts.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"STT", "Mã phiếu nhập", "Nhà cung cấp", "Người tạo", "Thời gian tạo", "Tổng tiền"
+				"STT", "Mã phiếu nhập", "Người tạo","Vai trò","Thời gian tạo", "Tổng tiền"
 			}
 		));
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(table_importProducts);
+		updateTableDataFormDAO();
+	}
+
+	@Override
+	public void updateTableDataFormDAO() {
+		ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+		updateTableData(importProducts);
+	}
+
+	@Override
+	public void updateTableData(ArrayList<ImportProducts> t) {
+		DecimalFormat df = new DecimalFormat("#,###");
+		DefaultTableModel model = (DefaultTableModel) table_importProducts.getModel();
+		model.setRowCount(0);
+		int i=0;
+		for(ImportProducts importProducts: t){
+			User user = UserDAO.getInstance().getUsetById(importProducts.getManguoidung());
+			String tenNguoitao = user.getFullName();
+			String vaiTro = user.getRole();
+			i++;
+			model.addRow(new Object[]{
+					i,
+					importProducts.getMaphieunhap(),
+					tenNguoitao,
+					vaiTro,
+					importProducts.getTimestamp(),
+					df.format(importProducts.getTongTien())+"VND",
+			});
+		}
+	}
+	public ImportProducts getImportProductsSelected(){
+		ImportProducts importProducts =null;
+		DefaultTableModel model = (DefaultTableModel) table_importProducts.getModel();
+		int i_row = table_importProducts.getSelectedRow();
+		if(i_row==-1){
+			JOptionPane.showMessageDialog(this,"Vui lòng chọn phiếu nhập");
+			return null;
+		}
+		int maPhieuNhap = Integer.parseInt(model.getValueAt(i_row,1)+"");
+		importProducts = ImportProductsDAO.getInstance().getImportProductsByMaPhieuNhap(maPhieuNhap);
+		return importProducts;
+	}
+	public void ChiTietMouseClicked() {
+		ChiTietPhieuNhapForm chiTietPhieuNhapForm = new ChiTietPhieuNhapForm(this);
+		chiTietPhieuNhapForm.setVisible(true);
 	}
 }

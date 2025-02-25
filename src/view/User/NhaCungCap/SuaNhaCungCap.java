@@ -48,7 +48,7 @@ public class SuaNhaCungCap extends JFrame {
 		panel.setBounds(0, 0, 372, 49);
 		contentPane.add(panel);
 		
-		JLabel lblThmNhCung = new JLabel("THÊM NHÀ CUNG CẤP");
+		JLabel lblThmNhCung = new JLabel("SỬA NHÀ CUNG CẤP");
 		lblThmNhCung.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThmNhCung.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblThmNhCung.setBounds(0, 0, 372, 49);
@@ -74,20 +74,20 @@ public class SuaNhaCungCap extends JFrame {
 		input_SDT.setBounds(10, 202, 328, 28);
 		contentPane.add(input_SDT);
 		
-		JButton btn_Them = new JButton("Thêm ");
-		btn_Them.addMouseListener(new MouseAdapter() {
+		JButton btn_Lưu = new JButton("Lưu");
+		btn_Lưu.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				LuuNhaCungCapMouseClick();
 			}
 		});
-		btn_Them.setIcon(null);
-		btn_Them.setForeground(Color.WHITE);
-		btn_Them.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btn_Them.setBorderPainted(false);
-		btn_Them.setBackground(new Color(60, 179, 113));
-		btn_Them.setBounds(10, 657, 131, 41);
-		contentPane.add(btn_Them);
+		btn_Lưu.setIcon(null);
+		btn_Lưu.setForeground(Color.WHITE);
+		btn_Lưu.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btn_Lưu.setBorderPainted(false);
+		btn_Lưu.setBackground(new Color(60, 179, 113));
+		btn_Lưu.setBounds(10, 657, 131, 41);
+		contentPane.add(btn_Lưu);
 		
 		JButton btn_HuyBo = new JButton("Huỷ bỏ");
 		btn_HuyBo.addActionListener(new ActionListener() {

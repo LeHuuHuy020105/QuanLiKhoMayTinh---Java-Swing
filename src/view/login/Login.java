@@ -143,28 +143,22 @@ public class Login extends JFrame {
         User currentUser = null;
         try {
             currentUser = UserDAO.getInstance().getCurrentUser(username, password);
-            if (currentUser == null) {
-                JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn không đúng !");
+            if (currentUser.getRole().compareTo("xuathang") == 0) {
+                new QuanLiNhapHangForm(currentUser).setVisible(true);
+                this.dispose();
             } else {
-                if (currentUser.getRole().compareTo("xuathang") == 0) {
-                    new QuanLiNhapHangForm(currentUser).setVisible(true);
+                if (currentUser.getRole().compareTo("admin") == 0) {
+                    new AdminDashboard(currentUser).setVisible(true);
                     this.dispose();
                 } else {
-                    if (currentUser.getRole().compareTo("admin") == 0) {
-                        new AdminDashboard(currentUser).setVisible(true);
+                    if (currentUser.getRole().compareTo("nhaphang") == 0) {
+                        new QuanLiXuatHangForm(currentUser).setVisible(true);
                         this.dispose();
-                    } else {
-                        if (currentUser.getRole().compareTo("nhaphang") == 0) {
-                            new QuanLiXuatHangForm(currentUser).setVisible(true);
-                            this.dispose();
-                        }
                     }
                 }
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException();
+            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn không đúng !");
         }
-        System.out.println("ban dang dang nhap voi vai tro : " + currentUser.getRole());
     }
 }

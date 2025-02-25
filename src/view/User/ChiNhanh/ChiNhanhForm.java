@@ -1,10 +1,15 @@
-package view.User.NhaCungCap;
+package view.User.ChiNhanh;
 
 import DAO.ProducersDAO;
-import controller.*;
+import controller.ExcelIntrerface;
+import controller.SearchProducer;
+import controller.btnEffect;
+import controller.updateDataToTable;
 import model.Producer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import view.User.NhaCungCap.SuaNhaCungCap;
+import view.User.NhaCungCap.ThemNhaCungCap;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -13,7 +18,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,12 +29,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer>, ExcelIntrerface {
+public class ChiNhanhForm extends JPanel implements updateDataToTable<Producer>, ExcelIntrerface {
 
     private static final long serialVersionUID = 1L;
 
     private JTextField input_Search;
-    private JTable table_NCC;
+    private JTable table_chiNhanh;
     private JFileChooser jFileChooser;
 
 	private JComboBox cbx_Search;
@@ -34,7 +42,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     /**
      * Create the panel.
      */
-    public NhaCungCapForm() {
+    public ChiNhanhForm() {
         setLayout(null);
         setSize(1257, 764);
         Box verticalBox = Box.createVerticalBox();
@@ -222,16 +230,16 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
-        table_NCC = new JTable();
-        table_NCC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        table_NCC.setModel(new DefaultTableModel(
+        table_chiNhanh = new JTable();
+        table_chiNhanh.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        table_chiNhanh.setModel(new DefaultTableModel(
                 new Object[][]{
                 },
                 new String[]{
-                        "STT", "Mã NCC", "Tên NCC", "Địa chỉ", "SDT"
+                        "STT", "Mã chi nhánh", "Địa chỉ", "SDT"
                 }
         ));
-        JScrollPane scrollPane = new JScrollPane(table_NCC);
+        JScrollPane scrollPane = new JScrollPane(table_chiNhanh);
         scrollPane.setBounds(10, 127, 1237, 626);
         add(scrollPane);
         updateTableDataFormDAO();
@@ -254,7 +262,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
 
     @Override
     public void updateTableData(ArrayList<Producer> t) {
-        DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
+        DefaultTableModel model = (DefaultTableModel) table_chiNhanh.getModel();
         model.setRowCount(0);
         int i = 0;
         for (Producer producer : t) {
@@ -288,7 +296,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Chọn nơi lưu trữ file Excel");
         jFileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
-        exportTableToExcel(table_NCC, jFileChooser);
+        exportTableToExcel(table_chiNhanh, jFileChooser);
     }
 
     public void exportTableToExcel(JTable jTable, JFileChooser jFileChooser) {
@@ -405,8 +413,8 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     public Producer getNhaCungCapSelected(){
         Producer producer_Selected = null;
         try {
-            DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
-            int i_row = table_NCC.getSelectedRow();
+            DefaultTableModel model = (DefaultTableModel) table_chiNhanh.getModel();
+            int i_row = table_chiNhanh.getSelectedRow();
 
             // Kiểm tra xem có hàng nào được chọn không
             if (i_row == -1) {
@@ -439,8 +447,8 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     public Producer getProducerSelected(){
         Producer producer = null;
         try {
-            DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
-            int i_row = table_NCC.getSelectedRow();
+            DefaultTableModel model = (DefaultTableModel) table_chiNhanh.getModel();
+            int i_row = table_chiNhanh.getSelectedRow();
             if(i_row == -1){
                 JOptionPane.showMessageDialog(this,"Vui lòng chọn 1 nhà cung cấp !");
                 return null;

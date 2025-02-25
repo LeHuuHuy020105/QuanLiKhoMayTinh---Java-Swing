@@ -1,15 +1,17 @@
 package model;
 
 public class Branch {
-    private String maChiNhanh;
-    private String diaChi;
+    public int maChiNhanh;
+    public String diaChi;
+    public String soDienThoai;
 
     public Branch() {
     }
 
-    public Branch(String diaChi, String maChiNhanh) {
+    public Branch(String diaChi, int maChiNhanh, String soDienThoai) {
         this.diaChi = diaChi;
         this.maChiNhanh = maChiNhanh;
+        this.soDienThoai = soDienThoai;
     }
 
     public String getDiaChi() {
@@ -20,19 +22,28 @@ public class Branch {
         this.diaChi = diaChi;
     }
 
-    public String getMaChiNhanh() {
+    public int getMaChiNhanh() {
         return maChiNhanh;
     }
 
-    public void setMaChiNhanh(String maChiNhanh) {
+    public void setMaChiNhanh(int maChiNhanh) {
         this.maChiNhanh = maChiNhanh;
+    }
+
+    public String getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
     }
 
     @Override
     public String toString() {
         return "Branch{" +
                 "diaChi='" + diaChi + '\'' +
-                ", maChiNhanh='" + maChiNhanh + '\'' +
+                ", maChiNhanh=" + maChiNhanh +
+                ", soDienThoai='" + soDienThoai + '\'' +
                 '}';
     }
 }
