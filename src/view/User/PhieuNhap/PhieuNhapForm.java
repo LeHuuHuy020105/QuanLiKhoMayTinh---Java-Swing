@@ -235,13 +235,13 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		for(ImportProducts importProducts: t){
 			User user = UserDAO.getInstance().getUsetById(importProducts.getManguoidung());
 			String tenNguoitao = user.getFullName();
-			String vaiTro = user.getRole();
+			String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
 			i++;
 			model.addRow(new Object[]{
 					i,
 					importProducts.getMaphieunhap(),
 					tenNguoitao,
-					vaiTro,
+					role,
 					importProducts.getTimestamp(),
 					df.format(importProducts.getTongTien())+"VND",
 			});

@@ -2,11 +2,11 @@ package DAO;
 
 public class Query {
 //    Product
-    public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru,giaban) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-    public static String updatePC = "update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,mainboard=?,congsuatnguon=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+    public static String updatePC = "update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,mainboard=?,congsuatnguon=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? , giaban =? where mamay =?";
 
-    public static String updateLaptop ="update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,kichthuocman =?,dungluongpin=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? where mamay =?";
+    public static String updateLaptop ="update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,kichthuocman =?,dungluongpin=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? , giaban=? where mamay =?";
 
     public static String selectAllProductByType(String typeProduct){
         return "Select * from product where loaimay = '"+typeProduct+"'";
@@ -32,8 +32,8 @@ public class Query {
 
 
 //    User
-    public static String insertUser = "INSERT INTO USER (username,password,fullname,status,email,role) VALUES (?,?,?,?,?,?)";
-    public static String getCurrentUser = "SELECT * FROM USER WHERE username =? && password =?" ;
+    public static String insertUser = "INSERT INTO USER (username,password,fullname,status,email,machinhanh) VALUES (?,?,?,?,?,?)";
+    public static String getCurrentUser = "SELECT * FROM USER WHERE username =? AND password =?" ;
 
 //    District
     public static String selectAllByProvince="Select * from district where province_id = ?";
@@ -49,8 +49,8 @@ public class Query {
 //    DetailImportProduct
     public static String insertDetailImportProduct ="insert into detailimportproducts (maphieunhap,mamay,soluong) values (?,?,?)";
 //     ImportProduct
-    public static String insertImportProduct ="insert into importproducts (tongtien,thoidiemtaophieu,manguoidung) values (?,?,?)";
+    public static String insertImportProduct ="insert into importproducts (tongtien,thoidiemtaophieu,id) values (?,?,?)";
 
 // Branch
-    public static String insertBranch = "insert into branch(diachi,sodienthoai) values (?,?)";
+    public static String insertBranch = "insert into branch(tenchinhanh, diachi, tenquan, thanhpho, sodienthoai, mota) values (?,?,?,?,?,?)";
 }

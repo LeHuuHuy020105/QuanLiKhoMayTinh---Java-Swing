@@ -5,8 +5,8 @@ public class Laptop extends Computer {
     private String dungLuongPin;
 
 
-    public Laptop(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String dungLuongPin, double kichThuocMan, String maNhaCungCap, double dungLuongLuuTru) {
-        super(cardManHinh, gia, maMay, ram, rom, soLuong, tenCpu, tenMay, xuatXu, maNhaCungCap,dungLuongLuuTru);
+    public Laptop(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String dungLuongPin, double kichThuocMan, String maNhaCungCap, double dungLuongLuuTru,double giaBan) {
+        super(cardManHinh, gia, maMay, ram, rom, soLuong, tenCpu, tenMay, xuatXu, maNhaCungCap,dungLuongLuuTru,giaBan);
         this.dungLuongPin = dungLuongPin;
         this.kichThuocMan = kichThuocMan;
     }

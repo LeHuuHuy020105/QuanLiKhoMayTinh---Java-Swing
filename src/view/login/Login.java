@@ -3,9 +3,7 @@ package view.login;
 import DAO.UserDAO;
 import model.User;
 import view.Icon;
-import view.User.AdminDashboard;
-import view.User.QuanLiNhapHangForm;
-import view.User.QuanLiXuatHangForm;
+import view.User.Dashboard;
 
 import java.awt.EventQueue;
 
@@ -15,7 +13,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Login extends JFrame {
 
@@ -144,22 +142,10 @@ public class Login extends JFrame {
         User currentUser = null;
         try {
             currentUser = UserDAO.getInstance().getCurrentUser(username, password);
-            if (currentUser.getRole().compareTo("xuathang") == 0) {
-                new QuanLiNhapHangForm(currentUser).setVisible(true);
-                this.dispose();
-            } else {
-                if (currentUser.getRole().compareTo("admin") == 0) {
-                    new AdminDashboard(currentUser).setVisible(true);
-                    this.dispose();
-                } else {
-                    if (currentUser.getRole().compareTo("nhaphang") == 0) {
-                        new QuanLiXuatHangForm(currentUser).setVisible(true);
-                        this.dispose();
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn không đúng !");
+            new Dashboard(currentUser);
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn bị sai !");
         }
     }
 }

@@ -121,4 +121,15 @@ public class ValueAddress {
     public static String getValueAddressFrame(JFrame frame, JComboBox cbxTP, JComboBox cbxQuan, JComboBox cbxPhuong, JTextField soNha) {
         return soNha.getText() + "," + cbxPhuong.getSelectedItem() + "," + cbxQuan.getSelectedItem() + "," + cbxTP.getSelectedItem();
     }
+    public static void updateValueAddressToCombobox(String diaChi,JComboBox cbx_ThanhPho ,JComboBox cbx_Quan , JComboBox cbx_Phuong ,JTextField input_SoNha){
+        String[] dulieu_DiaChi = diaChi.split(",");
+        String soNha = dulieu_DiaChi[0];
+        String phuong = dulieu_DiaChi[1];
+        String quan = dulieu_DiaChi[2];
+        String thanhPho = dulieu_DiaChi[3];
+        cbx_ThanhPho.setSelectedItem(thanhPho);
+        cbx_Quan.setSelectedItem(quan);
+        cbx_Phuong.setSelectedItem(phuong);
+        input_SoNha.setText(soNha);
+    }
 }

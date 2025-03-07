@@ -28,6 +28,14 @@ create table producer (
 	sodientthoai varchar(50) not null,
 	diachi varchar(150) not null
 )
+
+create table importproducts(
+	maphieunhap int auto_increment primary key,
+	tongtien double not null,
+	thoidiemtaophieu TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id int not null,
+	foreign key (id) references user(id)
+)
 create table detailimportproducts(
 	maphieunhap int not null,
 	mamay int not null,
@@ -35,24 +43,88 @@ create table detailimportproducts(
 	foreign key (mamay) references product(mamay),
 	foreign key (maphieunhap) references importproducts(maphieunhap)
 )
-create table importproducts(
-	maphieunhap int auto_increment primary key,
-	tongtien double not null,
-	thoidiemtaophieu TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,         
+    username VARCHAR(50) UNIQUE NOT NULL,       
+    password VARCHAR(255) NOT NULL,             
+    fullname VARCHAR(100) NOT NULL, 
+    status int not null,
+    email varchar(200),
+    machinhanh INT,                            
+    FOREIGN KEY (machinhanh) REFERENCES branch(machinhanh) 
+);
+CREATE TABLE role (
+    id INT AUTO_INCREMENT PRIMARY KEY,   -- Mã vai trò (khóa chính)
+    name VARCHAR(50) UNIQUE NOT NULL     -- Tên vai trò (duy nhất)
+);
+
+CREATE TABLE user_role (
+    user_id INT,                         -- Mã người dùng (khóa ngoại)
+    role_id INT,                         -- Mã vai trò (khóa ngoại)
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
+);
+CREATE TABLE branch (
+    machinhanh INT AUTO_INCREMENT PRIMARY KEY,  -- Mã chi nhánh (Khóa chính, tự động tăng)
+    tenchinhanh VARCHAR(100) NOT NULL,         -- Tên chi nhánh
+    diachi VARCHAR(255) NOT NULL,              -- Địa chỉ cụ thể
+    tenquan VARCHAR(100) NOT NULL,             -- Quận/Huyện
+    thanhpho VARCHAR(100) NOT NULL,
+    sodienthoai varchar(100) unique not null,-- Thành phố/Tỉnh
+    mota TEXT                                  -- Mô tả chi nhánh (nếu cần)
+);
+create table exportproducts (
+	maphieuxuat int auto_increment primary key ,
+	ngaylendon Timestamp DEFAULT CURRENT_TIMESTAMP,
+	trangthai varchar(100) not null,
+	ngaynhandonxuat timestamp null ,
+	machinhanh int not null,
+	id int not null,
+	foreign key (machinhanh) references branch(machinhanh),
+	foreign key (id) references user(id)
+)
+create table detailexportproducts (
+	maphieuxuat int not null,
+	mamay int not null,
+	soluong int not null,
+	foreign key (mamay) references product(mamay),
+	foreign key (maphieuxuat) references exportproducts(maphieuxuat)
+)
+create table address(
 	manguoidung int not null,
+	diachi varchar(300),
 	foreign key (manguoidung) references user(manguoidung)
 )
-create table user (
-	manguoidung int auto_increment primary key,
-	username varchar(50) unique not null,
-	password varchar(50) not null,
-	fullname varchar(50) not null,
-	status int not null,
-	email varchar(100) not null,
-	role varchar(50) not null
+create table inventoryBranch(
+	machinhanh int(11) not null,
+	mamay int(11) not null,
+	soluong int(11) not null,
+	foreign key (machinhanh) references branch (machinhanh),
+	foreign key (mamay) references product (mamay)
 )
-create table branch (
-	machinhanh int auto_increment primary key,
-	diachi varchar(100) not null,
-	sodienthoai varchar(100) not null
+create table inventory_branch(
+	 machinhanh INT,                      
+     mamay INT,
+     soluong int default 0,
+     FOREIGN KEY (machinhanh) REFERENCES branch(machinhanh) ,
+     FOREIGN KEY (mamay) REFERENCES product(mamay)
+)
+
+create table interfaceuser(
+	magiaodien int(11) auto_increment primary key,
+	tengiaodien varchar(100) not null,
+	them int(1) default 0,
+	sua int(1) default 0,
+	xoa int(1) default 0,
+	xuatexcel int(1) default 0,
+	nhapexcel int(1) default 0,
+	xemchitiet int(1) default 0
+)
+create table role_interfaceuser(
+	id int(11) not null,
+	magiaodien int(11) not null,
+	foreign key (id) references role(id),
+	foreign key (magiaodien) references interfaceuser(magiaodien)
 )

@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.CountryDAO;
 import DAO.ProducersDAO;
 import DAO.ProductsDAO;
 import model.Computer;
@@ -117,7 +118,8 @@ public class SearchProduct {
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
-            if (computer.getXuatXu().toLowerCase().contains(content_Search)) {
+            String tenQuocGia = CountryDAO.getInstance().CountryByID(computer.getXuatXu()).getTenQuocGia();
+            if (tenQuocGia.toLowerCase().contains(content_Search)) {
                 ketQua.add(computer);
             }
         }
@@ -138,9 +140,9 @@ public class SearchProduct {
         tenNCC = tenNCC.toLowerCase();
         ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
         ArrayList<Computer> ketQua = new ArrayList<>();
-        String maNCC = ProducersDAO.getInstance().producerByName(tenNCC).getMaNhaCungCap();
         for (Computer computer : computers){
-            if(computer.getMaNhaCungCap().toLowerCase().contains(maNCC)){
+            String tennhacungcap = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
+            if(tennhacungcap.toLowerCase().contains(tenNCC)){
                 ketQua.add(computer);
             }
         }

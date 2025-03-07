@@ -150,10 +150,10 @@ public class ChiTietPhieuNhapForm extends JFrame {
 		ImportProducts importProducts_selected = phieuNhapForm.getImportProductsSelected();
 		User user = UserDAO.getInstance().getUsetById(importProducts_selected.getManguoidung());
 		String tenNguoiTaoPhieu =user.getFullName();
-		String vaiTro = user.getRole();
+		String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
 		label_maPhieuNhap.setText(importProducts_selected.getMaphieunhap()+"");
 		label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
-		label_vaiTroNguoiTaoPhieu.setText(vaiTro);
+		label_vaiTroNguoiTaoPhieu.setText(role);
 		label_thoiDiemTaoPhieu.setText(importProducts_selected.getTimestamp()+"");
 		String tongTien = df.format(importProducts_selected.getTongTien())+" VND";
 		label_TongTien.setText(tongTien);

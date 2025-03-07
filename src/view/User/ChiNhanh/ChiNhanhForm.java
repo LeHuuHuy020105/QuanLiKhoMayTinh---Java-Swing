@@ -1,7 +1,9 @@
-package view.User.NhaCungCap;
+package view.User.ChiNhanh;
 
+import DAO.BrandDAO;
 import DAO.ProducersDAO;
 import controller.*;
+import model.Branch;
 import model.Producer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,7 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,12 +27,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer>, ExcelIntrerface {
+public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, ExcelIntrerface {
 
     private static final long serialVersionUID = 1L;
 
     private JTextField input_Search;
-    private JTable table_NCC;
+    private JTable table_CN;
     private JFileChooser jFileChooser;
 
 	private JComboBox cbx_Search;
@@ -35,7 +40,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     /**
      * Create the panel.
      */
-    public NhaCungCapForm() {
+    public ChiNhanhForm() {
         setLayout(null);
         setSize(1257, 764);
         Box verticalBox = Box.createVerticalBox();
@@ -193,7 +198,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         panel_5_1_1.setLayout(null);
         verticalBox_1.add(panel_5_1_1);
 
-        String [] cbx_SearchValue = new String[]{"Tất cả","Mã nhà cung cấp","Tên nhà cung cấp","Số điện thoại","Địa chỉ"};
+        String [] cbx_SearchValue = new String[]{"Tất cả","Mã chi nhánh","Số điện thoại","Địa chỉ"};
         cbx_Search = new JComboBox(cbx_SearchValue);
         cbx_Search.setBackground(UIManager.getColor("Button.background"));
         cbx_Search.setBounds(10, 11, 126, 30);
@@ -223,23 +228,23 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
-        table_NCC = new JTable();
-        table_NCC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        table_NCC.setModel(new DefaultTableModel(
+        table_CN = new JTable();
+        table_CN.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        table_CN.setModel(new DefaultTableModel(
                 new Object[][]{
                 },
                 new String[]{
-                        "STT", "Mã NCC", "Tên NCC", "Địa chỉ", "SDT"
+                        "STT", "Mã chi nhánh", "Địa chỉ", "SDT"
                 }
         ));
-        JScrollPane scrollPane = new JScrollPane(table_NCC);
+        JScrollPane scrollPane = new JScrollPane(table_CN);
         scrollPane.setBounds(10, 127, 1237, 626);
         add(scrollPane);
         updateTableDataFormDAO();
     }
 
     public void ThemNhaCungCapMouseClicked() {
-        ThemNhaCungCap themSanPham = new ThemNhaCungCap(this);
+        ThemChiNhanh themSanPham = new ThemChiNhanh(this);
         themSanPham.setVisible(true);
     }
 
@@ -249,23 +254,22 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
-        updateTableData(producers);
+        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        updateTableData(branches);
     }
 
     @Override
-    public void updateTableData(ArrayList<Producer> t) {
-        DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
+    public void updateTableData(ArrayList<Branch> t) {
+        DefaultTableModel model = (DefaultTableModel) table_CN.getModel();
         model.setRowCount(0);
         int i = 0;
-        for (Producer producer : t) {
+        for (Branch branch : t) {
             i++;
             model.addRow(new Object[]{
                     i,
-                    producer.getMaNhaCungCap(),
-                    producer.getTenNhaCungCap(),
-                    producer.getDiaChi(),
-                    producer.getSdt()
+                    branch.getMaChiNhanh(),
+                    branch.getDiaChi(),
+                    branch.getSoDienThoai(),
             });
         }
     }
@@ -289,7 +293,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Chọn nơi lưu trữ file Excel");
         jFileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
-        exportTableToExcel(table_NCC, jFileChooser);
+        exportTableToExcel(table_CN, jFileChooser);
     }
 
     public void exportTableToExcel(JTable jTable, JFileChooser jFileChooser) {
@@ -377,57 +381,61 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     public void jTextFieldSearchKeyReleased(){
         String luachon = (String) cbx_Search.getSelectedItem();
         String content_Search = input_Search.getText();
-        ArrayList<Producer> result = SearchFn(luachon,content_Search);
+        ArrayList<Branch> result = SearchFn(luachon,content_Search);
         updateTableData(result);
     }
-    public ArrayList<Producer> SearchFn(String luachon , String content_Search){
-        ArrayList<Producer>result = new ArrayList<>();
+    public ArrayList<Branch> SearchFn(String luachon , String content_Search){
+        ArrayList<Branch>result = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
-        SearchProducer searchProducer = new SearchProducer();
+        SearchBranch searchBranch = new SearchBranch();
         switch (luachon){
             case "Tất cả":
-                result = searchProducer.searchTatCa(content_Search);
+                result = searchBranch.searchTatCa(content_Search);
                 break;
-            case "Mã nhà cung cấp":
-                result = searchProducer.searchMaNhaCungCap(content_Search);
-                break;
-            case "Tên nhà cung cấp":
-                result = searchProducer.searchTenNhaCungCap(content_Search);
+            case "Mã chi nhánh":
+                result = searchBranch.searchMaChiNhanh(content_Search);
                 break;
             case "Số điện thoại":
-                result = searchProducer.searchSDT(content_Search);
+                result = searchBranch.searchSDT(content_Search);
                 break;
             case "Địa chỉ":
-                result = searchProducer.searchDiaChi(content_Search);
+                result = searchBranch.searchDiaChi(content_Search);
                 break;
         }
         return result;
     }
+    public Branch getChiNhanhSelected(){
+        Branch branch_Selected = null;
+        try {
+            DefaultTableModel model = (DefaultTableModel) table_CN.getModel();
+            int i_row = table_CN.getSelectedRow();
+
+            // Kiểm tra xem có hàng nào được chọn không
+            if (i_row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi nhánh để chỉnh sửa!");
+                return null; // Trả về null nếu không có hàng nào được chọn
+            }
+
+            // Lấy mã máy từ hàng được chọn
+            int maCN = Integer.parseInt(model.getValueAt(i_row, 1) + "");
+
+            // Tìm kiếm máy trong cơ sở dữ liệu
+            branch_Selected = BrandDAO.getInstance().BranchByID(maCN);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return branch_Selected;
+    }
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            ProducersDAO.getInstance().delete(getProducerSelected());
+            BrandDAO.getInstance().delete(getChiNhanhSelected());
             updateTableDataFormDAO();
         }
     }
     public void SuaMouseClick(){
-        SuaNhaCungCap suaNhaCungCap = new SuaNhaCungCap(this);
-        suaNhaCungCap.setVisible(true);
-    }
-    public Producer getProducerSelected(){
-        Producer producer = null;
-        try {
-            DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
-            int i_row = table_NCC.getSelectedRow();
-            if(i_row == -1){
-                JOptionPane.showMessageDialog(this,"Vui lòng chọn 1 nhà cung cấp !");
-                return null;
-            }
-            String maNCC = model.getValueAt(i_row,1)+"";
-            producer = ProducersDAO.getInstance().producerByID(maNCC);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return producer;
+        SuaChiNhanh suaChiNhanh = new SuaChiNhanh(this);
+        suaChiNhanh.setVisible(true);
     }
 }

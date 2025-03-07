@@ -80,6 +80,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
                 Producer producer = new Producer(diaChi,maNhaCungCap,soDienThoai,tenNhaCungCap);
                 ketQua.add(producer);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,6 +101,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
                 String diaChi = rs.getString("diachi");
                 producer = new Producer(diaChi,maNCC,SDT,tenNCC);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,6 +122,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
                 String diaChi = rs.getString("diachi");
                 producer = new Producer(diaChi,maNCC,SDT,tenNCC);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }

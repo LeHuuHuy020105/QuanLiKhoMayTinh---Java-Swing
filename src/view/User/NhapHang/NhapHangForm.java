@@ -1,38 +1,23 @@
 package view.User.NhapHang;
 
-import DAO.*;
-import com.itextpdf.text.pdf.PdfWriter;
+import DAO.DetailImportProductsDAO;
+import DAO.ImportProductsDAO;
+import DAO.ProducersDAO;
+import DAO.ProductsDAO;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
-import model.Computer;
-import model.DetailImportProducts;
-import model.ImportProducts;
-import model.User;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import java.awt.Font;
-import java.io.FileOutputStream;
-import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import model.*;
 import view.Icon;
 
 import javax.swing.*;
-import java.io.FileOutputStream;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class NhapHangForm extends JPanel implements updateDataToTable<Computer> {
 
@@ -68,6 +53,12 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
         String[] luaChon = new String[]{"Tất cả", "Mã máy", "Tên máy", "Nhà cung cấp"};
         cbx_luaChon = new JComboBox(luaChon);
+        cbx_luaChon.addItemListener(new ItemListener() {
+        	public void itemStateChanged(ItemEvent e) {
+        		updateTableDataFormDAO();
+        		input_Search.setText("");
+        	}
+        });
         cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
         cbx_luaChon.setBounds(10, 11, 126, 30);
         panel_5_1_1.add(cbx_luaChon);
@@ -237,7 +228,14 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         ArrayList<Computer> computers = searchProduct(luaChon, input);
         updateTableData(computers);
     }
-
+    public DetailImportProducts isValidProduct(DetailImportProducts detailImportProducts1, ArrayList<DetailImportProducts>detailImportProducts){
+        for(DetailImportProducts detailImportProducts2 : detailImportProducts){
+            if(detailImportProducts2.getMaMay()==detailImportProducts1.getMaMay()){
+                return detailImportProducts2;
+            }
+        }
+        return null;
+    }
     public ArrayList<Computer> searchProduct(String luaChon, String content_Search) {
         ArrayList<Computer> result = new ArrayList<>();
         SearchProduct searchProduct = new SearchProduct();
@@ -310,7 +308,13 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         int maMay =computer_selected.getMaMay();
 
         DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,0,soLuong);
-        this.detailImportProducts.add(detailImportProducts1);
+        DetailImportProducts detailImportProduct_isValid = isValidProduct(detailImportProducts1,detailImportProducts);
+        if(detailImportProduct_isValid==null){
+            this.detailImportProducts.add(detailImportProducts1);
+        }else {
+            int soluong_valid = detailImportProduct_isValid.getSoluong();
+            detailImportProduct_isValid.setSoluong(soluong_valid+soLuong);
+        }
         updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
         input_SoLuong.setText("");
         setTotalPrice();

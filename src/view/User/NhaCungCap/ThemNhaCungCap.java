@@ -31,27 +31,16 @@ public class ThemNhaCungCap extends JFrame  {
 	private JComboBox cbx_ThanhPho;
 	private JTextField input_SoNha;
 	private JComboBox cbx_Quan;
-
+	private NhaCungCapForm nhaCungCapForm;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ThemNhaCungCap frame = new ThemNhaCungCap();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public ThemNhaCungCap() {
+	public ThemNhaCungCap(NhaCungCapForm nhaCungCapForm) {
+		this.nhaCungCapForm = nhaCungCapForm;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 388, 720);
 		setLocationRelativeTo(null);
@@ -176,6 +165,7 @@ public class ThemNhaCungCap extends JFrame  {
 			ProducersDAO.getInstance().insert(producer);
 			JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
 			dispose();
+			nhaCungCapForm.updateTableDataFormDAO();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhà cung cấp!");

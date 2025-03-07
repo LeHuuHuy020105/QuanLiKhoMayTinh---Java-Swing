@@ -6,14 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import DAO.CountryDAO;
-import DAO.LaptopDAO;
-import DAO.PCDAO;
-import DAO.ProducersDAO;
-import model.Country;
-import model.Laptop;
-import model.PC;
-import model.Producer;
+import DAO.*;
+import model.*;
 
 import java.awt.Font;
 import java.awt.Window;
@@ -39,6 +33,7 @@ public class ThemSanPham extends JFrame {
 	private JTextField input_ROM;
 	private JComboBox comboBox_nhaCungCap;
 	private JComboBox cbx_xuatXu;
+	private JTextField textField_giaBan;
 
 	/**
 	 * Launch the application.
@@ -246,6 +241,16 @@ public class ThemSanPham extends JFrame {
 		}
 		cbx_xuatXu.setBounds(10, 285, 202, 25);
 		contentPane.add(cbx_xuatXu);
+		
+		JLabel lblNewLabel_1_1_1_2 = new JLabel("Giá bán");
+		lblNewLabel_1_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_2.setBounds(888, 255, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_2);
+		
+		textField_giaBan = new JTextField();
+		textField_giaBan.setColumns(10);
+		textField_giaBan.setBounds(888, 286, 202, 28);
+		contentPane.add(textField_giaBan);
 		JTextField textField = (JTextField) cbx_xuatXu.getEditor().getEditorComponent();
 		textField.addKeyListener(new KeyAdapter() {
             @Override
@@ -298,7 +303,7 @@ public class ThemSanPham extends JFrame {
 		String xuatXu = country.getMaQuocGia();
 		String maNhaCungCap = (String) comboBox_nhaCungCap.getSelectedItem();
 
-		double gia = 0, kichThuocMan = 0,dungLuongLuuTru = 0;;
+		double gia = 0, kichThuocMan = 0,dungLuongLuuTru = 0,giaBan=0;
 		int congSuatNguon = 0;
 
 		// Kiểm tra tên sản phẩm
@@ -310,7 +315,8 @@ public class ThemSanPham extends JFrame {
 		// Kiểm tra giá (double)
 		try {
 			gia = Double.parseDouble(input_gia.getText().trim());
-			if (gia <= 0) throw new NumberFormatException();
+			giaBan = Double.parseDouble(textField_giaBan.getText().trim());
+			if (gia <= 0 || giaBan<=0) throw new NumberFormatException();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập đơn giá hợp lệ (số dương)!");
 			hasError = true;
@@ -347,7 +353,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm Laptop
-			Laptop newLaptop = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+			Laptop newLaptop = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
 			try {
 				LaptopDAO.getInstance().insert(newLaptop);
 				this.dispose();
@@ -378,7 +384,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm PC
-			PC newPC = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+			PC newPC = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan);
 			try {
 				PCDAO.getInstance().insert(newPC);
 				this.dispose();

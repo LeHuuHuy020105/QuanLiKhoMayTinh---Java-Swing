@@ -1,26 +1,23 @@
-INSERT INTO product (tenmay, soluong, gia, tenCPU, ram, xuatxu, cardmanhinh, mainboard, congsuatnguon, kichthuocman, dungluongpin, rom, loaimay, manhacungcap, dungluongluutru) VALUES
-('Laptop Gaming ASUS ROG', 10, 25990000, 'Intel Core i7-12700H', '16GB', 'VN', 'NVIDIA RTX 3050', NULL, NULL, 15.6, '6-cell 80Wh', '512GB SSD', 'Laptop', 'ASUS', 512.0),
-('Laptop AA', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0),
-('Laptop BB', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0),
-('Laptop AA', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0),
-('Laptop BB', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0),
-('Laptop Dell XPS 15', 8, 32990000, 'Intel Core i9-12900HK', '32GB', 'US', 'NVIDIA RTX 3060', NULL, NULL, 15.6, '6-cell 97Wh', '1TB SSD', 'Laptop', 'DELL', 1024.0),
-('Laptop HP Envy 13', 12, 18990000, 'Intel Core i5-1240P', '16GB', 'JP', 'Intel Iris Xe', NULL, NULL, 13.3, '4-cell 65Wh', '512GB SSD', 'Laptop', 'HP', 512.0),
-('MacBook Pro 16', 6, 57990000, 'Apple M2 Max', '32GB', 'US', 'Apple M2 Max GPU', NULL, NULL, 16.0, '100Wh', '2TB SSD', 'Laptop', 'APPLE', 2048.0),
-('Acer Predator Helios 300', 15, 27990000, 'Intel Core i7-12650H', '16GB', 'TW', 'NVIDIA RTX 3070', NULL, NULL, 17.3, '4-cell 90Wh', '1TB SSD', 'Laptop', 'ACER', 1024.0),
-('Laptop A', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0),
-('Laptop B', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0),
-('Laptop AA', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0),
-('Laptop BB', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0),
-('PC Gaming MSI Aegis', 5, 40990000, 'Intel Core i9-13900K', '32GB', 'US', 'NVIDIA RTX 4090', 'MSI Z690', 850, NULL, NULL, '2TB SSD', 'PC', 'MSI', 2048.0),
-('PC Workstation Dell Precision', 3, 52990000, 'Intel Xeon W-2235', '64GB', 'US', 'NVIDIA Quadro RTX 5000', 'Dell Precision T7920', 1000, NULL, NULL, '4TB SSD', 'PC', 'DELL', 4096.0),
-('PC Văn phòng HP ProDesk', 10, 15990000, 'Intel Core i5-12400', '8GB', 'JP', 'Intel UHD 730', 'HP ProDesk 400 G7', 300, NULL, NULL, '512GB SSD', 'PC', 'HP', 512.0),
-('PC Gaming Razer Tomahawk', 7, 37990000, 'Intel Core i7-13700KF', '32GB', 'US', 'NVIDIA RTX 3080 Ti', 'ASUS ROG Strix Z690', 750, NULL, NULL, '1TB SSD', 'PC', 'ASUS', 1024.0),
-('PC Đồ họa Mac Studio', 4, 65990000, 'Apple M1 Ultra', '128GB', 'US', 'Apple M1 Ultra GPU', 'Mac Studio Board', 350, NULL, NULL, '8TB SSD', 'PC', 'APPLE', 8192.0),
-('PC Gaming', 7, 25000000, 'Intel i7', '32GB', 'CN', 'NVIDIA RTX', 'ASUS ROG', 750, NULL, NULL, '1TB', 'PC', 'MSI', 1.0),
-('PC Văn phòng', 15, 10000000, 'Intel i3', '8GB', 'VN', 'Intel UHD', 'Gigabyte', 500, NULL, NULL, '256GB', 'PC', 'HP', 256.0),
-('PC Gaming', 7, 25000000, 'Intel i7', '32GB', 'CN', 'NVIDIA RTX', 'ASUS ROG', 750, NULL, NULL, '1TB', 'PC', 'MSI', 1.0),
-('PC Văn phòng', 15, 10000000, 'Intel i3', '8GB', 'VN', 'Intel UHD', 'Gigabyte', 500, NULL, NULL, '256GB', 'PC', 'HP', 256.0);
+INSERT INTO product (tenmay, soluong, gia, tenCPU, ram, xuatxu, cardmanhinh, mainboard, congsuatnguon, kichthuocman, dungluongpin, rom, loaimay, manhacungcap, dungluongluutru, giaban) VALUES
+('Laptop Gaming ASUS ROG', 10, 25990000, 'Intel Core i7-12700H', '16GB', 'VN', 'NVIDIA RTX 3050', NULL, NULL, 15.6, '6-cell 80Wh', '512GB SSD', 'Laptop', 'ASUS', 512.0, 30990000),
+('Laptop AA', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0, 25000000),
+('Laptop BB', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0, 30000000),
+('Laptop AA', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0, 23000000),
+('Laptop BB', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0, 35000000),
+('Laptop Dell XPS 15', 8, 32990000, 'Intel Core i9-12900HK', '32GB', 'US', 'NVIDIA RTX 3060', NULL, NULL, 15.6, '6-cell 97Wh', '1TB SSD', 'Laptop', 'DELL', 1024.0, 50000000),
+('Laptop HP Envy 13', 12, 18990000, 'Intel Core i5-1240P', '16GB', 'JP', 'Intel Iris Xe', NULL, NULL, 13.3, '4-cell 65Wh', '512GB SSD', 'Laptop', 'HP', 512.0, 30000000),
+('MacBook Pro 16', 6, 57990000, 'Apple M2 Max', '32GB', 'US', 'Apple M2 Max GPU', NULL, NULL, 16.0, '100Wh', '2TB SSD', 'Laptop', 'APPLE', 2048.0, 80000000),
+('Acer Predator Helios 300', 15, 27990000, 'Intel Core i7-12650H', '16GB', 'TW', 'NVIDIA RTX 3070', NULL, NULL, 17.3, '4-cell 90Wh', '1TB SSD', 'Laptop', 'ACER', 1024.0, 38000000),
+('Laptop A', 10, 15000000, 'Intel i5', '8GB', 'US', 'NVIDIA GTX', NULL, NULL, 15.6, '5000Wh', '512GB', 'Laptop', 'DELL', 512.0, 25000000),
+('Laptop B', 5, 20000000, 'AMD Ryzen 7', '16GB', 'JP', 'Radeon RX', NULL, NULL, 14.0, '6000Wh', '1TB', 'Laptop', 'ASUS', 1.0, 32000000),
+('PC Gaming MSI Aegis', 5, 40990000, 'Intel Core i9-13900K', '32GB', 'US', 'NVIDIA RTX 4090', 'MSI Z690', 850, NULL, NULL, '2TB SSD', 'PC', 'MSI', 2048.0, 55000000),
+('PC Workstation Dell Precision', 3, 52990000, 'Intel Xeon W-2235', '64GB', 'US', 'NVIDIA Quadro RTX 5000', 'Dell Precision T7920', 1000, NULL, NULL, '4TB SSD', 'PC', 'DELL', 4096.0, 70000000),
+('PC Văn phòng HP ProDesk', 10, 15990000, 'Intel Core i5-12400', '8GB', 'JP', 'Intel UHD 730', 'HP ProDesk 400 G7', 300, NULL, NULL, '512GB SSD', 'PC', 'HP', 512.0, 20000000),
+('PC Gaming Razer Tomahawk', 7, 37990000, 'Intel Core i7-13700KF', '32GB', 'US', 'NVIDIA RTX 3080 Ti', 'ASUS ROG Strix Z690', 750, NULL, NULL, '1TB SSD', 'PC', 'ASUS', 1024.0, 50000000),
+('PC Đồ họa Mac Studio', 4, 65990000, 'Apple M1 Ultra', '128GB', 'US', 'Apple M1 Ultra GPU', 'Mac Studio Board', 350, NULL, NULL, '8TB SSD', 'PC', 'APPLE', 8192.0, 85000000),
+('PC Gaming', 7, 25000000, 'Intel i7', '32GB', 'CN', 'NVIDIA RTX', 'ASUS ROG', 750, NULL, NULL, '1TB', 'PC', 'MSI', 1.0, 35000000),
+('PC Văn phòng', 15, 10000000, 'Intel i3', '8GB', 'VN', 'Intel UHD', 'Gigabyte', 500, NULL, NULL, '256GB', 'PC', 'HP', 256.0, 15000000);
+
 
 INSERT INTO country (maquocgia, tenquocgia) VALUES
 ('VN', 'Vietnam'),
@@ -54,8 +51,47 @@ INSERT INTO country (maquocgia, tenquocgia) VALUES
 ('PH', 'Philippines'),
 ('NZ', 'New Zealand');
 
-insert into user(username,password,fullname,status,email,role) values
-('admin','admin','Le Huu Huy','1','lhhuy2005@gmail.com','admin'),
-('hoc','hoc','Sy Hoc','1','lhhuy2005@gmail.com','xuathang'),
-('thuy','thuy','Thanh Thuy','1','lhhuy2005@gmail.com','nhaphang'),
-('vinh','vinh','Thanh Vinh','1','lhhuy2005@gmail.com','nhanvienbanhang')
+
+INSERT INTO role (name) VALUES
+('Admin'),
+('Quản lí chi nhánh'),
+('Quản lí xuất nhập kho'),
+('Nhân viên bán hàng'),
+('User');
+
+INSERT INTO user (username, password, fullname, status, email, machinhanh) VALUES
+('admin', 'adminpass', 'Le Huu Huy', 1, 'lhhuy2005@gmail.com', NULL),      -- Admin không có chi nhánh
+('manager01', 'managerpass', 'Thanh Thuy', 1, 'abc@gmail.com', 2),         -- Quản lí chi nhánh Hà Nội
+('sales01', 'salespass', 'Sy Hoc', 1, 'abcd@gmail.com', 2),                -- Nhân viên bán hàng Hà Nội
+('warehouse01', 'whpass', 'Thanh Vinh', 1, 'abcde@gmail.com', 2);
+
+INSERT INTO branch (tenchinhanh, diachi, tenquan, thanhpho, sodienthoai, mota) VALUES
+('Chi nhánh Quận 1', '123 Lê Lợi', 'Quận 1', 'TP.HCM', '0399097211', 'Chi nhánh trung tâm tại Quận 1'),
+('Chi nhánh Thủ Đức', '789 Phạm Văn Đồng', 'Thủ Đức', 'TP.HCM', '0903335692', 'Chi nhánh mới mở tại thành phố Thủ Đức');
+
+
+INSERT INTO user_role (user_id, role_id) VALUES
+(1, 1), -- admin01 là Admin
+(2, 2), -- manager01 là Quản lí chi nhánh
+(3, 4), -- sales01 là Nhân viên bán hàng
+(4, 3) -- warehouse01 là Quản lí xuất nhập kho
+
+
+
+INSERT INTO interfaceuser (tengiaodien, them, sua, xoa, xuatexcel, nhapexcel, xemchitiet) 
+VALUES 
+('Sản phẩm', 1, 1, 1, 1, 1, 1),
+('Nhà cung cấp', 1, 1, 1, 1, 1, 1),
+('Nhập hàng', 0, 0, 0, 0, 0, 0),
+('Phiếu nhập', 1, 1, 1, 1, 1, 1),
+('Xuất hàng', 0, 0, 0, 0, 0, 0),
+('Phiếu xuất', 1, 1, 1, 1, 1, 1),
+('Tồn kho', 1, 1, 1, 1, 1, 1),
+('Tài khoản user', 1, 1, 1, 1, 1, 1),
+('Chi nhánh', 1, 1, 1, 1, 1, 1),
+('Nhập hàng - CN',0,0,0,0,0,0),
+('Phiếu nhập - CN',1,1,1,1,1,1);
+
+
+insert into role_interfaceuser(id,magiaodien) values (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(3,1),(3,3),(3,4),(3,5),(3,6),(2,1),(2,10),(2,11),(2,7)
+

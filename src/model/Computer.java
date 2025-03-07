@@ -5,6 +5,7 @@ public class Computer {
     private String tenMay;
     private int soLuong;
     private double gia;
+    private double giaBan;
     private String tenCpu;
     private String ram;
     private String xuatXu;
@@ -16,7 +17,7 @@ public class Computer {
     public Computer() {
     }
 
-    public Computer(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru) {
+    public Computer(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru, double giaBan) {
         this.cardManHinh = cardManHinh;
         this.gia = gia;
         this.maMay = maMay;
@@ -28,6 +29,15 @@ public class Computer {
         this.xuatXu = xuatXu;
         this.maNhaCungCap = maNhaCungCap;
         this.dungLuongLuuTru = dungLuongLuuTru;
+        this.giaBan=giaBan;
+    }
+
+    public double getGiaBan() {
+        return giaBan;
+    }
+
+    public void setGiaBan(double giaBan) {
+        this.giaBan = giaBan;
     }
 
     public double getDungLuongLuuTru() {

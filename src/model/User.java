@@ -5,21 +5,29 @@ public class User {
     private String fullName;
     private String userName;
     private String password;
-    private String role;
     private int status;
     private String email;
+    private int maChiNhanh;
 
     public User() {
     }
 
-    public User(String email, String fullName, String password, String role, int status, String userName,int idUser) {
+    public User(String email, String fullName, String password, int status, String userName,int idUser,int maChiNhanh) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
-        this.role = role;
         this.status = status;
         this.userName = userName;
         this.idUser = idUser;
+        this.maChiNhanh = maChiNhanh;
+    }
+
+    public int getMaChiNhanh() {
+        return maChiNhanh;
+    }
+
+    public void setMaChiNhanh(int maChiNhanh) {
+        this.maChiNhanh = maChiNhanh;
     }
 
     public String getEmail() {
@@ -46,13 +54,6 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public int getStatus() {
         return status;
@@ -86,7 +87,6 @@ public class User {
                 ", fullName='" + fullName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
                 ", status=" + status +
                 '}';
     }

@@ -39,7 +39,6 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
             var key = pst.getGeneratedKeys();
             key.next();
             ketQua= key.getInt(1);
-            System.out.println(key);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,7 +64,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 int maPhieuNhap = rs.getInt("maphieunhap");
-                int maNguoiDung = rs.getInt("manguoidung");
+                int maNguoiDung = rs.getInt("id");
                 double tongTien = rs.getDouble("tongtien");
                 Timestamp thoiGianTao = rs.getTimestamp("thoidiemtaophieu");
                 ImportProducts importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung);
@@ -86,7 +85,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
              ResultSet rs = pst.executeQuery();
              while (rs.next()){
                  int maPhieuNhap = rs.getInt("maphieunhap");
-                 int maNguoiDung = rs.getInt("manguoidung");
+                 int maNguoiDung = rs.getInt("id");
                  double tongTien = rs.getDouble("tongtien");
                  Timestamp thoiGianTao = rs.getTimestamp("thoidiemtaophieu");
                  importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung);

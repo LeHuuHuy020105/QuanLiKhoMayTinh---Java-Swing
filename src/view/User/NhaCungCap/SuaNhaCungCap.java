@@ -18,7 +18,7 @@ public class SuaNhaCungCap extends JFrame {
 	private JComboBox cbx_Quan;
 	private JComboBox cbx_ThanhPho;
 	private JPanel contentPane;
-	private JTextField input_TenNCC;
+	private JTextField input_maNCC;
 	private JTextField input_SDT;
 	private NhaCungCapForm nhaCungCapForm;
 	private JTextField input_SoNha;
@@ -54,15 +54,15 @@ public class SuaNhaCungCap extends JFrame {
 		lblThmNhCung.setBounds(0, 0, 372, 49);
 		panel.add(lblThmNhCung);
 		
-		JLabel lblNewLabel_1 = new JLabel("Tên nhà cung cấp");
+		JLabel lblNewLabel_1 = new JLabel("Mã nhà cung cấp");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(10, 79, 169, 28);
 		contentPane.add(lblNewLabel_1);
 		
-		input_TenNCC = new JTextField();
-		input_TenNCC.setColumns(10);
-		input_TenNCC.setBounds(10, 118, 328, 28);
-		contentPane.add(input_TenNCC);
+		input_maNCC = new JTextField();
+		input_maNCC.setColumns(10);
+		input_maNCC.setBounds(10, 118, 328, 28);
+		contentPane.add(input_maNCC);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Số điện thoại");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -144,7 +144,8 @@ public class SuaNhaCungCap extends JFrame {
 	}
 	public void hienThiThongTinSanPham(){
 		Producer producer_selected = nhaCungCapForm.getProducerSelected();
-		input_TenNCC.setText(producer_selected.getTenNhaCungCap());
+		input_maNCC.setText(producer_selected.getMaNhaCungCap());
+		input_maNCC.setEditable(false);
 		input_SDT.setText(producer_selected.getSdt());
 		String diaChi = producer_selected.getDiaChi();
 		String[] dulieu_DiaChi = diaChi.split(",");
@@ -158,19 +159,15 @@ public class SuaNhaCungCap extends JFrame {
 		input_SoNha.setText(soNha);
 	}
 	public void LuuNhaCungCapMouseClick(){
+		String maNCC = nhaCungCapForm.getProducerSelected().getMaNhaCungCap();
+		String tenNCC = nhaCungCapForm.getProducerSelected().getTenNhaCungCap();
 		boolean hasError = false;
-		String tenNCC = input_TenNCC.getText().trim();
 		String SDT = input_SDT.getText().trim();
-		if(tenNCC.isEmpty()){
-			JOptionPane.showMessageDialog(this,"Vui lòng nhập tên nhà cung cấp !");
-			hasError = true;
-		}
 		if(SDT.isEmpty()){
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập số điện thoại!");
 			hasError = true;
 		}
 		if(hasError)return;
-		String maNCC = tenNCC.toUpperCase();
 		String diaChi = ValueAddress.getValueAddressFrame(this,cbx_ThanhPho,cbx_Quan,cbx_Phuong,input_SoNha);
 		Producer producer = new Producer(diaChi,maNCC,SDT,tenNCC);
 		try {

@@ -47,6 +47,7 @@ public class SuaSanPhamForm extends JFrame {
 	private JTextField input_ROM;
 	private JComboBox comboBox_nhaCungCap;
 	private JComboBox cbx_xuatXu;
+	private JTextField textField_giaBan;
 
 	/**
 	 * Launch the application.
@@ -261,6 +262,17 @@ public class SuaSanPhamForm extends JFrame {
 		cbx_xuatXu = new JComboBox();
 		cbx_xuatXu.setBounds(10, 285, 202, 25);
 		contentPane.add(cbx_xuatXu);
+		
+		JLabel lblNewLabel_1_1_1_2 = new JLabel("Giá bán");
+		lblNewLabel_1_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_2.setBounds(888, 246, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_2);
+		
+		textField_giaBan = new JTextField();
+		textField_giaBan.setText("0.0");
+		textField_giaBan.setColumns(10);
+		textField_giaBan.setBounds(888, 282, 202, 28);
+		contentPane.add(textField_giaBan);
 		JTextField textField = (JTextField) cbx_xuatXu.getEditor().getEditorComponent();
 		textField.addKeyListener(new KeyAdapter() {
             @Override
@@ -312,9 +324,8 @@ public class SuaSanPhamForm extends JFrame {
 		input_cardDoHoa.setText(computer_Selected.getCardManHinh());
 		input_ROM.setText(computer_Selected.getRom());
 		input_dungLuongLuuTru.setText(computer_Selected.getDungLuongLuuTru()+"");
-		System.out.println("manhacungcap"+computer_Selected.getMaNhaCungCap());
 		comboBox_nhaCungCap.setSelectedItem(computer_Selected.getMaNhaCungCap());
-		System.out.println("ma may: "+ computer_Selected.getMaMay());
+		textField_giaBan.setText(computer_Selected.getGiaBan()+"");
 		String loaiMay ="";
 		if(computer_Selected instanceof Laptop){
 			Laptop laptop_selected = (Laptop)computer_Selected;
@@ -342,8 +353,8 @@ public class SuaSanPhamForm extends JFrame {
 		double dungLuongLuuTru = Double.parseDouble(input_dungLuongLuuTru.getText().trim());
 		String xuatXu =  (String) cbx_xuatXu.getSelectedItem();
 		String maNhaCungCap = (String) comboBox_nhaCungCap.getSelectedItem();
-
-		double gia = 0, kichThuocMan = 0;
+		
+		double gia = 0, kichThuocMan = 0,giaBan =0;
 		dungLuongLuuTru = 0;
 		int congSuatNguon = 0;
 
@@ -355,8 +366,9 @@ public class SuaSanPhamForm extends JFrame {
 
 		// Kiểm tra giá (double)
 		try {
+			giaBan = Double.parseDouble(textField_giaBan.getText().trim());
 			gia = Double.parseDouble(input_gia.getText().trim());
-			if (gia <= 0) throw new NumberFormatException();
+			if (gia <= 0 || giaBan <=0) throw new NumberFormatException();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập đơn giá hợp lệ (số dương)!");
 			hasError = true;
@@ -392,7 +404,7 @@ public class SuaSanPhamForm extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm Laptop
-			Laptop laptop_update = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+			Laptop laptop_update = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
 			try {
 				LaptopDAO.getInstance().update(laptop_update);
 				this.dispose();
@@ -421,9 +433,8 @@ public class SuaSanPhamForm extends JFrame {
 
 			// Nếu có lỗi, dừng lại ngay
 			if (hasError) return;
-
 			// Nếu hợp lệ, thêm PC
-			PC pc_update = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+			PC pc_update = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan);
 			try {
 				PCDAO.getInstance().update(pc_update);
 				this.dispose();

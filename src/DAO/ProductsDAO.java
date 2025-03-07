@@ -68,15 +68,16 @@ public class ProductsDAO implements DAOInterface<Computer> {
                 String loaiMay = rs.getString("loaimay");
                 String maNhaCungCap = rs.getString("manhacungcap");
                 double dungLuongLuuTru = rs.getDouble("dungluongluutru");
+                double giaBan = rs.getDouble("giaban");
                 if (loaiMay.equals("Laptop")) {
                     double kichThuocMan = rs.getDouble("kichthuocman");
                     String dungLuongPin = rs.getString("dungluongpin");
-                    Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+                    Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
                     ketQua.add(newLaptop);
                 } else {
                     String mainBoard = rs.getString("mainboard");
                     int congSuatNguon = rs.getInt("congsuatnguon");
-                    PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+                    PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan);
                     ketQua.add(newPC);
                 }
             }
@@ -108,15 +109,16 @@ public class ProductsDAO implements DAOInterface<Computer> {
                 String loaiMay = rs.getString("loaimay");
                 String maNhaCungCap = rs.getString("manhacungcap");
                 double dungLuongLuuTru = rs.getDouble("dungluongluutru");
+                double giaBan = rs.getDouble("giaban");
                 if (loaiMay.equals("Laptop")) {
                     double kichThuocMan = rs.getDouble("kichthuocman");
                     String dungLuongPin = rs.getString("dungluongpin");
-                    computer = new Laptop(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru);
+                    computer = new Laptop(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
 
                 } else {
                     String mainBoard = rs.getString("mainboard");
                     int congSuatNguon = rs.getInt("congsuatnguon");
-                    computer = new PC(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru);
+                    computer = new PC(cardManHinh, gia, maMay, RAM, ROM, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan);
                 }
             }
             JDBCUtil.closeConnection(connection);
