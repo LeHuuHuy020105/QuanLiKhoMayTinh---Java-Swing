@@ -31,7 +31,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     private JComboBox cbx_luaChon;
     private User currentUser ;
     private ArrayList<DetailImportProducts> detailImportProducts;
-	private JLabel label_TotalPrice;
+    private JLabel label_TotalPrice;
 
     /**
      * Create the panel.
@@ -54,10 +54,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         String[] luaChon = new String[]{"Tất cả", "Mã máy", "Tên máy", "Nhà cung cấp"};
         cbx_luaChon = new JComboBox(luaChon);
         cbx_luaChon.addItemListener(new ItemListener() {
-        	public void itemStateChanged(ItemEvent e) {
-        		updateTableDataFormDAO();
-        		input_Search.setText("");
-        	}
+            public void itemStateChanged(ItemEvent e) {
+                updateTableDataFormDAO();
+                input_Search.setText("");
+            }
         });
         cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
         cbx_luaChon.setBounds(10, 11, 126, 30);
@@ -108,15 +108,15 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 new Object[][]{
                 },
                 new String[]{
-                		"Mã máy", "Tên máy", "Nhà cung cấp","Số lượng","Đơn giá",
+                        "Mã máy", "Tên máy", "Nhà cung cấp","Số lượng","Đơn giá",
                 }
         ));
         scrollPane_1.setViewportView(table_nhapHang);
 
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton.setIcon(new ImageIcon(Icon.xuatExcel));
@@ -125,14 +125,14 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
         JButton btnSaSLng = new JButton("Sửa số lượng");
         btnSaSLng.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
         btnSaSLng.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		SuaSoLuongMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SuaSoLuongMouseClicked();
+            }
         });
         btnSaSLng.setIcon(new ImageIcon(Icon.edit));
         btnSaSLng.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -141,14 +141,14 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
         JButton btn_XoaSanPham = new JButton("Xoá sản phẩm");
         btn_XoaSanPham.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
         btn_XoaSanPham.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XoaMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XoaMouseClicked();
+            }
         });
         btn_XoaSanPham.setIcon(new ImageIcon(Icon.delete));
         btn_XoaSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -167,8 +167,8 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
         btnNewButton_2 = new JButton("Thêm\r\n");
         btnNewButton_2.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
         btnNewButton_2.addMouseListener(new MouseAdapter() {
             @Override
@@ -198,10 +198,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
         JButton btn_NhapHang = new JButton("Nhập Hàng");
         btn_NhapHang.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		NhapHangMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                NhapHangMouseClicked();
+            }
         });
         btn_NhapHang.setIcon(null);
         btn_NhapHang.setForeground(Color.WHITE);
@@ -363,7 +363,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             soLuong = Integer.parseInt(newSL);
         } catch (Exception e) {
             hasError=true;
-           JOptionPane.showMessageDialog(this,Notification.isValidNumber);
+            JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
         if(hasError)return;
         Computer computer_selected = getComputerSelectedTableNhapHang();
@@ -381,7 +381,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         }
         updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
         setTotalPrice();
-	}
+    }
     public double CountTotalPrice(){
         double totalPrice = 0;
         for(DetailImportProducts detailImportProducts1 : this.detailImportProducts){
@@ -405,7 +405,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             if(check == JOptionPane.YES_OPTION){
                 double TongTien =CountTotalPrice();
                 int maNguoiDung = currentUser.getIdUser();
-                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung);
+                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung,1,null);
                 int maphieunhap = ImportProductsDAO.getInstance().insertImportProduct(importProducts);
                 updateDatabaseImportProducts(maphieunhap);
                 int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
@@ -417,16 +417,11 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
         resetNhapHang();
 
-	}
+    }
     public void updateDatabaseImportProducts(int maphieunhap){
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
             detailImportProducts1.setMaphieunhap(maphieunhap);
             DetailImportProductsDAO.getInstance().insert(detailImportProducts1);
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
-            int soLuongMay = computer.getSoLuong()+detailImportProducts1.getSoluong();
-            System.out.println(soLuongMay);
-            computer.setSoLuong(soLuongMay);
-            ProductsDAO.getInstance().update(computer);
             updateTableDataFormDAO();
         }
     }

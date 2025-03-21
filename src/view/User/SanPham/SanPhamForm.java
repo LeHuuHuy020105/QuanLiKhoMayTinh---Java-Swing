@@ -2,6 +2,7 @@ package view.User.SanPham;
 
 import DAO.LaptopDAO;
 import DAO.PCDAO;
+import DAO.PermissionsDAO;
 import DAO.ProductsDAO;
 import controller.*;
 import model.Computer;
@@ -23,6 +24,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import model.PC;
+import model.User;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
@@ -42,12 +44,14 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     private JTextField input_Search;
     private JTable table_product;
     private JFileChooser jChooser = new JFileChooser();
-	private JComboBox cbx_luaChon;
+    private JComboBox cbx_luaChon;
+    private User currentUser;
 
     /**
      * Create the panel.
      */
-    public SanPhamForm() {
+    public SanPhamForm(User currentUser) {
+        this.currentUser = currentUser;
         setLayout(null);
         setSize(1500, 950);
         Box verticalBox = Box.createVerticalBox();
@@ -67,9 +71,9 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         verticalBox.add(panel_5_1);
 
         JButton btn_Them = new JButton("Thêm");
-        btn_Them.addMouseListener(new MouseAdapter() {
+        btn_Them.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 ThemSanPhamMouseClicked();
             }
         });
@@ -87,9 +91,9 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1.add(btn_Them);
 
         JButton btnXemChiTiet = new JButton("Xem chi tiết");
-        btnXemChiTiet.addMouseListener(new MouseAdapter() {
+        btnXemChiTiet.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 XemChiTietMouseClicked();
             }
         });
@@ -105,11 +109,11 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1.add(btnXemChiTiet);
 
         JButton btnXuatExcel = new JButton("Xuất Excel");
-        btnXuatExcel.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XuatExcelMouseClicked();
-        	}
+        btnXuatExcel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NhapExelMouseClicked();
+            }
         });
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXuatExcel.setIcon(new ImageIcon(Icon.xuatExcel));
@@ -123,9 +127,9 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1.add(btnXuatExcel);
 
         JButton btnNhapExcel = new JButton("Nhập Excel");
-        btnNhapExcel.addMouseListener(new MouseAdapter() {
+        btnNhapExcel.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 NhapExelMouseClicked();
             }
         });
@@ -141,9 +145,9 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1.add(btnNhapExcel);
 
         JButton btnSua = new JButton("Sửa");
-        btnSua.addMouseListener(new MouseAdapter() {
+        btnSua.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 SuaSanPhamMouseClicked();
             }
         });
@@ -160,10 +164,10 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
 
         JButton btnXoa = new JButton("Xoá");
         btnXoa.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XoaMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XoaMouseClicked();
+            }
         });
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXoa.setIcon(new ImageIcon(Icon.delete));
@@ -188,10 +192,10 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         String [] cbxLuaChonValues = new String[] {"Tất cả","Tên máy","Số lượng","Đơn giá","RAM","CPU","Dung lượng","Card màn hình","Xuất xứ"};
         cbx_luaChon = new JComboBox(cbxLuaChonValues);
         cbx_luaChon.addItemListener(new ItemListener() {
-        	public void itemStateChanged(ItemEvent e) {
-        		updateTableDataFormDAO();
-        		input_Search.setText("");
-        	}
+            public void itemStateChanged(ItemEvent e) {
+                updateTableDataFormDAO();
+                input_Search.setText("");
+            }
         });
         cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
         cbx_luaChon.setBounds(10, 11, 126, 30);
@@ -199,10 +203,10 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
 
         input_Search = new JTextField();
         input_Search.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        		jTextFieldSearchKeyReleased();
-        	}
+            @Override
+            public void keyReleased(KeyEvent e) {
+                jTextFieldSearchKeyReleased();
+            }
         });
         input_Search.setColumns(10);
         input_Search.setBounds(156, 11, 325, 30);
@@ -238,6 +242,8 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnEffect.effectBtnHover(btnNhapExcel);    // Nút Nhập Excel
         btnEffect.effectBtnHover(btnSua);          // Nút Sửa
         btnEffect.effectBtnHover(btnXoa);          // Nút Xoá
+
+        PermissionsDAO.applyPermissions(currentUser.getIdUser(),"Sản phẩm",btn_Them,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
     }
 
     public void XemChiTietMouseClicked() {
@@ -261,16 +267,13 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             DefaultTableModel model = (DefaultTableModel) table_product.getModel();
             int i_row = table_product.getSelectedRow();
 
-            // Kiểm tra xem có hàng nào được chọn không
             if (i_row == -1) {
                 JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
-                return null; // Trả về null nếu không có hàng nào được chọn
+                return null;
             }
 
-            // Lấy mã máy từ hàng được chọn
             int maMay = Integer.parseInt(model.getValueAt(i_row, 0)+"");
 
-            // Tìm kiếm máy trong cơ sở dữ liệu
             computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());

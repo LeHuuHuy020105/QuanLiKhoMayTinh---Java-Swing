@@ -64,4 +64,18 @@ public class DetailImportProductsDAO implements DAOInterface<DetailImportProduct
         }
         return ketQua;
     }
+    public int deleteByIDImportProducts(int maphieunhap){
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "delete from detailimportproducts where maphieunhap =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,maphieunhap);
+            ketQua=pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
 }

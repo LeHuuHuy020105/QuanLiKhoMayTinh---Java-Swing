@@ -3,6 +3,7 @@ package view.User.PhieuXuat;
 import DAO.DetailExportProductsDAO;
 import DAO.ExportProductsDAO;
 import DAO.InventoryDAO;
+import DAO.StatusDeliveryDAO;
 import model.DetailExportProducts;
 import model.ExportProducts;
 import model.Inventory;
@@ -104,7 +105,8 @@ public class SuaTrangThai extends JFrame {
 	public void LuuMouseClicked() {
 		String trangThai = cbx_TrangThai.getSelectedItem()+"";
 		ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
-		exportProducts.setTrangThai(trangThai);
+		int idStauts = StatusDeliveryDAO.getInstance().selectByName(trangThai);
+		exportProducts.setTrangThai(idStauts);
 		ExportProductsDAO.getInstance().update(exportProducts);
 		HuyBoMouseClicked();
 		phieuXuatForm.updateTableDataFormDAO();

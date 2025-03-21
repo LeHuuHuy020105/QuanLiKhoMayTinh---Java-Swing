@@ -47,6 +47,7 @@ public class LaptopDAO implements DAOInterface<Laptop> {
 
     @Override
     public int update(Laptop laptop) {
+        System.out.println(laptop);
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -64,9 +65,10 @@ public class LaptopDAO implements DAOInterface<Laptop> {
             pst.setString(10,"Laptop");
             pst.setString(11,laptop.getMaNhaCungCap());
             pst.setDouble(12,laptop.getDungLuongLuuTru());
-            pst.setInt(13,laptop.getMaMay());
-            pst.setDouble(14,laptop.getGiaBan());
+            pst.setInt(14,laptop.getMaMay());
+            pst.setDouble(13,laptop.getGiaBan());
             ketQua = pst.executeUpdate();
+            System.out.println(ketQua);
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();

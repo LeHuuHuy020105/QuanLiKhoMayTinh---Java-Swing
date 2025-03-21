@@ -23,6 +23,7 @@ public class ProductsDAO implements DAOInterface<Computer> {
     @Override
     public int update(Computer computer) {
         if(computer instanceof Laptop){
+            System.out.println("Laptop");
             Laptop laptop = (Laptop) computer;
             LaptopDAO.getInstance().update(laptop);
         }else {

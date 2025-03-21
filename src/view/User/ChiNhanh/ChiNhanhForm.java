@@ -35,7 +35,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
     private JTable table_CN;
     private JFileChooser jFileChooser;
 
-	private JComboBox cbx_Search;
+    private JComboBox cbx_Search;
 
     /**
      * Create the panel.
@@ -94,10 +94,10 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
         JButton btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XuatExcelMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XuatExcelMouseClicked();
+            }
         });
         btnEffect.effectBtnHover(btnXuatExcel);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -113,10 +113,10 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
         JButton btnNhapExcel = new JButton("Nhập Excel");
         btnNhapExcel.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		NhapExelMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                NhapExelMouseClicked();
+            }
         });
         btnEffect.effectBtnHover(btnNhapExcel);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -132,10 +132,10 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
         JButton btnSua = new JButton("Sửa");
         btnSua.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		SuaMouseClick();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SuaMouseClick();
+            }
         });
         btnEffect.effectBtnHover(btnSua);
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -151,10 +151,10 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
         JButton btnXoa = new JButton("Xoá");
         btnXoa.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XoaMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XoaMouseClicked();
+            }
         });
         btnEffect.effectBtnHover(btnXoa);
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -206,10 +206,10 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
         input_Search = new JTextField();
         input_Search.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        		jTextFieldSearchKeyReleased();
-        	}
+            @Override
+            public void keyReleased(KeyEvent e) {
+                jTextFieldSearchKeyReleased();
+            }
         });
         input_Search.setColumns(10);
         input_Search.setBounds(156, 11, 384, 30);

@@ -2,6 +2,10 @@ create table country(
 	maquocgia varchar(50) primary key,
 	tenquocgia varchar (50) not null
 )
+create table status(
+	id int primary key auto_increment,
+	name varchar(100)
+)
 CREATE TABLE product (
     mamay INT AUTO_INCREMENT PRIMARY KEY,
     tenmay VARCHAR(50) NOT NULL,
@@ -34,6 +38,9 @@ create table importproducts(
 	tongtien double not null,
 	thoidiemtaophieu TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	id int not null,
+	trangthai int(1) not null,
+	ngaynhandon timestamp,
+	thoidiemhuyphieu TIMESTAMP null default null,
 	foreign key (id) references user(id)
 )
 create table detailimportproducts(
@@ -78,10 +85,11 @@ CREATE TABLE branch (
 create table exportproducts (
 	maphieuxuat int auto_increment primary key ,
 	ngaylendon Timestamp DEFAULT CURRENT_TIMESTAMP,
-	trangthai varchar(100) not null,
+	trangthai int not null,
 	ngaynhandonxuat timestamp null ,
 	machinhanh int not null,
 	id int not null,
+	thoidiemhuyphieu timestamp,
 	foreign key (machinhanh) references branch(machinhanh),
 	foreign key (id) references user(id)
 )
@@ -127,4 +135,9 @@ create table role_interfaceuser(
 	magiaodien int(11) not null,
 	foreign key (id) references role(id),
 	foreign key (magiaodien) references interfaceuser(magiaodien)
+)
+
+create table status(
+	id int primary key auto_increment,
+	name varchar(100) not null
 )

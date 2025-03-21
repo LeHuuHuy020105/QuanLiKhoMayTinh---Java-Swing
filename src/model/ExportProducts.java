@@ -5,18 +5,20 @@ import java.sql.Timestamp;
 public class ExportProducts {
     private int maPhieuXuat;
     private Timestamp ngayLenDonXuat;
-    private String trangThai;
+    private int trangThai;
     private Timestamp ngayNhanDonXuat;
     private int maChiNhanh;
     private int manguoidung;
+    private Timestamp thoiDiemHuyPhieu;
 
-    public ExportProducts(int maPhieuXuat, Timestamp ngayLenDonXuat, Timestamp ngayNhanDonXuat, String trangThai,int maChiNhanh,int manguoidung) {
+    public ExportProducts(int maPhieuXuat, Timestamp ngayLenDonXuat, Timestamp ngayNhanDonXuat, int trangThai,int maChiNhanh,int manguoidung,Timestamp thoiDiemHuyPhieu) {
         this.maPhieuXuat = maPhieuXuat;
         this.ngayLenDonXuat = ngayLenDonXuat;
         this.ngayNhanDonXuat = ngayNhanDonXuat;
         this.trangThai = trangThai;
         this.maChiNhanh=maChiNhanh;
         this.manguoidung = manguoidung;
+        this.thoiDiemHuyPhieu = thoiDiemHuyPhieu;
     }
 
     public int getMaPhieuXuat() {
@@ -43,11 +45,11 @@ public class ExportProducts {
         this.ngayNhanDonXuat = ngayNhanDonXuat;
     }
 
-    public String getTrangThai() {
+    public int getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(int trangThai) {
         this.trangThai = trangThai;
     }
 

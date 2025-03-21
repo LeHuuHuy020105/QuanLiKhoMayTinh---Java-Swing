@@ -59,85 +59,85 @@ public class ChiTietPhieuNhapForm extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(new Color(144, 238, 144));
 		panel.setBounds(0, 0, 887, 49);
 		contentPane.add(panel);
-		
+
 		JLabel lblNewLabel = new JLabel("CHI TIẾT PHIẾU NHẬP");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel.setBounds(0, 0, 887, 49);
 		panel.add(lblNewLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Mã phiếu :");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(10, 94, 92, 28);
 		contentPane.add(lblNewLabel_1);
-		
+
 		label_maPhieuNhap = new JLabel("PN40");
 		label_maPhieuNhap.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		label_maPhieuNhap.setBounds(112, 94, 92, 28);
 		contentPane.add(label_maPhieuNhap);
-		
+
 		JLabel lblNewLabel_1_2 = new JLabel("Người tạo :");
 		lblNewLabel_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_2.setBounds(10, 147, 92, 28);
 		contentPane.add(lblNewLabel_1_2);
-		
+
 		label_tenNguoiTaoPhieu = new JLabel("Admin");
 		label_tenNguoiTaoPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		label_tenNguoiTaoPhieu.setBounds(112, 147, 186, 28);
 		contentPane.add(label_tenNguoiTaoPhieu);
-		
+
 		JLabel lblNewLabel_1_3 = new JLabel("Vai trò");
 		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_3.setBounds(446, 94, 92, 28);
 		contentPane.add(lblNewLabel_1_3);
-		
+
 		label_vaiTroNguoiTaoPhieu = new JLabel("Admin");
 		label_vaiTroNguoiTaoPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		label_vaiTroNguoiTaoPhieu.setBounds(599, 94, 92, 28);
 		contentPane.add(label_vaiTroNguoiTaoPhieu);
-		
+
 		JLabel lblNewLabel_1_3_1 = new JLabel("Thời gian tạo");
 		lblNewLabel_1_3_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_3_1.setBounds(446, 147, 121, 28);
 		contentPane.add(lblNewLabel_1_3_1);
-		
+
 		label_thoiDiemTaoPhieu = new JLabel("Admin");
 		label_thoiDiemTaoPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		label_thoiDiemTaoPhieu.setBounds(599, 147, 278, 28);
 		contentPane.add(label_thoiDiemTaoPhieu);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 211, 867, 237);
 		contentPane.add(scrollPane);
-		
+
 		table_ChiTietPhieuNhap = new JTable();
 		table_ChiTietPhieuNhap.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"STT", "Mã máy", "Tên máy", "Số lượng", "Đơn giá", "Thành tiền"
-			}
+				new Object[][] {
+				},
+				new String[] {
+						"STT", "Mã máy", "Tên máy", "Số lượng", "Đơn giá", "Thành tiền"
+				}
 		));
 		scrollPane.setViewportView(table_ChiTietPhieuNhap);
-		
+
 		JLabel lblNewLabel_2_1 = new JLabel("Tổng tiền :");
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_2_1.setBounds(10, 480, 108, 41);
 		contentPane.add(lblNewLabel_2_1);
-		
+
 		label_TongTien = new JLabel("0");
 		label_TongTien.setHorizontalAlignment(SwingConstants.CENTER);
 		label_TongTien.setForeground(Color.RED);
 		label_TongTien.setFont(new Font("Tahoma", Font.BOLD, 18));
 		label_TongTien.setBounds(132, 480, 197, 41);
 		contentPane.add(label_TongTien);
-		
+
 		JButton btnXut = new JButton("Xuất PDF");
 		btnXut.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\pdf.png"));
 		btnXut.setFont(new Font("Tahoma", Font.PLAIN, 14));

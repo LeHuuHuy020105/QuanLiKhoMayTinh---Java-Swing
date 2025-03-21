@@ -63,8 +63,8 @@ public class PCDAO implements DAOInterface<PC> {
             pst.setString(10,"PC");
             pst.setString(11,pc.getMaNhaCungCap());
             pst.setDouble(12,pc.getDungLuongLuuTru());
-            pst.setInt(13,pc.getMaMay());
-            pst.setDouble(14,pc.getGiaBan());
+            pst.setInt(14,pc.getMaMay());
+            pst.setDouble(13,pc.getGiaBan());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {

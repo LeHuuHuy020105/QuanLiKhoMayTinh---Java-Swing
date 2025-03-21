@@ -29,7 +29,7 @@ public class ThongKeForm extends JPanel {
     private JComponent side_ThongKe_SanPham;
     private JPanel side_ThongKe_Phieu;
     private JPanel side_ThongKe_TaiKhoan;
-	private CardLayout cardLayout;
+    private CardLayout cardLayout;
 
     /**
      * Create the panel.
@@ -210,17 +210,17 @@ public class ThongKeForm extends JPanel {
 
     }
     public void resetMenu() {
-		side_ThongKe_SanPham.setBackground(default_sideColor);
-		side_ThongKe_Phieu.setBackground(default_sideColor);
-		side_ThongKe_TaiKhoan.setBackground(default_sideColor);
+        side_ThongKe_SanPham.setBackground(default_sideColor);
+        side_ThongKe_Phieu.setBackground(default_sideColor);
+        side_ThongKe_TaiKhoan.setBackground(default_sideColor);
 
         panel_ThongKe_SanPham.setBackground(default_selectionColor);
         panel_ThongKe_Phieu.setBackground(default_selectionColor);
         panel_ThongKe_TaiKhoan.setBackground(default_selectionColor);
-	}
+    }
 
     public void ThongKeSanPhamMouseClicked() {
-    	resetMenu();
+        resetMenu();
         side_ThongKe_SanPham.setBackground(sideColor);
         panel_ThongKe_SanPham.setBackground(selectionColor);
         cardLayout.show(cardPanel,"Thống kê sản phẩm");

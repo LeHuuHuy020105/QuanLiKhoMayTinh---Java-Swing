@@ -9,9 +9,7 @@ import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
-import controller.Notification;
 import controller.SearchExportProducts;
-import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.Computer;
 import model.DetailExportProducts;
@@ -39,30 +37,30 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 	public PhieuXuatForm() {
 		setLayout(null);
 		setSize(1257,911);
-		
+
 		Box verticalBox = Box.createVerticalBox();
 		verticalBox.setBorder(new TitledBorder(
 
-		                new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 
-		                "Chức năng",
+				"Chức năng",
 
-		                TitledBorder.LEADING,
+				TitledBorder.LEADING,
 
-		                TitledBorder.TOP,
+				TitledBorder.TOP,
 
-		                new Font("Tahoma", Font.BOLD, 12),  // Đã sửa null thành Font.BOLD
+				new Font("Tahoma", Font.BOLD, 12),  // Đã sửa null thành Font.BOLD
 
-		                new Color(0, 0, 0)  // Màu chữ đen
+				new Color(0, 0, 0)  // Màu chữ đen
 
-		        ));
+		));
 		verticalBox.setBounds(10, 11, 533, 75);
 		add(verticalBox);
-		
+
 		JPanel panel_5_1 = new JPanel();
 		panel_5_1.setLayout(null);
 		verticalBox.add(panel_5_1);
-		
+
 		JButton btnNewButton = new JButton("Xoá");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -80,7 +78,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnNewButton.setBackground(UIManager.getColor("Button.background"));
 		btnNewButton.setBounds(10, 0, 70, 52);
 		panel_5_1.add(btnNewButton);
-		
+
 		JButton btnXemChiTiet = new JButton("Xem chi tiết");
 		btnXemChiTiet.addMouseListener(new MouseAdapter() {
 			@Override
@@ -98,7 +96,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnXemChiTiet.setBackground(UIManager.getColor("Button.background"));
 		btnXemChiTiet.setBounds(170, 0, 107, 52);
 		panel_5_1.add(btnXemChiTiet);
-		
+
 		JButton btnXuatExcel = new JButton("Xuất Excel");
 		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
@@ -110,7 +108,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnXuatExcel.setBackground(UIManager.getColor("Button.background"));
 		btnXuatExcel.setBounds(409, 0, 99, 52);
 		panel_5_1.add(btnXuatExcel);
-		
+
 		JButton btnNhapExcel = new JButton("Nhập Excel");
 		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
@@ -122,7 +120,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnNhapExcel.setBackground(UIManager.getColor("Button.background"));
 		btnNhapExcel.setBounds(287, 0, 98, 52);
 		panel_5_1.add(btnNhapExcel);
-		
+
 		JButton btnSua = new JButton("Sửa");
 		btnSua.addMouseListener(new MouseAdapter() {
 			@Override
@@ -140,22 +138,22 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnSua.setBackground(UIManager.getColor("Button.background"));
 		btnSua.setBounds(90, 0, 70, 52);
 		panel_5_1.add(btnSua);
-		
+
 		Box verticalBox_1 = Box.createVerticalBox();
 		verticalBox_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
 		verticalBox_1.setBounds(575, 11, 682, 75);
 		add(verticalBox_1);
-		
+
 		JPanel panel_5_1_1 = new JPanel();
 		panel_5_1_1.setLayout(null);
 		verticalBox_1.add(panel_5_1_1);
-		
+
 		String[] luachonStrings = new String[] {"Mã phiếu xuất","Địa chỉ"};
 		cbx_luaChon = new JComboBox(luachonStrings);
 		cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
 		cbx_luaChon.setBounds(10, 11, 126, 30);
 		panel_5_1_1.add(cbx_luaChon);
-		
+
 		input_Search = new JTextField();
 		input_Search.addKeyListener(new KeyAdapter() {
 			@Override
@@ -166,50 +164,50 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		input_Search.setColumns(10);
 		input_Search.setBounds(156, 11, 366, 30);
 		panel_5_1_1.add(input_Search);
-		
+
 		JButton btnNewButton_1 = new JButton("Làm mới");
 		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_1.setBounds(546, 9, 114, 30);
 		panel_5_1_1.add(btnNewButton_1);
-		
+
 		Box verticalBox_1_1 = Box.createVerticalBox();
 		verticalBox_1_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "L\u1ECDc theo ng\u00E0y", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
 		verticalBox_1_1.setBounds(10, 107, 682, 75);
 		add(verticalBox_1_1);
-		
+
 		JPanel panel_5_1_1_1 = new JPanel();
 		panel_5_1_1_1.setLayout(null);
 		verticalBox_1_1.add(panel_5_1_1_1);
-		
+
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(87, 11, 165, 30);
 		panel_5_1_1_1.add(dateChooser);
-		
+
 		JLabel lblNewLabel = new JLabel("Từ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(50, 11, 32, 30);
 		panel_5_1_1_1.add(lblNewLabel);
-		
+
 		JLabel lbln = new JLabel("Đến");
 		lbln.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lbln.setBounds(397, 11, 32, 30);
 		panel_5_1_1_1.add(lbln);
-		
+
 		JDateChooser dateChooser_1 = new JDateChooser();
 		dateChooser_1.setBounds(435, 11, 165, 30);
 		panel_5_1_1_1.add(dateChooser_1);
-		
+
 		Box verticalBox_1_2 = Box.createVerticalBox();
 		verticalBox_1_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Trạng thái", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
 		verticalBox_1_2.setBounds(750, 107, 294, 75);
 		add(verticalBox_1_2);
-		
+
 		JPanel panel_5_1_1_2 = new JPanel();
 		verticalBox_1_2.add(panel_5_1_1_2);
 		panel_5_1_1_2.setLayout(null);
-		
-		String[] trangthaiStrings = new String[] {"Tất cả","Chờ xác nhận","Đang chuẩn bị hàng","Đã bàn giao cho đơn vị vận chuyển","Vận chuyển","Hoàn thành"};
+
+		String[] trangthaiStrings = StatusDeliveryDAO.getInstance().selectAll().toArray(new String[0]);
 		cbx_TrangThai = new JComboBox(trangthaiStrings);
 		cbx_TrangThai.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -219,24 +217,24 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		cbx_TrangThai.setBackground(UIManager.getColor("Button.background"));
 		cbx_TrangThai.setBounds(10, 11, 262, 30);
 		panel_5_1_1_2.add(cbx_TrangThai);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 216, 1247, 684);
 		add(scrollPane);
-		
+
 		table_PhieuXuatHang = new JTable();
 		table_PhieuXuatHang.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo","Thời gian hoàn thành","Địa chỉ","Tình trạng đơn"
-			}
+				new Object[][] {
+				},
+				new String[] {
+						"STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo","Thời gian hoàn thành","Địa chỉ","Tình trạng đơn"
+				}
 		));
 		scrollPane.setViewportView(table_PhieuXuatHang);
 		updateTableDataFormDAO();
 	}
 	public void fillData(){
-		
+
 	}
 	@Override
 	public void updateTableDataFormDAO() {
@@ -253,6 +251,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 			i++;
 			String diaChi = BrandDAO.getInstance().BranchByID(exportProducts.getMaChiNhanh()).getDiaChi();
 			String tenNguoiDung = UserDAO.getInstance().getUsetById(exportProducts.getManguoidung()).getFullName();
+			String trangThai = StatusDeliveryDAO.getInstance().selectByID(exportProducts.getTrangThai());
 			model.addRow(new Object[]{
 					i,
 					exportProducts.getMaPhieuXuat(),
@@ -260,7 +259,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 					exportProducts.getNgayLenDonXuat(),
 					exportProducts.getNgayNhanDonXuat()==null? "Trống":exportProducts.getNgayNhanDonXuat(),
 					diaChi,
-					exportProducts.getTrangThai()
+					trangThai
 			});
 		}
 	}
@@ -277,7 +276,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		return exportProducts;
 	}
 	public void SuaMouseClick() {
-		SuaTrangThai suaTrangThai = new SuaTrangThai(this);
+		SuaTrangThaiPhieuXuat suaTrangThai = new SuaTrangThaiPhieuXuat(this);
 		suaTrangThai.setVisible(true);
 	}
 	public void ChiTietMouseClicked() {
@@ -286,11 +285,12 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 	}
 	public void XoaMouseClicked() {
 		ExportProducts exportProducts_Selected = getExportProductsSelected();
-		if(exportProducts_Selected.getTrangThai().equals("Chờ xác nhận") || exportProducts_Selected.getTrangThai().equals("Đang chuẩn bị hàng")){
+		if(exportProducts_Selected.getTrangThai()==1|| exportProducts_Selected.getTrangThai()==2){
 			int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá phiếu xuất này hay không ", "xoá phiếu xuất", JOptionPane.YES_NO_OPTION);
 			if(luaChon==JOptionPane.YES_OPTION){
-				ExportProductsDAO.getInstance().delete(exportProducts_Selected);
-				updateDatabase(exportProducts_Selected.getMaPhieuXuat());
+				exportProducts_Selected.setTrangThai(6);
+				ExportProductsDAO.getInstance().update(exportProducts_Selected);
+				updateTableDataFormDAO();
 			}
 		}else {
 			JOptionPane.showMessageDialog(this,"Bạn không thể xoá phiếu nhập khi đã bàn giao cho đơn vị vận chuyển !");
@@ -336,4 +336,5 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		ArrayList<ExportProducts>result = searchExportProducts.searchTrangThai(trangThai);
 		updateTableData(result);
 	}
+
 }

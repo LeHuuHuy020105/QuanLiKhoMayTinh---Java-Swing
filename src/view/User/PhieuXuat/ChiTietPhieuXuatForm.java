@@ -157,7 +157,8 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		String diaChi = BrandDAO.getInstance().BranchByID(exportProducts_selected.getMaChiNhanh()).getDiaChi();
 		label_DiaChi.setText(diaChi);
 		label_maPhieuXuat.setText(exportProducts_selected.getMaPhieuXuat()+"");
-		label_TinhTrangDon.setText(exportProducts_selected.getTrangThai());
+		String status = StatusDeliveryDAO.getInstance().selectByID(exportProducts_selected.getTrangThai());
+		label_TinhTrangDon.setText(status);
 		ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
 		updateDataToTable(detailExportProducts);
 	}

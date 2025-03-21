@@ -31,7 +31,7 @@ public class Dashboard extends JFrame {
     private JPanel cardPanel;
     private CardLayout cardLayout;
     private User currentUser;
-    
+
 
     private Color selectionColor = new Color(245, 255, 250);
     private Color sideColor = new Color(135, 206, 250);
@@ -152,10 +152,9 @@ public class Dashboard extends JFrame {
         panel.repaint();
     }
     public void Display(String item){
-        System.out.println(item);
         switch (item){
             case "Sản phẩm":
-                SanPhamForm sanPhamForm = new SanPhamForm();
+                SanPhamForm sanPhamForm = new SanPhamForm(currentUser);
                 cardPanel.add(sanPhamForm,"Sản phẩm");
                 cardLayout.show(cardPanel,"Sản phẩm");
                 break;

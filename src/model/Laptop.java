@@ -33,7 +33,7 @@ public class Laptop extends Computer {
 
     @Override
     public String toString() {
-        return "Laptop{" +
+        return super.toString()+"Laptop{" +
                 "dungLuongPin='" + dungLuongPin + '\'' +
                 ", kichThuocMan=" + kichThuocMan +
                 '}';

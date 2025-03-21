@@ -49,7 +49,7 @@ public class Query {
 //    DetailImportProduct
     public static String insertDetailImportProduct ="insert into detailimportproducts (maphieunhap,mamay,soluong) values (?,?,?)";
 //     ImportProduct
-    public static String insertImportProduct ="insert into importproducts (tongtien,thoidiemtaophieu,id) values (?,?,?)";
+    public static String insertImportProduct ="insert into importproducts (tongtien,thoidiemtaophieu,id,trangthai) values (?,?,?,?)";
 
 // Branch
     public static String insertBranch = "insert into branch(tenchinhanh, diachi, tenquan, thanhpho, sodienthoai, mota) values (?,?,?,?,?,?)";

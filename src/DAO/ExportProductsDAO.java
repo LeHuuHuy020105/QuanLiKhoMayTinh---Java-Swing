@@ -22,13 +22,13 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
         try {
             Connection connection = JDBCUtil.getConnection();
             String sql ="update exportproducts set ngaylendon=?,trangthai=?,machinhanh=?,id=? where maphieuxuat =?";
-            if (exportProducts.getTrangThai().equals("Hoàn thành")){
+            if (exportProducts.getTrangThai()==5){
                 sql ="update exportproducts set ngaylendon=?,trangthai=?,ngaynhandonxuat=CURRENT_TIMESTAMP,machinhanh=?,id=? where maphieuxuat =?";
             }
             System.out.println(sql);
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setTimestamp(1,exportProducts.getNgayLenDonXuat());
-            pst.setString(2,exportProducts.getTrangThai());
+            pst.setInt(2,exportProducts.getTrangThai());
             pst.setInt(3,exportProducts.getMaChiNhanh());
             pst.setInt(4,exportProducts.getManguoidung());
             pst.setInt(5,exportProducts.getMaPhieuXuat());
@@ -65,11 +65,12 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 int maPhieuXuat = rs.getInt("maphieuxuat");
-                String trangThai = rs.getString("trangthai");
+                int trangThai = rs.getInt("trangthai");
                 Timestamp ngaylendon = rs.getTimestamp("ngaylendon");
                 int maChiNhanh = rs.getInt("machinhanh");
                 int maNguoiDung = rs.getInt("id");
-                ExportProducts exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung);
+                Timestamp thoiDiemHuyPhieu = rs.getTimestamp("thoidiemhuyphieu");
+                ExportProducts exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung,thoiDiemHuyPhieu);
                 ketQua.add(exportProducts);
             }
         } catch (Exception e) {
@@ -84,7 +85,7 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             String sql = "insert into exportproducts (ngaylendon,trangthai,machinhanh,id) values (?,?,?,?)";
             PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setTimestamp(1, exportProducts.getNgayLenDonXuat());
-            pst.setString(2,exportProducts.getTrangThai());
+            pst.setInt(2,exportProducts.getTrangThai());
             pst.setInt(3,exportProducts.getMaChiNhanh());
             pst.setInt(4,exportProducts.getManguoidung());
             pst.executeUpdate();
@@ -107,11 +108,12 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 int maPhieuXuat = rs.getInt("maphieuxuat");
-                String trangThai = rs.getString("trangthai");
+                int trangThai = rs.getInt("trangthai");
                 Timestamp ngaylendon = rs.getTimestamp("ngaylendon");
                 int maChiNhanh = rs.getInt("machinhanh");
                 int maNguoiDung = rs.getInt("id");
-                exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung);
+                Timestamp thoiDiemHuyPhieu = rs.getTimestamp("thoidiemhuyphieu");
+                exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung,thoiDiemHuyPhieu);
             }
         } catch (Exception e) {
             e.printStackTrace();

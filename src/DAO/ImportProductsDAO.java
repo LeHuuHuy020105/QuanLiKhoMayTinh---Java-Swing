@@ -35,6 +35,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
             pst.setDouble(1, importProducts.getTongTien());
             pst.setTimestamp(2, importProducts.getTimestamp());
             pst.setInt(3,importProducts.getManguoidung());
+            pst.setInt(4,importProducts.getTrangThai());
             pst.executeUpdate();
             var key = pst.getGeneratedKeys();
             key.next();
@@ -46,7 +47,19 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
     }
     @Override
     public int update(ImportProducts importProducts) {
-        return 0;
+        int ketQua =0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "update importproducts set thoidiemhuyphieu= NOW(),trangthai =? where maphieunhap =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,importProducts.getTrangThai());
+            pst.setInt(2,importProducts.getMaphieunhap());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -67,7 +80,10 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
                 int maNguoiDung = rs.getInt("id");
                 double tongTien = rs.getDouble("tongtien");
                 Timestamp thoiGianTao = rs.getTimestamp("thoidiemtaophieu");
-                ImportProducts importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung);
+                int trangThai = rs.getInt("trangthai");
+                Timestamp thoiGianHuy = rs.getTimestamp("thoidiemhuyphieu");
+                Timestamp ngayNhanDon = rs.getTimestamp("ngaynhandon");
+                ImportProducts importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung,trangThai,thoiGianHuy,ngayNhanDon);
                 ketQua.add(importProducts);
             }
         } catch (Exception e) {
@@ -88,7 +104,10 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
                  int maNguoiDung = rs.getInt("id");
                  double tongTien = rs.getDouble("tongtien");
                  Timestamp thoiGianTao = rs.getTimestamp("thoidiemtaophieu");
-                 importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung);
+                 int trangThai = rs.getInt("trangthai");
+                 Timestamp thoiGianHuy = rs.getTimestamp("thoidiemhuyphieu");
+                 Timestamp ngayNhanDon = rs.getTimestamp("ngaynhandon");
+                 importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung,trangThai,thoiGianHuy,ngayNhanDon);
              }
          } catch (Exception e) {
              e.printStackTrace();

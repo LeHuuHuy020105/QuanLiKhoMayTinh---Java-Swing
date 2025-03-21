@@ -142,8 +142,12 @@ public class Login extends JFrame {
         User currentUser = null;
         try {
             currentUser = UserDAO.getInstance().getCurrentUser(username, password);
-            new Dashboard(currentUser);
-            this.dispose();
+            if(currentUser.getStatus()==1){
+                new Dashboard(currentUser);
+                this.dispose();
+            }else {
+                JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khoá !");
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn bị sai !");
         }

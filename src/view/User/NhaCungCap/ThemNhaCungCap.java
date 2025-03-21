@@ -49,44 +49,44 @@ public class ThemNhaCungCap extends JFrame  {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(new Color(144, 238, 144));
 		panel.setBounds(0, 0, 372, 49);
 		contentPane.add(panel);
-		
+
 		JLabel lblThmNhCung = new JLabel("THÊM NHÀ CUNG CẤP");
 		lblThmNhCung.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThmNhCung.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblThmNhCung.setBounds(0, 0, 372, 49);
 		panel.add(lblThmNhCung);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Tên nhà cung cấp");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(10, 112, 169, 28);
 		contentPane.add(lblNewLabel_1);
-		
+
 		input_TenNCC = new JTextField();
 		input_TenNCC.setColumns(10);
 		input_TenNCC.setBounds(10, 140, 328, 28);
 		contentPane.add(input_TenNCC);
-		
+
 		JLabel lblNewLabel_1_1 = new JLabel("Số điện thoại");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1.setBounds(10, 197, 116, 28);
 		contentPane.add(lblNewLabel_1_1);
-		
+
 		input_SDT = new JTextField();
 		input_SDT.setColumns(10);
 		input_SDT.setBounds(10, 224, 328, 28);
 		contentPane.add(input_SDT);
-		
+
 		JLabel lblNewLabel_1_1_1 = new JLabel("Thành phố");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_1.setBounds(10, 273, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1);
-		
+
 		JButton btn_ThemSanPham = new JButton("Thêm");
 		btn_ThemSanPham.addMouseListener(new MouseAdapter() {
 			@Override
@@ -101,7 +101,7 @@ public class ThemNhaCungCap extends JFrame  {
 		btn_ThemSanPham.setBackground(new Color(60, 179, 113));
 		btn_ThemSanPham.setBounds(10, 611, 131, 41);
 		contentPane.add(btn_ThemSanPham);
-		
+
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,30 +118,30 @@ public class ThemNhaCungCap extends JFrame  {
 		cbx_ThanhPho = new JComboBox();
 		cbx_ThanhPho.setBounds(10, 300, 321, 28);
 		contentPane.add(cbx_ThanhPho);
-		
+
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Quận / Huyện");
 		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_1_1.setBounds(10, 350, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1);
-		
+
 		cbx_Quan = new JComboBox();
 		cbx_Quan.setBounds(10, 377, 321, 28);
 		contentPane.add(cbx_Quan);
-		
+
 		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Phường / Xã");
 		lblNewLabel_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_1_1_1.setBounds(10, 426, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1_1);
-		
+
 		cbx_Phuong = new JComboBox();
 		cbx_Phuong.setBounds(10, 453, 321, 28);
 		contentPane.add(cbx_Phuong);
-		
+
 		JLabel lblNewLabel_1_1_2 = new JLabel("Số nhà");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_2.setBounds(10, 505, 116, 28);
 		contentPane.add(lblNewLabel_1_1_2);
-		
+
 		input_SoNha = new JTextField();
 		input_SoNha.setColumns(10);
 		input_SoNha.setBounds(10, 533, 328, 28);

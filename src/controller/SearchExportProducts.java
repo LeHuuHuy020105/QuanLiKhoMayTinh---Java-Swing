@@ -2,6 +2,7 @@ package controller;
 
 import DAO.BrandDAO;
 import DAO.ExportProductsDAO;
+import DAO.StatusDeliveryDAO;
 import model.ExportProducts;
 
 import java.util.ArrayList;
@@ -32,11 +33,13 @@ public class SearchExportProducts {
     public ArrayList<ExportProducts> searchTrangThai(String trangThai){
         ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
         ArrayList<ExportProducts>ketQua = new ArrayList<>();
+        int idStatus = StatusDeliveryDAO.getInstance().selectByName(trangThai);
         if(trangThai.equals("Tất cả")){
             return exportProducts;
         }
         for(ExportProducts exportProducts1 :  exportProducts){
-            if(exportProducts1.getTrangThai().equals(trangThai)){
+
+            if(exportProducts1.getTrangThai()==idStatus){
                 ketQua.add(exportProducts1);
             }
         }

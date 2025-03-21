@@ -26,7 +26,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
     private JButton btn_Them;
     private JTextField input_NguoiTaoPhieu;
     private ArrayList<DetailExportProducts> detailExportProducts;
-	private JComboBox cbx_ChiNhanh;
+    private JComboBox cbx_ChiNhanh;
     private User currentUser;
 
     /**
@@ -50,10 +50,10 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         String[] luaChon = new String[]{"Tất cả", "Mã máy", "Tên máy", "Nhà cung cấp"};
         cbx_luaChon = new JComboBox(luaChon);
         cbx_luaChon.addItemListener(new ItemListener() {
-        	public void itemStateChanged(ItemEvent e) {
-        		updateTableDataFormDAO();
-        		input_Search.setText("");
-        	}
+            public void itemStateChanged(ItemEvent e) {
+                updateTableDataFormDAO();
+                input_Search.setText("");
+            }
         });
         cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
         cbx_luaChon.setBounds(10, 11, 126, 30);
@@ -61,10 +61,10 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
 
         input_Search = new JTextField();
         input_Search.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        		jTextFieldSearchKeyReleased();
-        	}
+            @Override
+            public void keyReleased(KeyEvent e) {
+                jTextFieldSearchKeyReleased();
+            }
         });
         input_Search.setColumns(10);
         input_Search.setBounds(156, 11, 335, 30);
@@ -151,8 +151,8 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
 
         btn_Them = new JButton("Thêm\r\n");
         btn_Them.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
         btn_Them.addMouseListener(new MouseAdapter() {
             @Override
@@ -185,10 +185,10 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
 
         JButton btnNewButton_2_1 = new JButton("Xuất hàng");
         btnNewButton_2_1.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XuatHangMouseClicked();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XuatHangMouseClicked();
+            }
         });
         btnNewButton_2_1.setIcon(null);
         btnNewButton_2_1.setForeground(Color.WHITE);
@@ -293,21 +293,21 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         }
     }
     public void XuatHangMouseClicked() {
-    	if(detailExportProducts.size()==0) {
+        if(detailExportProducts.size()==0) {
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để xuất hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-    	}else {
-			int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
-			if(check==JOptionPane.YES_OPTION) {
+        }else {
+            int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
+            if(check==JOptionPane.YES_OPTION) {
                 String diaChi = cbx_ChiNhanh.getSelectedItem()+"";
                 Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);
                 int maChiNhanh = branch.getMaChiNhanh();
-                ExportProducts exportProducts = new ExportProducts(0,null,null,"Chờ xác nhận",maChiNhanh,currentUser.getIdUser());
+                ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser());
                 int maPhieuXuat = ExportProductsDAO.getInstance().insertExportProduct(exportProducts);
                 updateDatabaseExportProducts(maPhieuXuat);
             }
-		}
+        }
         resetXuatHang();
-	}
+    }
     public void updateDatabaseExportProducts(int maphieuxuat){
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
             detailExportProducts1.setMaPhieuXuat(maphieuxuat);
