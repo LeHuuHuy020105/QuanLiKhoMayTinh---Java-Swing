@@ -314,6 +314,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			int choice = JOptionPane.showConfirmDialog(this, "Bạn chắc muốn xoá phiếu nhập này ?", "Xoá phiếu nhập", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				importProducts_Selected.setTrangThai(6);
+				importProducts_Selected.setThoiGianHuy(new Timestamp(System.currentTimeMillis()));
 				ImportProductsDAO.getInstance().update(importProducts_Selected);
 				updateDatabaseProducts(importProducts_Selected.getMaphieunhap());
 			}

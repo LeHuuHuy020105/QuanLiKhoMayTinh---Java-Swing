@@ -405,7 +405,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             if(check == JOptionPane.YES_OPTION){
                 double TongTien =CountTotalPrice();
                 int maNguoiDung = currentUser.getIdUser();
-                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung,1,null);
+                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung,1,null,null);
                 int maphieunhap = ImportProductsDAO.getInstance().insertImportProduct(importProducts);
                 updateDatabaseImportProducts(maphieunhap);
                 int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);

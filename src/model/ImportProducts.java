@@ -25,6 +25,14 @@ public class ImportProducts {
         this.ngayNhanDon = ngayNhanDon;
     }
 
+    public Timestamp getNgayNhanDon() {
+        return ngayNhanDon;
+    }
+
+    public void setNgayNhanDon(Timestamp ngayNhanDon) {
+        this.ngayNhanDon = ngayNhanDon;
+    }
+
     public Timestamp getThoiGianHuy() {
         return thoiGianHuy;
     }

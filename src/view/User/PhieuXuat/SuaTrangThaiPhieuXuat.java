@@ -8,15 +8,10 @@ import model.DetailExportProducts;
 import model.ExportProducts;
 import model.Inventory;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -57,8 +52,8 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
         lblSaTrngThi.setBounds(0, 0, 372, 49);
         panel.add(lblSaTrngThi);
 
-        String [] trangThai = StatusDeliveryDAO.getInstance().selectAllChangeStatus().toArray(new String[0]);
-        cbx_TrangThai = new JComboBox(trangThai);
+
+        cbx_TrangThai = new JComboBox();
         cbx_TrangThai.setBounds(10, 93, 354, 30);
         contentPane.add(cbx_TrangThai);
 
@@ -96,6 +91,8 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
     public void fillData(){
         ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
         cbx_TrangThai.setSelectedItem(exportProducts.getTrangThai());
+        String [] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(exportProducts.getTrangThai()).toArray(new String[0]);
+        cbx_TrangThai.setModel(new DefaultComboBoxModel<>(trangThai));
     }
     public void HuyBoMouseClicked() {
         this.dispose();

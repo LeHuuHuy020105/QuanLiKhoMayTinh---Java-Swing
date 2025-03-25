@@ -114,4 +114,22 @@ public class StatusDeliveryDAO implements DAOInterface<String>{
         }
         return ketQua;
     }
+    public ArrayList<String> selectChangeStatus(int idStatus) {
+        ArrayList<String>ketQua = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Select * from status where id>=? and id<=5 and name !='Đã huỷ' ";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,idStatus);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                String name = rs.getString("name");
+                ketQua.add(name);
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
 }

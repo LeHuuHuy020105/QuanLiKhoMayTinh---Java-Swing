@@ -301,7 +301,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
                 String diaChi = cbx_ChiNhanh.getSelectedItem()+"";
                 Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);
                 int maChiNhanh = branch.getMaChiNhanh();
-                ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser());
+                ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser(),null);
                 int maPhieuXuat = ExportProductsDAO.getInstance().insertExportProduct(exportProducts);
                 updateDatabaseExportProducts(maPhieuXuat);
             }

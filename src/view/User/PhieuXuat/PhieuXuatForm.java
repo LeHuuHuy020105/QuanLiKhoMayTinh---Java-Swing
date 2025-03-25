@@ -5,15 +5,19 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
+import controller.ImportProductsSearch;
 import controller.SearchExportProducts;
 import controller.updateDataToTable;
 import model.Computer;
 import model.DetailExportProducts;
 import model.ExportProducts;
+import model.ImportProducts;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
@@ -26,9 +30,11 @@ import java.awt.event.ItemEvent;
 public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportProducts> {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField input_Search;
+	private JDateChooser date_Start;
+	private JDateChooser date_End;
+	private JTextField input_TimKiem;
 	private JTable table_PhieuXuatHang;
-	private JComboBox cbx_luaChon;
+	private JComboBox cbx_TimKiem;
 	private JComboBox cbx_TrangThai;
 
 	/**
@@ -149,21 +155,21 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		verticalBox_1.add(panel_5_1_1);
 
 		String[] luachonStrings = new String[] {"Mã phiếu xuất","Địa chỉ"};
-		cbx_luaChon = new JComboBox(luachonStrings);
-		cbx_luaChon.setBackground(UIManager.getColor("Button.background"));
-		cbx_luaChon.setBounds(10, 11, 126, 30);
-		panel_5_1_1.add(cbx_luaChon);
+		cbx_TimKiem = new JComboBox(luachonStrings);
+		cbx_TimKiem.setBackground(UIManager.getColor("Button.background"));
+		cbx_TimKiem.setBounds(10, 11, 126, 30);
+		panel_5_1_1.add(cbx_TimKiem);
 
-		input_Search = new JTextField();
-		input_Search.addKeyListener(new KeyAdapter() {
+		input_TimKiem = new JTextField();
+		input_TimKiem.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				jTextFieldSearchKeyReleased();
+				applyFilters();
 			}
 		});
-		input_Search.setColumns(10);
-		input_Search.setBounds(156, 11, 366, 30);
-		panel_5_1_1.add(input_Search);
+		input_TimKiem.setColumns(10);
+		input_TimKiem.setBounds(156, 11, 366, 30);
+		panel_5_1_1.add(input_TimKiem);
 
 		JButton btnNewButton_1 = new JButton("Làm mới");
 		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
@@ -180,9 +186,9 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		panel_5_1_1_1.setLayout(null);
 		verticalBox_1_1.add(panel_5_1_1_1);
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(87, 11, 165, 30);
-		panel_5_1_1_1.add(dateChooser);
+		date_Start = new JDateChooser();
+		date_Start.setBounds(87, 11, 165, 30);
+		panel_5_1_1_1.add(date_Start);
 
 		JLabel lblNewLabel = new JLabel("Từ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -194,9 +200,9 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		lbln.setBounds(397, 11, 32, 30);
 		panel_5_1_1_1.add(lbln);
 
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(435, 11, 165, 30);
-		panel_5_1_1_1.add(dateChooser_1);
+		date_End = new JDateChooser();
+		date_End.setBounds(435, 11, 165, 30);
+		panel_5_1_1_1.add(date_End);
 
 		Box verticalBox_1_2 = Box.createVerticalBox();
 		verticalBox_1_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Trạng thái", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
@@ -304,12 +310,130 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 			ProductsDAO.getInstance().update(computer);
 		}
 	}
-	public void jTextFieldSearchKeyReleased() {
-		String luaChon = (String) cbx_luaChon.getSelectedItem();
-		String input = input_Search.getText();
-		ArrayList<ExportProducts> exportProducts = searchExportProducts(luaChon, input);
-		System.out.println(exportProducts);
-		updateTableData(exportProducts);
+	public void applyFilters() {
+		String statusFilter = cbx_TrangThai.getSelectedItem() + "";
+		String keyword = input_TimKiem.getText().trim().toLowerCase();
+		String cbxLuaChon = cbx_TimKiem.getSelectedItem() + "";
+		Timestamp dateStart = null, dateEnd = null;
+
+		// Lấy giá trị từ JDateChooser
+		if (date_Start.getDate() != null) {
+			dateStart = new Timestamp(date_Start.getDate().getTime());
+		}
+		if (date_End.getDate() != null) {
+			dateEnd = new Timestamp(date_End.getDate().getTime());
+		}
+
+		// Lấy danh sách tất cả sản phẩm
+		ArrayList<ImportProducts> allImportProducts = ImportProductsDAO.getInstance().selectAll();
+
+		ArrayList<ImportProducts> filteredImportProducts = new ArrayList<>();
+
+		for (ImportProducts importProducts : allImportProducts) {
+			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(importProducts, statusFilter);
+			boolean matchKeyword = keyword.isEmpty() || matchKeyword(importProducts, keyword, cbxLuaChon);
+			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, importProducts);
+
+			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
+			if (matchStatus && matchKeyword && matchTime) {
+				filteredImportProducts.add(importProducts);
+			}
+		}
+
+		System.out.println("Mang: " + filteredImportProducts);
+		updateTableData(filteredImportProducts);
+	}
+
+	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ImportProducts importProducts) {
+		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
+		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
+		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
+		LocalDate productDate = (importProducts.getTimestamp() != null)
+				? importProducts.getTimestamp().toLocalDateTime().toLocalDate()
+				: null;
+		LocalDate productCancelDate = (importProducts.getThoiGianHuy() != null)
+				? importProducts.getThoiGianHuy().toLocalDateTime().toLocalDate()
+				: null;
+
+		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
+		if (startDate == null && endDate == null) {
+			return true;
+		}
+
+		// Kiểm tra productDate
+		boolean matchesDate = true;
+		if (productDate != null) {
+			if (startDate != null && endDate != null) {
+				// Trường hợp cả startDate và endDate đều có giá trị
+				// Kiểm tra xem productDate có nằm trong khoảng [startDate, endDate] không
+				matchesDate = !productDate.isBefore(startDate) && !productDate.isAfter(endDate);
+			} else if (startDate != null) {
+				// Trường hợp chỉ có startDate (endDate là null)
+				// Kiểm tra xem productDate có từ startDate trở về sau không
+				matchesDate = !productDate.isBefore(startDate);
+			} else if (endDate != null) {
+				// Trường hợp chỉ có endDate (startDate là null)
+				// Kiểm tra xem productDate có trước endDate không
+				matchesDate = !productDate.isAfter(endDate);
+			}
+		}
+
+		// Kiểm tra productCancelDate (nếu có)
+		boolean matchesCancelDate = true;
+		if (productCancelDate != null) {
+			if (startDate != null && endDate != null) {
+				// Trường hợp cả startDate và endDate đều có giá trị
+				matchesCancelDate = !productCancelDate.isBefore(startDate) && !productCancelDate.isAfter(endDate);
+			} else if (startDate != null) {
+				// Trường hợp chỉ có startDate (endDate là null)
+				matchesCancelDate = !productCancelDate.isBefore(startDate);
+			} else if (endDate != null) {
+				// Trường hợp chỉ có endDate (startDate là null)
+				matchesCancelDate = !productCancelDate.isAfter(endDate);
+			}
+		}else {
+			matchesCancelDate =false;
+		}
+		System.out.print("iD: " + importProducts.getMaphieunhap()+" - ");
+		System.out.print(matchesDate+ " - ");
+		System.out.println(matchesCancelDate);
+
+		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
+		return matchesDate || matchesCancelDate;
+	}
+
+	// Kiểm tra tình trạng tồn kho
+	private boolean matchStatus(ImportProducts importProducts, String statusFilter) {
+		int status = -1;
+		switch (statusFilter) {
+			case "Bình thường":
+				status = 1;
+				break;
+			case "Đã huỷ":
+				status = 0;
+				break;
+		}
+		return importProducts.getTrangThai() == status;
+	}
+
+	public ArrayList<ImportProducts> search(String luaChon, String input) {
+		ArrayList<ImportProducts> result = new ArrayList<>();
+		ImportProductsSearch importProductsSearch = new ImportProductsSearch();
+		switch (luaChon) {
+			case "Tất cả":
+				result = importProductsSearch.searchAll(input);
+				break;
+			case "Mã phiếu nhập":
+				result = importProductsSearch.searchMaPhieuNhap(input);
+				break;
+			case "Tổng tiền":
+				result = importProductsSearch.searchTongTien(input);
+				break;
+			case "Tên người tạo":
+				result = importProductsSearch.searchNguoiTao(input);
+				break;
+		}
+		return result;
 	}
 
 	public ArrayList<ExportProducts> searchExportProducts(String luaChon, String content_Search) {

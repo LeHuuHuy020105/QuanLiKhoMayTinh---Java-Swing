@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class SuaTrangThaiPhieuNhap extends JFrame {
@@ -47,8 +48,8 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
         lblSaTrngThi.setBounds(0, 0, 372, 49);
         panel.add(lblSaTrngThi);
 
-        String [] trangThai = StatusDeliveryDAO.getInstance().selectAllChangeStatus().toArray(new String[0]);
-        cbx_TrangThai = new JComboBox(trangThai);
+
+        cbx_TrangThai = new JComboBox();
         cbx_TrangThai.setBounds(10, 93, 354, 30);
         contentPane.add(cbx_TrangThai);
 
@@ -88,6 +89,8 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
     public void fillData(){
         ImportProducts importProducts = phieuNhapForm.getImportProductsSelected();
         cbx_TrangThai.setSelectedItem(importProducts.getTrangThai());
+        String [] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(importProducts.getTrangThai()).toArray(new String[0]);
+        cbx_TrangThai.setModel(new DefaultComboBoxModel<>(trangThai));
     }
     public void HuyBoMouseClicked() {
         this.dispose();
@@ -103,6 +106,7 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
         ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts.getMaphieunhap());
         if(trangThai.equals("Hoàn thành")){
             importProducts.setTrangThai(5);
+            importProducts.setNgayNhanDon(new Timestamp(System.currentTimeMillis()));
             ImportProductsDAO.getInstance().update(importProducts);
             updateDatabaseImportProducts(detailImportProducts);
         }
