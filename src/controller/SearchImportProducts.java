@@ -6,7 +6,7 @@ import model.ImportProducts;
 
 import java.util.ArrayList;
 
-public class ImportProductsSearch {
+public class SearchImportProducts {
     public ArrayList<ImportProducts> searchAll(String input) {
         ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
         ArrayList<ImportProducts> result = new ArrayList<>();

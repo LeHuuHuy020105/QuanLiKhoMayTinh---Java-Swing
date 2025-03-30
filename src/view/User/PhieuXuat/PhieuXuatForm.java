@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
-import controller.ImportProductsSearch;
 import controller.SearchExportProducts;
 import controller.updateDataToTable;
 import model.Computer;
@@ -325,34 +324,33 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 
 		// Lấy danh sách tất cả sản phẩm
-		ArrayList<ImportProducts> allImportProducts = ImportProductsDAO.getInstance().selectAll();
+		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
 
-		ArrayList<ImportProducts> filteredImportProducts = new ArrayList<>();
+		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
 
-		for (ImportProducts importProducts : allImportProducts) {
-			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(importProducts, statusFilter);
-			boolean matchKeyword = keyword.isEmpty() || matchKeyword(importProducts, keyword, cbxLuaChon);
-			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, importProducts);
+		for (ExportProducts exportProducts : allExportProducts) {
+			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(exportProducts, statusFilter);
+			boolean matchKeyword = keyword.isEmpty() || matchKeyword(exportProducts, keyword, cbxLuaChon);
+			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, exportProducts);
 
 			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
 			if (matchStatus && matchKeyword && matchTime) {
-				filteredImportProducts.add(importProducts);
+				filteredExportProducts.add(exportProducts);
 			}
 		}
 
-		System.out.println("Mang: " + filteredImportProducts);
-		updateTableData(filteredImportProducts);
+		updateTableData(filteredExportProducts);
 	}
 
-	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ImportProducts importProducts) {
+	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
 		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
 		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
 		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
-		LocalDate productDate = (importProducts.getTimestamp() != null)
-				? importProducts.getTimestamp().toLocalDateTime().toLocalDate()
+		LocalDate productDate = (exportProducts.getNgayNhanDonXuat() != null)
+				? exportProducts.getNgayNhanDonXuat().toLocalDateTime().toLocalDate()
 				: null;
-		LocalDate productCancelDate = (importProducts.getThoiGianHuy() != null)
-				? importProducts.getThoiGianHuy().toLocalDateTime().toLocalDate()
+		LocalDate productCancelDate = (exportProducts.getThoiDiemHuyPhieu() != null)
+				? exportProducts.getThoiDiemHuyPhieu().toLocalDateTime().toLocalDate()
 				: null;
 
 		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
@@ -394,7 +392,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}else {
 			matchesCancelDate =false;
 		}
-		System.out.print("iD: " + importProducts.getMaphieunhap()+" - ");
+		System.out.print("iD: " + exportProducts.getMaPhieuXuat()+" - ");
 		System.out.print(matchesDate+ " - ");
 		System.out.println(matchesCancelDate);
 
@@ -403,7 +401,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 	}
 
 	// Kiểm tra tình trạng tồn kho
-	private boolean matchStatus(ImportProducts importProducts, String statusFilter) {
+	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
 		int status = -1;
 		switch (statusFilter) {
 			case "Bình thường":
@@ -413,47 +411,29 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 				status = 0;
 				break;
 		}
-		return importProducts.getTrangThai() == status;
+		return exportProducts.getTrangThai() == status;
 	}
 
 	public ArrayList<ImportProducts> search(String luaChon, String input) {
-		ArrayList<ImportProducts> result = new ArrayList<>();
-		ImportProductsSearch importProductsSearch = new ImportProductsSearch();
+		ArrayList<ExportProducts> result = new ArrayList<>();
+		SearchExportProducts searchExportProducts = new SearchExportProducts();
 		switch (luaChon) {
 			case "Tất cả":
-				result = importProductsSearch.searchAll(input);
+				result = searchExportProducts.searchAll(input);
 				break;
-			case "Mã phiếu nhập":
-				result = importProductsSearch.searchMaPhieuNhap(input);
+			case "Mã phiếu xuất":
+				result = searchExportProducts.searchMaPhieuNhap(input);
 				break;
 			case "Tổng tiền":
-				result = importProductsSearch.searchTongTien(input);
+				result = searchExportProducts.searchTongTien(input);
 				break;
 			case "Tên người tạo":
-				result = importProductsSearch.searchNguoiTao(input);
+				result = searchExportProducts.searchNguoiTao(input);
 				break;
 		}
 		return result;
 	}
 
-	public ArrayList<ExportProducts> searchExportProducts(String luaChon, String content_Search) {
-		ArrayList<ExportProducts> result = new ArrayList<>();
-		SearchExportProducts searchExportProducts = new SearchExportProducts();
-		if(content_Search.equals("")){
-			ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
-			return exportProducts;
-		}
-		content_Search = content_Search.toLowerCase();
-		switch (luaChon) {
-			case "Mã phiếu xuất":
-				result = searchExportProducts.searchMaPhieuXuat(content_Search);
-				break;
-			case "Địa chỉ":
-				result = searchExportProducts.searchDiaChi(content_Search);
-				break;
-		}
-		return result;
-	}
 	public void FilterTrangThai(){
 		String trangThai = cbx_TrangThai.getSelectedItem()+"";
 		SearchExportProducts searchExportProducts = new SearchExportProducts();

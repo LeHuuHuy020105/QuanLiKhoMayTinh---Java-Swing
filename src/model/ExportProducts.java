@@ -21,6 +21,14 @@ public class ExportProducts {
         this.thoiDiemHuyPhieu = thoiDiemHuyPhieu;
     }
 
+    public Timestamp getThoiDiemHuyPhieu() {
+        return thoiDiemHuyPhieu;
+    }
+
+    public void setThoiDiemHuyPhieu(Timestamp thoiDiemHuyPhieu) {
+        this.thoiDiemHuyPhieu = thoiDiemHuyPhieu;
+    }
+
     public int getMaPhieuXuat() {
         return maPhieuXuat;
     }

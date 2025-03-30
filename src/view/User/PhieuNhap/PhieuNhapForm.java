@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
-import controller.ImportProductsSearch;
+import controller.SearchImportProducts;
 import controller.updateDataToTable;
 import model.*;
 
@@ -443,19 +443,19 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 
 	public ArrayList<ImportProducts> search(String luaChon, String input) {
 		ArrayList<ImportProducts> result = new ArrayList<>();
-		ImportProductsSearch importProductsSearch = new ImportProductsSearch();
+		SearchImportProducts searchImportProducts = new SearchImportProducts();
 		switch (luaChon) {
 			case "Tất cả":
-				result = importProductsSearch.searchAll(input);
+				result = searchImportProducts.searchAll(input);
 				break;
 			case "Mã phiếu nhập":
-				result = importProductsSearch.searchMaPhieuNhap(input);
+				result = searchImportProducts.searchMaPhieuNhap(input);
 				break;
 			case "Tổng tiền":
-				result = importProductsSearch.searchTongTien(input);
+				result = searchImportProducts.searchTongTien(input);
 				break;
 			case "Tên người tạo":
-				result = importProductsSearch.searchNguoiTao(input);
+				result = searchImportProducts.searchNguoiTao(input);
 				break;
 		}
 		return result;
