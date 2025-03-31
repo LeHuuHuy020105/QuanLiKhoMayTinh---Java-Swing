@@ -1,68 +1,83 @@
 package model;
 
-public class Bill {
-    private String maMay;
-    private int soLuong;
-    private String maChiNhanh;
-    private String maNhaCungCap;
-    private int totalPrice;
+import java.sql.Timestamp;
 
-    public Bill(String maChiNhanh, String maMay, String maNhaCungCap, int soLuong , int totalPrice) {
-        this.maChiNhanh = maChiNhanh;
-        this.maMay = maMay;
-        this.maNhaCungCap = maNhaCungCap;
-        this.soLuong = soLuong;
-        this.totalPrice = totalPrice;
+public class Bill {
+    private int maPhieu;
+    private Timestamp ngayXuatPhieu;
+    private double thanhTien;
+    private double tongTien;
+    private int maNhanVien;
+    private int maKhachHang;
+    private int maChiNhanh;
+
+    public Bill() {
     }
 
-    public String getMaChiNhanh() {
+
+    public Bill(int maPhieu, Timestamp ngayXuatPhieu, double thanhTien, double tongTien, int maNhanVien, int maKhachHang, int maChiNhanh) {
+        this.maPhieu = maPhieu;
+        this.ngayXuatPhieu = ngayXuatPhieu;
+        this.thanhTien = thanhTien;
+        this.tongTien = tongTien;
+        this.maNhanVien = maNhanVien;
+        this.maKhachHang = maKhachHang;
+        this.maChiNhanh = maChiNhanh;
+    }
+
+    public double getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(double tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public int getMaPhieu() {
+        return maPhieu;
+    }
+
+    public void setMaPhieu(int maPhieu) {
+        this.maPhieu = maPhieu;
+    }
+
+    public Timestamp getNgayXuatPhieu() {
+        return ngayXuatPhieu;
+    }
+
+    public void setNgayXuatPhieu(Timestamp ngayXuatPhieu) {
+        this.ngayXuatPhieu = ngayXuatPhieu;
+    }
+
+    public double getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(double thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+
+    public int getMaNhanVien() {
+        return maNhanVien;
+    }
+
+    public void setMaNhanVien(int maNhanVien) {
+        this.maNhanVien = maNhanVien;
+    }
+
+    public int getMaKhachHang() {
+        return maKhachHang;
+    }
+
+    public void setMaKhachHang(int maKhachHang) {
+        this.maKhachHang = maKhachHang;
+    }
+
+    public int getMaChiNhanh() {
         return maChiNhanh;
     }
 
-    public void setMaChiNhanh(String maChiNhanh) {
+    public void setMaChiNhanh(int maChiNhanh) {
         this.maChiNhanh = maChiNhanh;
-    }
-
-    public String getMaMay() {
-        return maMay;
-    }
-
-    public void setMaMay(String maMay) {
-        this.maMay = maMay;
-    }
-
-    public String getMaNhaCungCap() {
-        return maNhaCungCap;
-    }
-
-    public void setMaNhaCungCap(String maNhaCungCap) {
-        this.maNhaCungCap = maNhaCungCap;
-    }
-
-    public int getSoLuong() {
-        return soLuong;
-    }
-
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    @Override
-    public String toString() {
-        return "Bill{" +
-                "maChiNhanh='" + maChiNhanh + '\'' +
-                ", maMay='" + maMay + '\'' +
-                ", soLuong=" + soLuong +
-                ", maNhaCungCap='" + maNhaCungCap + '\'' +
-                ", totalPrice=" + totalPrice +
-                '}';
     }
 }

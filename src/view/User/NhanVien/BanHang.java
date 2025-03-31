@@ -200,7 +200,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         btn_NhapHang.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                NhapHangMouseClicked();
+                BanHangMouseClicked();
             }
         });
         btn_NhapHang.setIcon(null);
@@ -397,26 +397,18 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         double totalPrice = CountTotalPrice();
         label_TotalPrice.setText(df.format(totalPrice)+" VND");
     }
-    public void NhapHangMouseClicked() {
+    public void BanHangMouseClicked() {
         if(detailImportProducts.size()==0){
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để nhập hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }else {
             int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
             if(check == JOptionPane.YES_OPTION){
-                double TongTien =CountTotalPrice();
-                int maNguoiDung = currentUser.getIdUser();
-                ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung,1,null,null);
-                int maphieunhap = ImportProductsDAO.getInstance().insertImportProduct(importProducts);
-                updateDatabaseImportProducts(maphieunhap);
-                int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
-                if(check_pdf==JOptionPane.YES_OPTION){
-                    exportPDF(detailImportProducts);
-                }
+
+
             }
         }
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
         resetNhapHang();
-
     }
     public void updateDatabaseImportProducts(int maphieunhap){
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
@@ -503,5 +495,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 //        }
         System.out.println("abc");
     }
+
+
 }
 

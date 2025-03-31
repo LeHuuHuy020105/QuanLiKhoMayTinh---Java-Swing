@@ -310,135 +310,135 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 	}
 	public void applyFilters() {
-		String statusFilter = cbx_TrangThai.getSelectedItem() + "";
-		String keyword = input_TimKiem.getText().trim().toLowerCase();
-		String cbxLuaChon = cbx_TimKiem.getSelectedItem() + "";
-		Timestamp dateStart = null, dateEnd = null;
-
-		// Lấy giá trị từ JDateChooser
-		if (date_Start.getDate() != null) {
-			dateStart = new Timestamp(date_Start.getDate().getTime());
-		}
-		if (date_End.getDate() != null) {
-			dateEnd = new Timestamp(date_End.getDate().getTime());
-		}
-
-		// Lấy danh sách tất cả sản phẩm
-		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
-
-		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
-
-		for (ExportProducts exportProducts : allExportProducts) {
-			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(exportProducts, statusFilter);
-			boolean matchKeyword = keyword.isEmpty() || matchKeyword(exportProducts, keyword, cbxLuaChon);
-			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, exportProducts);
-
-			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
-			if (matchStatus && matchKeyword && matchTime) {
-				filteredExportProducts.add(exportProducts);
-			}
-		}
-
-		updateTableData(filteredExportProducts);
+//		String statusFilter = cbx_TrangThai.getSelectedItem() + "";
+//		String keyword = input_TimKiem.getText().trim().toLowerCase();
+//		String cbxLuaChon = cbx_TimKiem.getSelectedItem() + "";
+//		Timestamp dateStart = null, dateEnd = null;
+//
+//		// Lấy giá trị từ JDateChooser
+//		if (date_Start.getDate() != null) {
+//			dateStart = new Timestamp(date_Start.getDate().getTime());
+//		}
+//		if (date_End.getDate() != null) {
+//			dateEnd = new Timestamp(date_End.getDate().getTime());
+//		}
+//
+//		// Lấy danh sách tất cả sản phẩm
+//		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
+//
+//		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
+//
+//		for (ExportProducts exportProducts : allExportProducts) {
+//			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(exportProducts, statusFilter);
+//			boolean matchKeyword = keyword.isEmpty() || matchKeyword(exportProducts, keyword, cbxLuaChon);
+//			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, exportProducts);
+//
+//			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
+//			if (matchStatus && matchKeyword && matchTime) {
+//				filteredExportProducts.add(exportProducts);
+//			}
+//		}
+//
+//		updateTableData(filteredExportProducts);
 	}
 
-	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
-		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
-		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
-		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
-		LocalDate productDate = (exportProducts.getNgayNhanDonXuat() != null)
-				? exportProducts.getNgayNhanDonXuat().toLocalDateTime().toLocalDate()
-				: null;
-		LocalDate productCancelDate = (exportProducts.getThoiDiemHuyPhieu() != null)
-				? exportProducts.getThoiDiemHuyPhieu().toLocalDateTime().toLocalDate()
-				: null;
-
-		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
-		if (startDate == null && endDate == null) {
-			return true;
-		}
-
-		// Kiểm tra productDate
-		boolean matchesDate = true;
-		if (productDate != null) {
-			if (startDate != null && endDate != null) {
-				// Trường hợp cả startDate và endDate đều có giá trị
-				// Kiểm tra xem productDate có nằm trong khoảng [startDate, endDate] không
-				matchesDate = !productDate.isBefore(startDate) && !productDate.isAfter(endDate);
-			} else if (startDate != null) {
-				// Trường hợp chỉ có startDate (endDate là null)
-				// Kiểm tra xem productDate có từ startDate trở về sau không
-				matchesDate = !productDate.isBefore(startDate);
-			} else if (endDate != null) {
-				// Trường hợp chỉ có endDate (startDate là null)
-				// Kiểm tra xem productDate có trước endDate không
-				matchesDate = !productDate.isAfter(endDate);
-			}
-		}
-
-		// Kiểm tra productCancelDate (nếu có)
-		boolean matchesCancelDate = true;
-		if (productCancelDate != null) {
-			if (startDate != null && endDate != null) {
-				// Trường hợp cả startDate và endDate đều có giá trị
-				matchesCancelDate = !productCancelDate.isBefore(startDate) && !productCancelDate.isAfter(endDate);
-			} else if (startDate != null) {
-				// Trường hợp chỉ có startDate (endDate là null)
-				matchesCancelDate = !productCancelDate.isBefore(startDate);
-			} else if (endDate != null) {
-				// Trường hợp chỉ có endDate (startDate là null)
-				matchesCancelDate = !productCancelDate.isAfter(endDate);
-			}
-		}else {
-			matchesCancelDate =false;
-		}
-		System.out.print("iD: " + exportProducts.getMaPhieuXuat()+" - ");
-		System.out.print(matchesDate+ " - ");
-		System.out.println(matchesCancelDate);
-
-		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
-		return matchesDate || matchesCancelDate;
-	}
+//	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
+//		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
+//		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
+//		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
+//		LocalDate productDate = (exportProducts.getNgayNhanDonXuat() != null)
+//				? exportProducts.getNgayNhanDonXuat().toLocalDateTime().toLocalDate()
+//				: null;
+//		LocalDate productCancelDate = (exportProducts.getThoiDiemHuyPhieu() != null)
+//				? exportProducts.getThoiDiemHuyPhieu().toLocalDateTime().toLocalDate()
+//				: null;
+//
+//		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
+//		if (startDate == null && endDate == null) {
+//			return true;
+//		}
+//
+//		// Kiểm tra productDate
+//		boolean matchesDate = true;
+//		if (productDate != null) {
+//			if (startDate != null && endDate != null) {
+//				// Trường hợp cả startDate và endDate đều có giá trị
+//				// Kiểm tra xem productDate có nằm trong khoảng [startDate, endDate] không
+//				matchesDate = !productDate.isBefore(startDate) && !productDate.isAfter(endDate);
+//			} else if (startDate != null) {
+//				// Trường hợp chỉ có startDate (endDate là null)
+//				// Kiểm tra xem productDate có từ startDate trở về sau không
+//				matchesDate = !productDate.isBefore(startDate);
+//			} else if (endDate != null) {
+//				// Trường hợp chỉ có endDate (startDate là null)
+//				// Kiểm tra xem productDate có trước endDate không
+//				matchesDate = !productDate.isAfter(endDate);
+//			}
+//		}
+//
+//		// Kiểm tra productCancelDate (nếu có)
+//		boolean matchesCancelDate = true;
+//		if (productCancelDate != null) {
+//			if (startDate != null && endDate != null) {
+//				// Trường hợp cả startDate và endDate đều có giá trị
+//				matchesCancelDate = !productCancelDate.isBefore(startDate) && !productCancelDate.isAfter(endDate);
+//			} else if (startDate != null) {
+//				// Trường hợp chỉ có startDate (endDate là null)
+//				matchesCancelDate = !productCancelDate.isBefore(startDate);
+//			} else if (endDate != null) {
+//				// Trường hợp chỉ có endDate (startDate là null)
+//				matchesCancelDate = !productCancelDate.isAfter(endDate);
+//			}
+//		}else {
+//			matchesCancelDate =false;
+//		}
+//		System.out.print("iD: " + exportProducts.getMaPhieuXuat()+" - ");
+//		System.out.print(matchesDate+ " - ");
+//		System.out.println(matchesCancelDate);
+//
+//		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
+//		return matchesDate || matchesCancelDate;
+//	}
 
 	// Kiểm tra tình trạng tồn kho
-	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
-		int status = -1;
-		switch (statusFilter) {
-			case "Bình thường":
-				status = 1;
-				break;
-			case "Đã huỷ":
-				status = 0;
-				break;
-		}
-		return exportProducts.getTrangThai() == status;
-	}
-
-	public ArrayList<ImportProducts> search(String luaChon, String input) {
-		ArrayList<ExportProducts> result = new ArrayList<>();
-		SearchExportProducts searchExportProducts = new SearchExportProducts();
-		switch (luaChon) {
-			case "Tất cả":
-				result = searchExportProducts.searchAll(input);
-				break;
-			case "Mã phiếu xuất":
-				result = searchExportProducts.searchMaPhieuNhap(input);
-				break;
-			case "Tổng tiền":
-				result = searchExportProducts.searchTongTien(input);
-				break;
-			case "Tên người tạo":
-				result = searchExportProducts.searchNguoiTao(input);
-				break;
-		}
-		return result;
-	}
-
+//	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
+//		int status = -1;
+//		switch (statusFilter) {
+//			case "Bình thường":
+//				status = 1;
+//				break;
+//			case "Đã huỷ":
+//				status = 0;
+//				break;
+//		}
+//		return exportProducts.getTrangThai() == status;
+//	}
+//
+//	public ArrayList<ImportProducts> search(String luaChon, String input) {
+//		ArrayList<ExportProducts> result = new ArrayList<>();
+//		SearchExportProducts searchExportProducts = new SearchExportProducts();
+//		switch (luaChon) {
+//			case "Tất cả":
+//				result = searchExportProducts.searchAll(input);
+//				break;
+//			case "Mã phiếu xuất":
+//				result = searchExportProducts.searchMaPhieuNhap(input);
+//				break;
+//			case "Tổng tiền":
+//				result = searchExportProducts.searchTongTien(input);
+//				break;
+//			case "Tên người tạo":
+//				result = searchExportProducts.searchNguoiTao(input);
+//				break;
+//		}
+//		return result;
+//	}
+//
 	public void FilterTrangThai(){
-		String trangThai = cbx_TrangThai.getSelectedItem()+"";
-		SearchExportProducts searchExportProducts = new SearchExportProducts();
-		ArrayList<ExportProducts>result = searchExportProducts.searchTrangThai(trangThai);
-		updateTableData(result);
+//		String trangThai = cbx_TrangThai.getSelectedItem()+"";
+//		SearchExportProducts searchExportProducts = new SearchExportProducts();
+//		ArrayList<ExportProducts>result = searchExportProducts.searchTrangThai(trangThai);
+//		updateTableData(result);
 	}
 
 }
