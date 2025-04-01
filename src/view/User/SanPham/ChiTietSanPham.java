@@ -237,7 +237,6 @@ public class ChiTietSanPham extends JFrame {
 		panel_image = new JPanel();
 		panel_image.setBounds(10, 98, 192, 122);
 		contentPane.add(panel_image);
-		hienThiThongTinSanPham();
 		ImageHelper.hienThiAnhTrenPanel(hinhAnh, panel_image);
 		
 		JLabel lblNewLabel_1_1_1_2 = new JLabel("Giá bán");
@@ -251,6 +250,7 @@ public class ChiTietSanPham extends JFrame {
 		textField_giaBan.setColumns(10);
 		textField_giaBan.setBounds(386, 62, 132, 28);
 		contentPane.add(textField_giaBan);
+		hienThiThongTinSanPham();
 	}
 	public void notAllowEdit() {
 		input_tenSanPham.setEditable(false);
