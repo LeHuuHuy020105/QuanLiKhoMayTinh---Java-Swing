@@ -31,7 +31,7 @@ public class ThongKePhieuForm extends JPanel {
 	 */
 	public ThongKePhieuForm() {
 		setLayout(null);
-		setSize(1247, 678);
+		setSize(1247, 504);
 
 		Box verticalBox = Box.createVerticalBox();
 		verticalBox.setBorder(new TitledBorder(
@@ -157,7 +157,7 @@ public class ThongKePhieuForm extends JPanel {
 		panel_5_1_1_2.add(textField_2);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 207, 1227, 362);
+		scrollPane.setBounds(10, 207, 1227, 286);
 		add(scrollPane);
 
 		table = new JTable();
@@ -172,24 +172,24 @@ public class ThongKePhieuForm extends JPanel {
 
 		JLabel lblNewLabel_2_1 = new JLabel("Tổng phiếu :");
 		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_2_1.setBounds(32, 603, 153, 41);
+		lblNewLabel_2_1.setBounds(34, 526, 153, 41);
 		add(lblNewLabel_2_1);
 
 		JLabel lblNewLabel_2_1_1 = new JLabel("65");
 		lblNewLabel_2_1_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_2_1_1.setBounds(171, 603, 161, 41);
+		lblNewLabel_2_1_1.setBounds(197, 524, 161, 41);
 		add(lblNewLabel_2_1_1);
 
 		JLabel lblNewLabel_2_1_2 = new JLabel("Tổng tiền :");
 		lblNewLabel_2_1_2.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_2_1_2.setBounds(741, 603, 124, 41);
+		lblNewLabel_2_1_2.setBounds(738, 526, 124, 41);
 		add(lblNewLabel_2_1_2);
 
 		JLabel lblNewLabel_2_1_1_1 = new JLabel("140000000");
 		lblNewLabel_2_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2_1_1_1.setForeground(Color.RED);
 		lblNewLabel_2_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_2_1_1_1.setBounds(893, 603, 286, 41);
+		lblNewLabel_2_1_1_1.setBounds(887, 524, 286, 41);
 		add(lblNewLabel_2_1_1_1);
 	}
 }

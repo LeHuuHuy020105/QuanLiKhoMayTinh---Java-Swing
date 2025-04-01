@@ -7,11 +7,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import DAO.*;
+import controller.ImageHelper;
 import model.*;
 
 import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ThemSanPham extends JFrame {
@@ -34,6 +38,8 @@ public class ThemSanPham extends JFrame {
 	private JComboBox comboBox_nhaCungCap;
 	private JComboBox cbx_xuatXu;
 	private JTextField textField_giaBan;
+	private byte[] hinhAnh;
+	private JPanel panel_Image;
 
 	/**
 	 * Launch the application.
@@ -67,27 +73,27 @@ public class ThemSanPham extends JFrame {
 
 		JLabel lblNewLabel_1_1 = new JLabel("Tên sản phẩm");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1.setBounds(10, 99, 116, 28);
+		lblNewLabel_1_1.setBounds(10, 168, 116, 28);
 		contentPane.add(lblNewLabel_1_1);
 
 		input_tenSanPham = new JTextField();
 		input_tenSanPham.setColumns(10);
-		input_tenSanPham.setBounds(10, 138, 202, 28);
+		input_tenSanPham.setBounds(10, 206, 202, 28);
 		contentPane.add(input_tenSanPham);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Đơn giá");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_1.setBounds(10, 177, 116, 28);
+		lblNewLabel_1_1_1.setBounds(10, 244, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1);
 
 		input_gia = new JTextField();
 		input_gia.setColumns(10);
-		input_gia.setBounds(10, 207, 202, 28);
+		input_gia.setBounds(10, 282, 202, 28);
 		contentPane.add(input_gia);
 
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Xuất xứ");
 		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_1_1.setBounds(10, 246, 116, 28);
+		lblNewLabel_1_1_1_1.setBounds(10, 321, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1);
 
 		JLabel lblNewLabel_1_2 = new JLabel("CPU");
@@ -203,12 +209,12 @@ public class ThemSanPham extends JFrame {
 
 		JLabel lblNewLabel_1_2_2_1_2_1 = new JLabel("Công xuất nguồn");
 		lblNewLabel_1_2_2_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_2_2_1_2_1.setBounds(10, 321, 172, 28);
+		lblNewLabel_1_2_2_1_2_1.setBounds(888, 324, 172, 28);
 		contentPane.add(lblNewLabel_1_2_2_1_2_1);
 
 		input_congSuatNguon = new JTextField();
 		input_congSuatNguon.setColumns(10);
-		input_congSuatNguon.setBounds(10, 354, 202, 28);
+		input_congSuatNguon.setBounds(888, 358, 202, 28);
 		contentPane.add(input_congSuatNguon);
 
 		JLabel lblNewLabel_1_2_2_1_3 = new JLabel("ROM");
@@ -239,7 +245,7 @@ public class ThemSanPham extends JFrame {
 		for(Country country : list_country) {
 			cbx_xuatXu.addItem(country.getTenQuocGia());
 		}
-		cbx_xuatXu.setBounds(10, 285, 202, 25);
+		cbx_xuatXu.setBounds(10, 355, 202, 25);
 		contentPane.add(cbx_xuatXu);
 
 		JLabel lblNewLabel_1_1_1_2 = new JLabel("Giá bán");
@@ -251,6 +257,20 @@ public class ThemSanPham extends JFrame {
 		textField_giaBan.setColumns(10);
 		textField_giaBan.setBounds(888, 286, 202, 28);
 		contentPane.add(textField_giaBan);
+		
+		panel_Image = new JPanel();
+		panel_Image.setBounds(10, 59, 172, 99);
+		contentPane.add(panel_Image);
+		
+		JButton btnNewButton = new JButton("Upload");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				upLoadImage();
+			}
+		});
+		btnNewButton.setBounds(199, 59, 85, 21);
+		contentPane.add(btnNewButton);
 		JTextField textField = (JTextField) cbx_xuatXu.getEditor().getEditorComponent();
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -269,6 +289,28 @@ public class ThemSanPham extends JFrame {
 		});
 		cbxLoaiSanPhamMouseClicked();
 	}
+	public void upLoadImage() {
+	    JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setDialogTitle("Chọn ảnh");
+	    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	    fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Hình ảnh (*.jpg, *.jpeg, *.png)", "jpg", "jpeg", "png"));
+
+	    int result = fileChooser.showOpenDialog(this);
+	    if (result == JFileChooser.APPROVE_OPTION) {
+	        File file = fileChooser.getSelectedFile();
+
+	        // Kiểm tra dung lượng ảnh (≤ 5MB)
+	        if (file.length() > 5 * 1024 * 1024) {
+	            JOptionPane.showMessageDialog(this, "Ảnh quá lớn! Vui lòng chọn ảnh dưới 5MB.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
+
+	        // Chuyển ảnh thành byte[]
+	        hinhAnh = ImageHelper.convertImageToBytes(file.getAbsolutePath());
+			ImageHelper.hienThiAnhTrenPanel(hinhAnh,panel_Image);
+	    }
+	}
+
 	public void resetCBXLoaiSanPham() {
 		input_congSuatNguon.setEditable(true);
 		input_mainBoard.setEditable(true);
@@ -353,7 +395,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm Laptop
-			Laptop newLaptop = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
+			Laptop newLaptop = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
 				LaptopDAO.getInstance().insert(newLaptop);
 				this.dispose();
@@ -384,7 +426,7 @@ public class ThemSanPham extends JFrame {
 			if (hasError) return;
 
 			// Nếu hợp lệ, thêm PC
-			PC newPC = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan);
+			PC newPC = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
 				PCDAO.getInstance().insert(newPC);
 				this.dispose();

@@ -37,6 +37,7 @@ public class LaptopDAO implements DAOInterface<Laptop> {
             pst.setString(14, laptop.getMaNhaCungCap());
             pst.setDouble(15, laptop.getDungLuongLuuTru());
             pst.setDouble(16, laptop.getGiaBan());
+            pst.setBytes(17, laptop.getHinhAnh());
             ketQua = pst.executeUpdate();
 
         } catch (Exception e) {
@@ -105,7 +106,8 @@ public class LaptopDAO implements DAOInterface<Laptop> {
                 String maNhaCungCap = rs.getString("manhacungcap");
                 double dungLuongLuuTru = rs.getDouble("dungluongluutru");
                 double giaBan = rs.getDouble("giaban");
-                Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan);
+                byte[] hinhAnh = rs.getBytes("hinhanh");
+                Laptop newLaptop = new Laptop(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
                 ketQua.add(newLaptop);
             }
             JDBCUtil.closeConnection(connection);

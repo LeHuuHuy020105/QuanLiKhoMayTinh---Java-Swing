@@ -11,11 +11,13 @@ import DAO.CountryDAO;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProducersDAO;
+import controller.ImageHelper;
 import model.*;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -41,7 +43,9 @@ public class ChiTietSanPham extends JFrame {
 	private JComboBox comboBox_loaiSanPham;
 	private JTextField input_ROM;
 	private JComboBox comboBox_nhaCungCap;
-	private JSpinner spinner_soLuong;
+	private JPanel panel_image;
+	private byte[] hinhAnh;
+	private JTextField textField_giaBan;
 
 	/**
 	 * Launch the application.
@@ -52,6 +56,7 @@ public class ChiTietSanPham extends JFrame {
 	 */
 	public ChiTietSanPham(SanPhamForm sanPhamForm) {
 		this.sanPhamForm = sanPhamForm;
+		this.hinhAnh = sanPhamForm.getComputerSelected().getHinhAnh();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 489);
 		setLocationRelativeTo(null);
@@ -80,32 +85,32 @@ public class ChiTietSanPham extends JFrame {
 
 		JLabel lblNewLabel_1_1 = new JLabel("Tên sản phẩm");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1.setBounds(10, 99, 116, 28);
+		lblNewLabel_1_1.setBounds(10, 240, 116, 28);
 		contentPane.add(lblNewLabel_1_1);
 
 		input_tenSanPham = new JTextField();
 		input_tenSanPham.setColumns(10);
-		input_tenSanPham.setBounds(10, 138, 202, 28);
+		input_tenSanPham.setBounds(10, 278, 202, 28);
 		contentPane.add(input_tenSanPham);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Đơn giá");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_1.setBounds(10, 177, 116, 28);
+		lblNewLabel_1_1_1.setBounds(10, 316, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1);
 
 		input_gia = new JTextField();
 		input_gia.setColumns(10);
-		input_gia.setBounds(10, 207, 202, 28);
+		input_gia.setBounds(10, 354, 202, 28);
 		contentPane.add(input_gia);
 
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Xuất xứ");
 		lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_1_1.setBounds(10, 246, 116, 28);
+		lblNewLabel_1_1_1_1.setBounds(888, 321, 116, 28);
 		contentPane.add(lblNewLabel_1_1_1_1);
 
 		input_xuatXu = new JTextField();
 		input_xuatXu.setColumns(10);
-		input_xuatXu.setBounds(10, 282, 202, 28);
+		input_xuatXu.setBounds(888, 354, 202, 28);
 		contentPane.add(input_xuatXu);
 
 		JLabel lblNewLabel_1_2 = new JLabel("CPU");
@@ -193,12 +198,12 @@ public class ChiTietSanPham extends JFrame {
 
 		JLabel lblNewLabel_1_2_2_1_2_1 = new JLabel("Công xuất nguồn");
 		lblNewLabel_1_2_2_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_2_2_1_2_1.setBounds(10, 321, 172, 28);
+		lblNewLabel_1_2_2_1_2_1.setBounds(888, 248, 172, 28);
 		contentPane.add(lblNewLabel_1_2_2_1_2_1);
 
 		input_congSuatNguon = new JTextField();
 		input_congSuatNguon.setColumns(10);
-		input_congSuatNguon.setBounds(10, 354, 202, 28);
+		input_congSuatNguon.setBounds(888, 282, 202, 28);
 		contentPane.add(input_congSuatNguon);
 
 		label_IDproduct = new JLabel("");
@@ -228,16 +233,24 @@ public class ChiTietSanPham extends JFrame {
 		}
 		comboBox_nhaCungCap.setBounds(888, 210, 202, 28);
 		contentPane.add(comboBox_nhaCungCap);
-
-		JLabel lblNewLabel_1_2_2_2_1 = new JLabel("Loại sản phẩm");
-		lblNewLabel_1_2_2_2_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_2_2_2_1.setBounds(888, 270, 116, 28);
-		contentPane.add(lblNewLabel_1_2_2_2_1);
-
-		spinner_soLuong = new JSpinner();
-		spinner_soLuong.setBounds(1014, 270, 110, 28);
-		contentPane.add(spinner_soLuong);
+		
+		panel_image = new JPanel();
+		panel_image.setBounds(10, 98, 192, 122);
+		contentPane.add(panel_image);
 		hienThiThongTinSanPham();
+		ImageHelper.hienThiAnhTrenPanel(hinhAnh, panel_image);
+		
+		JLabel lblNewLabel_1_1_1_2 = new JLabel("Giá bán");
+		lblNewLabel_1_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_2.setBounds(316, 60, 72, 28);
+		contentPane.add(lblNewLabel_1_1_1_2);
+		
+		textField_giaBan = new JTextField();
+		textField_giaBan.setText("0");
+		textField_giaBan.setEditable(false);
+		textField_giaBan.setColumns(10);
+		textField_giaBan.setBounds(386, 62, 132, 28);
+		contentPane.add(textField_giaBan);
 	}
 	public void notAllowEdit() {
 		input_tenSanPham.setEditable(false);
@@ -254,13 +267,14 @@ public class ChiTietSanPham extends JFrame {
 		input_xuatXu.setEditable(false);
 		comboBox_loaiSanPham.setEnabled(false);
 		comboBox_nhaCungCap.setEnabled(false);
-		spinner_soLuong.setEnabled(false);
 	}
 	public void hienThiThongTinSanPham(){
+		DecimalFormat df = new DecimalFormat("#,###");
 		Computer computer_Selected = sanPhamForm.getComputerSelected();
 		label_IDproduct.setText(computer_Selected.getMaMay()+"");
 		input_tenSanPham.setText(computer_Selected.getTenMay());
-		input_gia.setText(computer_Selected.getGia()+"");
+		input_gia.setText(df.format(computer_Selected.getGia()));
+		textField_giaBan.setText(df.format(computer_Selected.getGiaBan()));
 		Country country_selected = CountryDAO.getInstance().CountryByID(computer_Selected.getXuatXu());
 		input_xuatXu.setText(country_selected.getTenQuocGia());
 		input_CPU.setText(computer_Selected.getTenCpu());
@@ -269,7 +283,6 @@ public class ChiTietSanPham extends JFrame {
 		input_ROM.setText(computer_Selected.getRom());
 		input_dungLuongLuuTru.setText(computer_Selected.getDungLuongLuuTru()+"");
 		comboBox_nhaCungCap.setSelectedItem(computer_Selected.getMaNhaCungCap());
-		spinner_soLuong.setValue(computer_Selected.getSoLuong());
 		String loaiMay ="";
 		if(computer_Selected instanceof Laptop){
 			Laptop laptop_selected = (Laptop)computer_Selected;

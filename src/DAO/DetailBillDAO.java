@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public class DetailBillDAO implements DAOInterface<DetailBill> {
+    public static DetailBillDAO getInstance(){
+        return new DetailBillDAO();
+    }
     @Override
     public int insert(DetailBill detailBill) {
         int ketQua=0;

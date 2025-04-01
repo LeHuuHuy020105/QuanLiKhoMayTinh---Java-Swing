@@ -4,27 +4,74 @@ import java.sql.Timestamp;
 
 public class Bill {
     private int maPhieu;
-    private Timestamp ngayXuatPhieu;
+    private Timestamp thoiDiemTao;
     private double thanhTien;
     private double tongTien;
     private int maNhanVien;
     private int maKhachHang;
     private int maChiNhanh;
+    private String hinhThuc;
+    private Timestamp thoiDiemHuy;
+    private int trangThai;
+    private int madiachi;
 
     public Bill() {
     }
 
+    public Bill(String hinhThuc, int madiachi, int maKhachHang, double tongTien, int trangThai) {
+        this.hinhThuc = hinhThuc;
+        this.madiachi = madiachi;
+        this.maKhachHang = maKhachHang;
+        this.tongTien = tongTien;
+        this.trangThai = trangThai;
+    }
 
-    public Bill(int maPhieu, Timestamp ngayXuatPhieu, double thanhTien, double tongTien, int maNhanVien, int maKhachHang, int maChiNhanh) {
+    public Bill(int maChiNhanh, int maKhachHang, int maNhanVien, Timestamp thoiDiemTao, double thanhTien, double tongTien, String hinhThuc) {
+        this.maChiNhanh = maChiNhanh;
+        this.maKhachHang = maKhachHang;
+        this.maNhanVien = maNhanVien;
+        this.thoiDiemTao = thoiDiemTao;
+        this.thanhTien = thanhTien;
+        this.tongTien = tongTien;
+        this.hinhThuc = hinhThuc;
+    }
+    public Bill(int maChiNhanh, int maKhachHang, int maNhanVien, Timestamp thoiDiemTao, double thanhTien, double tongTien,String hinhThuc , Timestamp thoiDiemHuy ,int trangThai) {
+        this.maChiNhanh = maChiNhanh;
+        this.maKhachHang = maKhachHang;
+        this.maNhanVien = maNhanVien;
+        this.thoiDiemTao = thoiDiemTao;
+        this.thanhTien = thanhTien;
+        this.tongTien = tongTien;
+        this.hinhThuc = hinhThuc;
+        this.thoiDiemHuy = thoiDiemHuy;
+        this.trangThai = trangThai;
+    }
+
+    public Bill(int maPhieu, Timestamp thoiDiemTao, double thanhTien, double tongTien, int maNhanVien, int maKhachHang, int maChiNhanh,String hinhThuc) {
         this.maPhieu = maPhieu;
-        this.ngayXuatPhieu = ngayXuatPhieu;
+        this.thoiDiemTao = thoiDiemTao;
         this.thanhTien = thanhTien;
         this.tongTien = tongTien;
         this.maNhanVien = maNhanVien;
         this.maKhachHang = maKhachHang;
         this.maChiNhanh = maChiNhanh;
+        this.hinhThuc = hinhThuc;
     }
 
+    public String getHinhThuc() {
+        return hinhThuc;
+    }
+
+    public void setHinhThuc(String hinhThuc) {
+        this.hinhThuc = hinhThuc;
+    }
+    public int getMadiachi() {
+        return madiachi;
+    }
+
+    public void setMadiachi(int madiachi) {
+        this.madiachi = madiachi;
+    }
     public double getTongTien() {
         return tongTien;
     }
@@ -41,12 +88,29 @@ public class Bill {
         this.maPhieu = maPhieu;
     }
 
-    public Timestamp getNgayXuatPhieu() {
-        return ngayXuatPhieu;
+
+    public Timestamp getThoiDiemHuy() {
+        return thoiDiemHuy;
     }
 
-    public void setNgayXuatPhieu(Timestamp ngayXuatPhieu) {
-        this.ngayXuatPhieu = ngayXuatPhieu;
+    public void setThoiDiemHuy(Timestamp thoiDiemHuy) {
+        this.thoiDiemHuy = thoiDiemHuy;
+    }
+
+    public Timestamp getThoiDiemTao() {
+        return thoiDiemTao;
+    }
+
+    public void setThoiDiemTao(Timestamp thoiDiemTao) {
+        this.thoiDiemTao = thoiDiemTao;
+    }
+
+    public int getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
     }
 
     public double getThanhTien() {

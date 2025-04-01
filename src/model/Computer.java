@@ -13,11 +13,12 @@ public class Computer {
     private String Rom;
     private String maNhaCungCap;
     private double dungLuongLuuTru;
+    private byte[]hinhAnh;
 
     public Computer() {
     }
 
-    public Computer(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru, double giaBan) {
+    public Computer(String cardManHinh, double gia, int maMay, String ram, String rom, int soLuong, String tenCpu, String tenMay, String xuatXu, String maNhaCungCap , double dungLuongLuuTru, double giaBan,byte[] hinhAnh) {
         this.cardManHinh = cardManHinh;
         this.gia = gia;
         this.maMay = maMay;
@@ -30,6 +31,15 @@ public class Computer {
         this.maNhaCungCap = maNhaCungCap;
         this.dungLuongLuuTru = dungLuongLuuTru;
         this.giaBan=giaBan;
+        this.hinhAnh = hinhAnh;
+    }
+
+    public byte[] getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(byte[] hinhAnh) {
+        this.hinhAnh = hinhAnh;
     }
 
     public double getGiaBan() {

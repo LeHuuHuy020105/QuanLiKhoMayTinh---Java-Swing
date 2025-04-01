@@ -4,6 +4,7 @@ import DAO.UserDAO;
 import model.User;
 import view.User.ChiNhanh.ChiNhanhForm;
 import view.User.NhaCungCap.NhaCungCapForm;
+import view.User.NhanVien.BanHang;
 import view.User.NhapHang.NhapHangForm;
 import view.User.PhieuNhap.PhieuNhapForm;
 import view.User.PhieuXuat.PhieuXuatForm;
@@ -209,10 +210,14 @@ public class Dashboard extends JFrame {
                 cardLayout.show(cardPanel,"Nhập hàng - CN");
                 break;
             case "Phiếu nhập - CN":
-                System.out.println("abcd");
                 PhieuNhapBranchForm phieuNhapBranchForm = new PhieuNhapBranchForm(currentUser);
                 cardPanel.add(phieuNhapBranchForm,"Phiếu nhập - CN");
                 cardLayout.show(cardPanel,"Phiếu nhập - CN");
+                break;
+            case "Bán hàng":
+                BanHang banHang = new BanHang(currentUser);
+                cardPanel.add(banHang,"Bán hàng");
+                cardLayout.show(cardPanel,"Bán hàng");
                 break;
         }
     }

@@ -1,9 +1,6 @@
 package view.User.NhanVien;
 
-import DAO.DetailImportProductsDAO;
-import DAO.ImportProductsDAO;
-import DAO.ProducersDAO;
-import DAO.ProductsDAO;
+import DAO.*;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
@@ -30,14 +27,17 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private JButton btnNewButton_2;
     private JComboBox cbx_luaChon;
     private User currentUser ;
-    private ArrayList<DetailImportProducts> detailImportProducts;
+    private ArrayList<DetailBill> detailBills;
     private JLabel label_TotalPrice;
+    private JTextField textField_searchCustomer;
+	private JLabel lbl_infoCustomer;
+    private Customer customer;
 
     /**
      * Create the panel.
      */
     public BanHang(User user) {
-        this.detailImportProducts = new ArrayList<>();
+        this.detailBills = new ArrayList<>();
         this.currentUser = user;
         setLayout(null);
         setSize(1257, 735);
@@ -100,7 +100,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         add(input_NguoiTaoPhieu);
 
         JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(676, 121, 559, 427);
+        scrollPane_1.setBounds(676, 202, 559, 346);
         add(scrollPane_1);
 
         table_nhapHang = new JTable();
@@ -196,7 +196,11 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         label_TotalPrice.setBounds(853, 637, 197, 41);
         add(label_TotalPrice);
 
-        JButton btn_NhapHang = new JButton("Nhập Hàng");
+        JButton btn_NhapHang = new JButton("Thanh toán");
+        btn_NhapHang.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         btn_NhapHang.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -215,8 +219,69 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel_1_1.setBounds(676, 43, 123, 27);
         add(lblNewLabel_1_1);
-        updateTableDataFormDAO();
+        
+        JLabel lblNewLabel_1_1_1 = new JLabel("Khách hàng");
+        lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel_1_1_1.setBounds(676, 114, 123, 27);
+        add(lblNewLabel_1_1_1);
+        
+        textField_searchCustomer = new JTextField();
+        textField_searchCustomer.setBounds(822, 112, 266, 27);
+        add(textField_searchCustomer);
+        textField_searchCustomer.setColumns(10);
+        
+        JButton btnNewButton_3 = new JButton("New button");
+        btnNewButton_3.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		SearchCustomer();
+        	}
+        });
+        btnNewButton_3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        btnNewButton_3.setBounds(1098, 115, 47, 21);
+        add(btnNewButton_3);
+        
+        JButton btnNewButton_3_1 = new JButton("New button");
+        btnNewButton_3_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        btnNewButton_3_1.setBounds(1149, 115, 65, 21);
+        add(btnNewButton_3_1);
+        
+        lbl_infoCustomer = new JLabel("");
+        lbl_infoCustomer.setBounds(676, 167, 374, 27);
+        add(lbl_infoCustomer);
+        
+        ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
+        ArrayList<String> items = dataCustomer(customers);
+        fillData();
+        setVisible(true);
+    }
+    private void SearchCustomer() {
+    	customer = CustomerDAO.getInstance().findByPhone(textField_searchCustomer.getText());
+        String s = customer.getFullName()+" - "+customer.getSoDienThoai();
+        lbl_infoCustomer.setText(s);
+
+	}
+    public ArrayList<String> dataCustomer(ArrayList<Customer> customers){
+        ArrayList<String> result = new ArrayList<>();
+        for(Customer customer : customers){
+            String s = customer.getSoDienThoai()+"-"+customer.getFullName();
+            result.add(s);
+        }
+        return result;
+    }
+    public void fillData(){
         loadNhaphangForm();
+        updateTableDataFormDAO();
+        ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
+        String[] items = dataCustomer(customers).toArray(new String[0]);
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(items);
+
     }
     public void loadNhaphangForm(){
         input_NguoiTaoPhieu.setText(currentUser.getFullName());
@@ -228,10 +293,10 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         ArrayList<Computer> computers = searchProduct(luaChon, input);
         updateTableData(computers);
     }
-    public DetailImportProducts isValidProduct(DetailImportProducts detailImportProducts1, ArrayList<DetailImportProducts>detailImportProducts){
-        for(DetailImportProducts detailImportProducts2 : detailImportProducts){
-            if(detailImportProducts2.getMaMay()==detailImportProducts1.getMaMay()){
-                return detailImportProducts2;
+    public DetailBill isValidProduct(DetailBill detailBill, ArrayList<DetailBill>detailBills){
+        for(DetailBill item : detailBills){
+            if(item.getMaMay()==detailBill.getMaMay()){
+                return item;
             }
         }
         return null;
@@ -307,35 +372,35 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         Computer computer_selected = getComputerSelectedTableProduct();
         int maMay =computer_selected.getMaMay();
 
-        DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,0,soLuong);
-        DetailImportProducts detailImportProduct_isValid = isValidProduct(detailImportProducts1,detailImportProducts);
-        if(detailImportProduct_isValid==null){
-            this.detailImportProducts.add(detailImportProducts1);
+        DetailBill detailBill = new DetailBill(maMay,0,soLuong);
+        DetailBill detailBill_isValid = isValidProduct(detailBill,detailBills);
+        if(detailBill_isValid==null){
+            this.detailBills.add(detailBill);
         }else {
-            int soluong_valid = detailImportProduct_isValid.getSoluong();
-            detailImportProduct_isValid.setSoluong(soluong_valid+soLuong);
+            int soluong_valid = detailBill_isValid.getSoLuong();
+            detailBill_isValid.setSoLuong(soluong_valid+soLuong);
         }
-        updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
+        updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
         input_SoLuong.setText("");
         setTotalPrice();
     }
-    public void updateDataToTableNhapHangForm(ArrayList<DetailImportProducts> detailImportProducts, JTable jTable){
+    public void updateDataToTableBanHangForm(ArrayList<DetailBill> detailBills, JTable jTable){
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         model.setRowCount(0);
         DecimalFormat df = new DecimalFormat("#,###");
-        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+        for(DetailBill detailBill : detailBills){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
             String tenNCC = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
             model.addRow(new Object[]{
                     computer.getMaMay(),
                     computer.getTenMay(),
                     tenNCC,
-                    detailImportProducts1.getSoluong(),
+                    detailBill.getSoLuong(),
                     df.format(computer.getGia()) + " VND",
             });
         }
     }
-    public Computer getComputerSelectedTableNhapHang() {
+    public Computer getComputerSelectedTableBanHang() {
         Computer computer = null;
         DefaultTableModel model = (DefaultTableModel) table_nhapHang.getModel();
         int i_row = table_nhapHang.getSelectedRow();
@@ -347,10 +412,10 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
         return computer;
     }
-    public DetailImportProducts EntryFormByProductID(ArrayList<DetailImportProducts> detailImportProducts, Computer computer){
-        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
-            if(detailImportProducts1.getMaMay() == computer.getMaMay()){
-                return detailImportProducts1;
+    public DetailBill EntryFormByProductID(ArrayList<DetailBill> detailBills, Computer computer){
+        for(DetailBill detailBill : detailBills){
+            if(detailBill.getMaMay() == computer.getMaMay()){
+                return detailBill;
             }
         }
         return null;
@@ -366,28 +431,28 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelectedTableNhapHang();
-        DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_selected);
-        detailImportProducts1.setSoluong(soLuong);
-        updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
+        Computer computer_selected = getComputerSelectedTableBanHang();
+        DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
+        detailBill.setSoLuong(soLuong);
+        updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
     }
     public void XoaMouseClicked() {
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
-            Computer computer_Selected = getComputerSelectedTableNhapHang();
-            DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_Selected);
-            this.detailImportProducts.remove(detailImportProducts1);
+            Computer computer_Selected = getComputerSelectedTableBanHang();
+            DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_Selected);
+            this.detailBills.remove(detailBill);
         }
-        updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+        updateDataToTableBanHangForm(detailBills,table_nhapHang);
         setTotalPrice();
     }
     public double CountTotalPrice(){
         double totalPrice = 0;
-        for(DetailImportProducts detailImportProducts1 : this.detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+        for(DetailBill detailBill : this.detailBills){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
             double donGia = computer.getGia();
-            int soLuong = detailImportProducts1.getSoluong();
+            int soLuong = detailBill.getSoLuong();
             totalPrice+=donGia*soLuong;
         }
         return totalPrice;
@@ -398,28 +463,32 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         label_TotalPrice.setText(df.format(totalPrice)+" VND");
     }
     public void BanHangMouseClicked() {
-        if(detailImportProducts.size()==0){
+        if(detailBills.size()==0){
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để nhập hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }else {
             int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
             if(check == JOptionPane.YES_OPTION){
-
-
+                Bill bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,0,"offline");
+                int maPhieu = BillDAO.getInstance().insertBill(bill);
+                updateDatabaseDetailBill(maPhieu);
             }
         }
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
         resetNhapHang();
     }
-    public void updateDatabaseImportProducts(int maphieunhap){
-        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
-            detailImportProducts1.setMaphieunhap(maphieunhap);
-            DetailImportProductsDAO.getInstance().insert(detailImportProducts1);
+    public void updateDatabaseDetailBill(int maphieu){
+        for(DetailBill detailBill : detailBills){
+            detailBill.setMaPhieu(maphieu);
+            DetailBillDAO.getInstance().insert(detailBill);
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
+            computer.setSoLuong(computer.getSoLuong() - detailBill.getSoLuong());
+            ProductsDAO.getInstance().update(computer);
             updateTableDataFormDAO();
         }
     }
     public void resetNhapHang(){
-        detailImportProducts.clear();
-        updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+        detailBills.clear();
+        updateDataToTableBanHangForm(detailBills,table_nhapHang);
         label_TotalPrice.setText("");
     }
     public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
@@ -495,7 +564,5 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 //        }
         System.out.println("abc");
     }
-
-
 }
 

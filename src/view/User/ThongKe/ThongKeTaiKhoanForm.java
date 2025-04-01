@@ -26,7 +26,7 @@ public class ThongKeTaiKhoanForm extends JPanel {
 	 */
 	public ThongKeTaiKhoanForm() {
 		setLayout(null);
-		setSize(1247, 678);
+		setSize(1247, 504);
 
 		Box verticalBox_1 = Box.createVerticalBox();
 		verticalBox_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
@@ -54,7 +54,7 @@ public class ThongKeTaiKhoanForm extends JPanel {
 		panel_5_1_1.add(btnNewButton_1);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 115, 1227, 552);
+		scrollPane.setBounds(10, 115, 1227, 378);
 		add(scrollPane);
 
 		table = new JTable();

@@ -1,45 +1,25 @@
-package view.User.PhieuNhap;
+package view.User.PhieuXuat;
 
-import DAO.DetailImportProductsDAO;
-import DAO.ImportProductsDAO;
-import DAO.ProductsDAO;
-import DAO.UserDAO;
-import model.Computer;
-import model.DetailImportProducts;
-import model.ImportProducts;
-import model.User;
+import DAO.*;
+import model.*;
+import view.User.PhieuNhap.PhieuNhapForm;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Window;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-public class KhoiPhucPhieuNhapForm extends JFrame {
+public class KhoiPhucPhieuXuatForm extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTable table_ChiTietPhieuNhap;
-    private PhieuNhapForm phieuNhapForm;
+    private PhieuXuatForm phieuXuatForm;
     private JLabel label_maPhieuNhap;
     private JLabel label_tenNguoiTaoPhieu;
     private JLabel label_vaiTroNguoiTaoPhieu;
@@ -54,8 +34,8 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
     /**
      * Create the frame.
      */
-    public KhoiPhucPhieuNhapForm(PhieuNhapForm phieuNhapForm) {
-        this.phieuNhapForm = phieuNhapForm;
+    public KhoiPhucPhieuXuatForm(PhieuXuatForm phieuXuatForm) {
+        this.phieuXuatForm = phieuXuatForm;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 903, 580);
         setLocationRelativeTo(null);
@@ -168,52 +148,49 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
     }
     public void hienThiThongTinPhieuNhap(){
         DecimalFormat df = new DecimalFormat("#,###");
-        ImportProducts importProducts_selected = phieuNhapForm.getImportProductsSelected();
-        User user = UserDAO.getInstance().getUsetById(importProducts_selected.getManguoidung());
+        ExportProducts exportProduct_selected = phieuXuatForm.getExportProductsSelected();
+        User user = UserDAO.getInstance().getUsetById(exportProduct_selected.getManguoidung());
         String tenNguoiTaoPhieu =user.getFullName();
         String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
-        label_maPhieuNhap.setText(importProducts_selected.getMaphieunhap()+"");
+        label_maPhieuNhap.setText(exportProduct_selected.getMaPhieuXuat()+"");
         label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
         label_vaiTroNguoiTaoPhieu.setText(role);
-        label_thoiDiemTaoPhieu.setText(importProducts_selected.getTimestamp()+"");
-        String tongTien = df.format(importProducts_selected.getTongTien())+" VND";
-        label_TongTien.setText(tongTien);
-        ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());
-        updateDataToTable(detailImportProducts);
+        label_thoiDiemTaoPhieu.setText(exportProduct_selected.getNgayLenDonXuat()+"");
+        ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProduct_selected.getMaPhieuXuat());
+        updateDataToTable(detailExportProducts);
     }
-    public void updateDataToTable(ArrayList<DetailImportProducts>detailImportProducts){
+    public void updateDataToTable(ArrayList<DetailExportProducts>detailExportProducts){
         DecimalFormat df = new DecimalFormat("#,###");
         DefaultTableModel model = (DefaultTableModel) table_ChiTietPhieuNhap.getModel();
         model.setRowCount(0);
         int i = 0;
-        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
+        for(DetailExportProducts detailExportProducts1 : detailExportProducts){
             i++;
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
-            double thanhTien = detailImportProducts1.getSoluong()*computer.getGia();
-            System.out.println(df.format(thanhTien));
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            double thanhTien = detailExportProducts1.getSoLuong()*computer.getGia();
             model.addRow(new Object[]{
                     i,
-                    detailImportProducts1.getMaMay(),
+                    detailExportProducts1.getMaMay(),
                     computer.getTenMay(),
-                    detailImportProducts1.getSoluong(),
+                    detailExportProducts1.getSoLuong(),
                     df.format(computer.getGia()),
                     df.format(thanhTien),
             });
         }
     }
     public void KhoiPhucMouseClicked(){
-        ImportProducts importProducts_Selected = phieuNhapForm.getImportProductsSelected();
-        ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_Selected.getMaphieunhap());
-        for(DetailImportProducts item : detailImportProducts){
+        ExportProducts exportProducts_selected = phieuXuatForm.getExportProductsSelected();
+        ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
+        for(DetailExportProducts item : detailExportProducts){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
-            computer.setSoLuong(computer.getSoLuong()+item.getSoluong());
+            computer.setSoLuong(computer.getSoLuong()-item.getSoLuong());
             ProductsDAO.getInstance().update(computer);
         }
-        importProducts_Selected.setTrangThai(1);
-        importProducts_Selected.setThoiGianHuy(null);
-        importProducts_Selected.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        ImportProductsDAO.getInstance().update(importProducts_Selected);
+        exportProducts_selected.setTrangThai(1);
+        exportProducts_selected.setNgayLenDonXuat(new Timestamp(System.currentTimeMillis()));
+        exportProducts_selected.setThoiDiemHuyPhieu(null);
+        ExportProductsDAO.getInstance().update(exportProducts_selected);
         this.dispose();
-        phieuNhapForm.updateTableDataFormDAO();
+        phieuXuatForm.updateTableDataFormDAO();
     }
 }

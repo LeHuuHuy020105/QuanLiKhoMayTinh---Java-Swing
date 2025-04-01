@@ -36,6 +36,7 @@ public class PCDAO implements DAOInterface<PC> {
             pst.setString(14, pc.getMaNhaCungCap());
             pst.setDouble(15, pc.getDungLuongLuuTru());
             pst.setDouble(16, pc.getGiaBan());
+            pst.setBytes(17, pc.getHinhAnh());
             ketQua = pst.executeUpdate();
 
         } catch (Exception e) {
@@ -102,7 +103,8 @@ public class PCDAO implements DAOInterface<PC> {
                 String maNhaCungCap = rs.getString("manhacungcap");
                 double dungLuongLuuTru = rs.getDouble("dungluongluutru");
                 double giaBan = rs.getDouble("giaban");
-                PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard,maNhaCungCap,dungLuongLuuTru,giaBan);
+                byte[] hinhAnh = rs.getBytes("hinhanh");
+                PC newPC = new PC(cardManHinh, gia, maMay, Ram, Rom, soLuong, tenCPU, tenMay, xuatXu, congSuatNguon, mainBoard,maNhaCungCap,dungLuongLuuTru,giaBan,hinhAnh);
                 ketQua.add(newPC);
 
             }

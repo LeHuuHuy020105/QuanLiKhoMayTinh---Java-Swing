@@ -299,7 +299,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 
 	public void ChiTietMouseClicked() {
 		ImportProducts importProducts = getImportProductsSelected();
-		if (importProducts.getTrangThai() == 0) {
+		if (importProducts.getTrangThai() == 6) {
 			KhoiPhucPhieuNhapForm khoiPhucPhieuNhapForm = new KhoiPhucPhieuNhapForm(this);
 			khoiPhucPhieuNhapForm.setVisible(true);
 		} else {

@@ -17,6 +17,8 @@ import model.Computer;
 import model.DetailExportProducts;
 import model.ExportProducts;
 import model.ImportProducts;
+import view.User.PhieuNhap.ChiTietPhieuNhapForm;
+import view.User.PhieuNhap.KhoiPhucPhieuNhapForm;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
@@ -285,8 +287,14 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		suaTrangThai.setVisible(true);
 	}
 	public void ChiTietMouseClicked() {
-		ChiTietPhieuXuatForm chiTietPhieuXuatForm = new ChiTietPhieuXuatForm(this);
-		chiTietPhieuXuatForm.setVisible(true);
+		ExportProducts exportProducts = getExportProductsSelected();
+		if (exportProducts.getTrangThai() == 6) {
+			KhoiPhucPhieuXuatForm khoiPhucPhieuXuatForm = new KhoiPhucPhieuXuatForm(this);
+			khoiPhucPhieuXuatForm.setVisible(true);
+		} else {
+			ChiTietPhieuXuatForm chiTietPhieuXuatForm = new ChiTietPhieuXuatForm(this);
+			chiTietPhieuXuatForm.setVisible(true);
+		}
 	}
 	public void XoaMouseClicked() {
 		ExportProducts exportProducts_Selected = getExportProductsSelected();

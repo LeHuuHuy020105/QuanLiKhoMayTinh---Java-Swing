@@ -2,7 +2,7 @@ package DAO;
 
 public class Query {
 //    Product
-    public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru,giaban) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static String insertProduct = "Insert into product(tenmay,soluong,gia,tenCPU,ram,xuatxu,cardmanhinh,mainboard,congsuatnguon,kichthuocman,dungluongpin,rom,loaimay,manhacungcap,dungluongluutru,giaban,hinhanh) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     public static String updatePC = "update product set tenmay=?,soluong=?,gia=?,tenCPU=?,ram=?,xuatxu=?,mainboard=?,congsuatnguon=?,rom=?,loaimay=?,manhacungcap=?,dungluongluutru=? , giaban =? where mamay =?";
 

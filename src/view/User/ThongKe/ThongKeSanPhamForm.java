@@ -28,9 +28,9 @@ public class ThongKeSanPhamForm extends JPanel {
 	 */
 	public ThongKeSanPhamForm() {
 		setLayout(null);
-		setSize(1247, 678);
+		setSize( 1247, 504);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 188, 1223, 490);
+		scrollPane.setBounds(10, 86, 1223, 407);
 		add(scrollPane);
 
 		table = new JTable();
@@ -94,25 +94,6 @@ public class ThongKeSanPhamForm extends JPanel {
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_1.setBounds(546, 11, 114, 30);
 		panel_5_1_1_1.add(btnNewButton_1);
-
-		Box verticalBox_1_2 = Box.createVerticalBox();
-		verticalBox_1_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "S\u1EAFp x\u1EBFp", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
-		verticalBox_1_2.setBounds(384, 100, 312, 75);
-		add(verticalBox_1_2);
-
-		JPanel panel_5_1_1_2 = new JPanel();
-		panel_5_1_1_2.setLayout(null);
-		verticalBox_1_2.add(panel_5_1_1_2);
-
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBackground(UIManager.getColor("Button.background"));
-		comboBox_1.setBounds(10, 11, 126, 30);
-		panel_5_1_1_2.add(comboBox_1);
-
-		JComboBox comboBox_1_1 = new JComboBox();
-		comboBox_1_1.setBackground(UIManager.getColor("Button.background"));
-		comboBox_1_1.setBounds(158, 11, 126, 30);
-		panel_5_1_1_2.add(comboBox_1_1);
 
 	}
 }
