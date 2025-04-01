@@ -190,7 +190,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		date_Start.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				applyFilters();
-				;
 			}
 		});
 		date_Start.setBounds(87, 11, 165, 30);
