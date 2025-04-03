@@ -4,28 +4,25 @@ import DAO.*;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
+import controller.writePDF;
 import model.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
-import javax.swing.UIManager;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -34,6 +31,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.Iterator;
 
 public class XuatHangForm extends JPanel implements updateDataToTable<Computer> {
 
@@ -48,12 +46,14 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
     private ArrayList<DetailExportProducts> detailExportProducts;
     private JComboBox cbx_ChiNhanh;
     private User currentUser;
+    private JFileChooser jFileChooser;
 
     /**
      * Create the panel.
      */
     public XuatHangForm(User currentUser) {
         this.currentUser = currentUser;
+        this.jFileChooser = new JFileChooser();
         detailExportProducts = new ArrayList<>();
         setLayout(null);
         setSize(1257, 736);
@@ -132,6 +132,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                NhapExcelMouseClicked();
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -218,9 +219,45 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         btnNewButton_2_1.setBounds(1108, 668, 139, 41);
         add(btnNewButton_2_1);
         updateTableDataFormDAO();
-        FillData();
+        fillDataInterface();
     }
-    public void FillData(){
+    public void NhapExcelMouseClicked(){
+        jFileChooser.showOpenDialog(null);
+        File file = jFileChooser.getSelectedFile();
+        if(!file.getName().endsWith("xlsx")){
+            JOptionPane.showMessageDialog(null,"Vui lòng chọn file Excel.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            fillData(file);
+        }
+    }
+    public void fillData(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int maMay = (int) row.getCell(0).getNumericCellValue();
+                int soLuong =  (int) row.getCell(1).getNumericCellValue();
+                DetailExportProducts detailImportProducts1 = new DetailExportProducts(maMay,soLuong);
+                detailExportProducts.add(detailImportProducts1);
+                updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
+            }
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
+    }
+    public void fillDataInterface(){
         ArrayList<Branch>branches = BrandDAO.getInstance().selectAll();
         for(Branch branch : branches){
             cbx_ChiNhanh.addItem(branch.getDiaChi());
@@ -325,6 +362,10 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
                 ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser(),null);
                 int maPhieuXuat = ExportProductsDAO.getInstance().insertExportProduct(exportProducts);
                 updateDatabaseExportProducts(maPhieuXuat);
+                int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
+                if(check_pdf==JOptionPane.YES_OPTION){
+                    writePDF.getInstance().writePhieuXuat(maPhieuXuat);
+                }
             }
         }
         updateTableDataFormDAO();

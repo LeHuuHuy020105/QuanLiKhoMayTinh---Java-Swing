@@ -371,6 +371,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
 
                 // Loại bỏ trường "hinhAnh"
                 allFields.removeIf(field -> field.getName().equals("hinhAnh"));
+                allFields.removeIf(field -> field.getName().equals("soLuong"));
 
                 // Chuyển danh sách thuộc tính về mảng để dễ xử lý
                 Field[] fields = allFields.toArray(new Field[0]);
@@ -479,29 +480,29 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                 Computer computer = null;
                 // Đọc dữ liệu từ các cột của file Excel
                 String tenmay = row.getCell(1).getStringCellValue();
-                int soluong = (int) row.getCell(2).getNumericCellValue();
-                double gia = row.getCell(3).getNumericCellValue();
-                double giaBan = row.getCell(4).getNumericCellValue();
-                String tenCPU = row.getCell(5).getStringCellValue();
-                String ram = row.getCell(6).getStringCellValue();
-                String xuatxu = row.getCell(7).getStringCellValue();
-                String cardmanhinh = row.getCell(8).getStringCellValue();
-                String rom = row.getCell(9).getStringCellValue();
-                String manhacungcap = row.getCell(10).getStringCellValue();
-                double dungluongluutru = row.getCell(11).getNumericCellValue(); // Đọc số thay vì String
-                String loaimay = row.getCell(16).getStringCellValue();
+                int soluong = 0;
+                double gia = row.getCell(2).getNumericCellValue();
+                double giaBan = row.getCell(3).getNumericCellValue();
+                String tenCPU = row.getCell(4).getStringCellValue();
+                String ram = row.getCell(5).getStringCellValue();
+                String xuatxu = row.getCell(6).getStringCellValue();
+                String cardmanhinh = row.getCell(7).getStringCellValue();
+                String rom = row.getCell(8).getStringCellValue();
+                String manhacungcap = row.getCell(9).getStringCellValue();
+                double dungluongluutru = row.getCell(10).getNumericCellValue(); // Đọc số thay vì String
+                String loaimay = row.getCell(15).getStringCellValue();
 
 
                 // Kiểm tra loại máy để tạo đối tượng Laptop hoặc PC
                 if (loaimay.equalsIgnoreCase("Laptop")) {
-                    double kichthuocman = row.getCell(12).getNumericCellValue();
-                    String dungluongpin = row.getCell(13).getStringCellValue(); // Sử dụng String vì constructor yêu cầu
+                    double kichthuocman = row.getCell(11).getNumericCellValue();
+                    String dungluongpin = row.getCell(12).getStringCellValue(); // Sử dụng String vì constructor yêu cầu
 
                     // Tạo đối tượng Laptop với đúng tham số
                      computer = new Laptop(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, dungluongpin, kichthuocman, manhacungcap, dungluongluutru,giaBan,null);
                 } else {
-                    String mainboard = row.getCell(14).getStringCellValue();
-                    int congsuatnguon = (int) row.getCell(15).getNumericCellValue();
+                    String mainboard = row.getCell(13).getStringCellValue();
+                    int congsuatnguon = (int) row.getCell(14).getNumericCellValue();
 
                     // Tạo đối tượng PC với đúng tham số
                     computer = new PC(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, congsuatnguon, mainboard, manhacungcap, dungluongluutru,giaBan,null);

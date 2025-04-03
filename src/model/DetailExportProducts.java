@@ -8,7 +8,10 @@ public class DetailExportProducts {
 
     public DetailExportProducts() {
     }
-
+    public DetailExportProducts(int maMay, int soLuong) {
+        this.maMay = maMay;
+        this.soLuong = soLuong;
+    }
     public DetailExportProducts(int maPhieuXuat, int maMay, int soLuong) {
         this.maPhieuXuat = maPhieuXuat;
         this.maMay = maMay;

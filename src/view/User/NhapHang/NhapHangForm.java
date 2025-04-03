@@ -7,6 +7,7 @@ import DAO.ProductsDAO;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
+import controller.writePDF;
 import model.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -459,7 +460,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 updateDatabaseImportProducts(maphieunhap);
                 int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
                 if(check_pdf==JOptionPane.YES_OPTION){
-                    exportPDF(detailImportProducts);
+                    writePDF.getInstance().writePhieuNhap(maphieunhap);
                 }
             }
         }
