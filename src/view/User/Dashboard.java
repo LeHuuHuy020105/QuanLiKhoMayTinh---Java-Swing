@@ -89,6 +89,7 @@ public class Dashboard extends JFrame {
         renderMenuBar(menuItems,panel_2);
     }
     public void renderMenuBar(ArrayList<String> menuItems , JPanel jPanel){
+        System.out.println("arr: "+menuItems);
         // Tạo các mục menu
         for (int i = 0; i < menuItems.size(); i++) {
             String item = menuItems.get(i);
@@ -153,6 +154,7 @@ public class Dashboard extends JFrame {
         panel.repaint();
     }
     public void Display(String item){
+        System.out.println("item: "+ item);
         switch (item){
             case "Sản phẩm":
                 SanPhamForm sanPhamForm = new SanPhamForm(currentUser);
@@ -170,12 +172,14 @@ public class Dashboard extends JFrame {
                 cardLayout.show(cardPanel, "Nhập hàng");
                 break;
             case "Phiếu nhập":
-                PhieuNhapForm phieuNhapForm = new PhieuNhapForm();
+                System.out.println("phieunhap");
+                PhieuNhapForm phieuNhapForm = new PhieuNhapForm(currentUser);
                 cardPanel.add(phieuNhapForm, "Phiếu nhập");
                 cardLayout.show(cardPanel, "Phiếu nhập");
                 break;
             case "Phiếu xuất":
-                PhieuXuatForm phieuXuatForm = new PhieuXuatForm();
+                System.out.println("phieuxuat");
+                PhieuXuatForm phieuXuatForm = new PhieuXuatForm(currentUser);
                 cardPanel.add(phieuXuatForm, "Phiếu xuất");
                 cardLayout.show(cardPanel, "Phiếu xuất");
                 break;

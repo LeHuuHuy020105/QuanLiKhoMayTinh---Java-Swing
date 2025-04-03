@@ -1,9 +1,6 @@
 package view.User.SanPham;
 
-import DAO.LaptopDAO;
-import DAO.PCDAO;
-import DAO.PermissionsDAO;
-import DAO.ProductsDAO;
+import DAO.*;
 import controller.*;
 import model.Computer;
 import model.Laptop;
@@ -16,23 +13,25 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.*;
 
 import model.PC;
 import model.User;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
+import view.User.Excel.ConfirmDataExcel;
 
-import javax.swing.table.TableModel;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Iterator;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
@@ -41,6 +40,13 @@ import java.awt.event.ItemEvent;
 public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,ExcelIntrerface{
 
     private static final long serialVersionUID = 1L;
+    private JButton btnNhapExcel;
+    private JButton btnXuatExcel;
+    private JButton btnXemChiTiet;
+    private JButton btnSua;
+    private JButton btnXoa;
+    private JButton btn_Them;
+    private String[] columnNames;
     private JTextField input_Search;
     private JTable table_product;
     private JFileChooser jChooser = new JFileChooser();
@@ -70,7 +76,8 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1.setLayout(null);
         verticalBox.add(panel_5_1);
 
-        JButton btn_Them = new JButton("Thêm");
+
+        btn_Them = new JButton("Thêm");
         btn_Them.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +97,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btn_Them.setBounds(10, 0, 70, 52);
         panel_5_1.add(btn_Them);
 
-        JButton btnXemChiTiet = new JButton("Xem chi tiết");
+        btnXemChiTiet = new JButton("Xem chi tiết");
         btnXemChiTiet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,11 +115,11 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnXemChiTiet.setBounds(170, 0, 107, 52);
         panel_5_1.add(btnXemChiTiet);
 
-        JButton btnXuatExcel = new JButton("Xuất Excel");
+        btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NhapExelMouseClicked();
+                XuatExcelMouseClicked();
             }
         });
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -126,7 +133,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnXuatExcel.setBounds(487, 0, 99, 52);
         panel_5_1.add(btnXuatExcel);
 
-        JButton btnNhapExcel = new JButton("Nhập Excel");
+        btnNhapExcel = new JButton("Nhập Excel");
         btnNhapExcel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -144,7 +151,8 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnNhapExcel.setBounds(375, 0, 98, 52);
         panel_5_1.add(btnNhapExcel);
 
-        JButton btnSua = new JButton("Sửa");
+
+        btnSua = new JButton("Sửa");
         btnSua.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -162,7 +170,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnSua.setBounds(90, 0, 70, 52);
         panel_5_1.add(btnSua);
 
-        JButton btnXoa = new JButton("Xoá");
+        btnXoa = new JButton("Xoá");
         btnXoa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -223,13 +231,14 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnNewButton_1.setBounds(491, 9, 114, 30);
         panel_5_1_1.add(btnNewButton_1);
 
+        columnNames = new String[]{
+                "Mã máy", "Tên máy", "Số lượng", "Đơn giá","Giá bán", "Bộ xử lí", "RAM", "Bộ nhớ", "Loại máy"
+        };
         table_product = new JTable();
         table_product.setModel(new DefaultTableModel(
                 new Object[][]{
                 },
-                new String[]{
-                        "Mã máy", "Tên máy", "Số lượng", "Đơn giá","Giá bán", "Bộ xử lí", "RAM", "Bộ nhớ", "Loại máy"
-                }
+                columnNames
         ));
 
         JScrollPane scrollPane = new JScrollPane(table_product);
@@ -243,9 +252,12 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnEffect.effectBtnHover(btnSua);          // Nút Sửa
         btnEffect.effectBtnHover(btnXoa);          // Nút Xoá
 
-        PermissionsDAO.applyPermissions(currentUser.getIdUser(),"Sản phẩm",btn_Them,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
-    }
 
+    }
+    public void Permission(){
+        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        PermissionsDAO.applyPermissions(roleUser,"Sản phẩm",btn_Them,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
+    }
     public void XemChiTietMouseClicked() {
         ChiTietSanPham chiTietSanPham = new ChiTietSanPham(this);
         chiTietSanPham.setVisible(true);
@@ -323,56 +335,113 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     }
     @Override
     public void XuatExcelMouseClicked(){
+        ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
         jChooser.setDialogTitle("Chọn nơi lưu file Excel");
         jChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
-        exportTableToExcel(table_product,jChooser);
+        exportListToExcel(computers,jChooser);
     }
-    public void exportTableToExcel(JTable table,JFileChooser jChooser){
-//        int userSelection = jChooser.showSaveDialog(null);
-//        if (userSelection == JFileChooser.APPROVE_OPTION) {
-//            File file = jChooser.getSelectedFile();
-//
-//            // Đảm bảo file có đuôi .xlsx
-//            if (!file.getAbsolutePath().endsWith(".xlsx")) {
-//                file = new File(file.getAbsolutePath() + ".xlsx");
-//            }
-//
-//            try (Workbook workbook = new XSSFWorkbook()) { // Tạo workbook Excel
-//                Sheet sheet = workbook.createSheet("Data"); // Tạo sheet mới
-//
-//                TableModel model = table.getModel();
-//                int rowCount = model.getRowCount();
-//                int colCount = model.getColumnCount();
-//
-//                // Ghi tiêu đề cột
-//                Row headerRow = sheet.createRow(0);
-//                for (int col = 0; col < colCount; col++) {
-//                    Cell cell = headerRow.createCell(col);
-//                    cell.setCellValue(model.getColumnName(col));
-//                    cell.setCellStyle(createHeaderStyle(workbook)); // Style cho header
-//                }
-//
-//                // Ghi dữ liệu từ JTable
-//                for (int row = 0; row < rowCount; row++) {
-//                    Row excelRow = sheet.createRow(row + 1);
-//                    for (int col = 0; col < colCount; col++) {
-//                        Cell cell = excelRow.createCell(col);
-//                        Object value = model.getValueAt(row, col);
-//                        cell.setCellValue(value != null ? value.toString() : "");
-//                    }
-//                }
-//
-//                // Ghi file Excel ra đĩa
-//                try (FileOutputStream fileOut = new FileOutputStream(file)) {
-//                    workbook.write(fileOut);
-//                }
-//
-//                JOptionPane.showMessageDialog(null,Notification.success_ExportExcel  + file.getAbsolutePath());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                JOptionPane.showMessageDialog(null, Notification.error_SaveExcel,"Lỗi",JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+    public void exportListToExcel(ArrayList<Computer> dataList, JFileChooser jChooser) {
+        int userSelection = jChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File file = jChooser.getSelectedFile();
+
+            // Đảm bảo file có đuôi .xlsx
+            if (!file.getAbsolutePath().endsWith(".xlsx")) {
+                file = new File(file.getAbsolutePath() + ".xlsx");
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Data");
+                CreationHelper createHelper = workbook.getCreationHelper();
+
+                // Định dạng số cho cột giá
+                CellStyle numberStyle = workbook.createCellStyle();
+                DataFormat format = createHelper.createDataFormat();
+                numberStyle.setDataFormat(format.getFormat("#,##0.00")); // Hiển thị dạng số (VD: 1,500.00)
+
+                // 🔹 Lấy tất cả thuộc tính từ Computer, Laptop, PC (BỎ QUA hinhAnh)
+                Set<Field> allFields = new LinkedHashSet<>();
+                Class<?>[] classes = {Computer.class, Laptop.class, PC.class};
+                for (Class<?> clazz : classes) {
+                    while (clazz != null) {
+                        allFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+                        clazz = clazz.getSuperclass();
+                    }
+                }
+
+                // Loại bỏ trường "hinhAnh"
+                allFields.removeIf(field -> field.getName().equals("hinhAnh"));
+
+                // Chuyển danh sách thuộc tính về mảng để dễ xử lý
+                Field[] fields = allFields.toArray(new Field[0]);
+
+                // 🔹 Ghi tiêu đề cột
+                Row headerRow = sheet.createRow(0);
+                for (int i = 0; i < fields.length; i++) {
+                    fields[i].setAccessible(true);
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(fields[i].getName()); // Đặt tên cột
+                    cell.setCellStyle(createHeaderStyle(workbook)); // Áp dụng style header
+                }
+                int typeColumnIndex = fields.length; // Cột cuối cùng
+                Cell typeHeader = headerRow.createCell(typeColumnIndex);
+                typeHeader.setCellValue("Loại máy");
+                typeHeader.setCellStyle(createHeaderStyle(workbook));
+
+                // 🔹 Ghi dữ liệu của từng object
+                for (int rowIndex = 0; rowIndex < dataList.size(); rowIndex++) {
+                    Row row = sheet.createRow(rowIndex + 1);
+                    Computer obj = dataList.get(rowIndex);
+
+                    for (int colIndex = 0; colIndex < fields.length; colIndex++) {
+                        fields[colIndex].setAccessible(true);
+                        Cell cell = row.createCell(colIndex);
+
+                        try {
+                            // 🔹 Kiểm tra nếu obj có thuộc tính này
+                            Object value = null;
+                            if (fields[colIndex].getDeclaringClass().isAssignableFrom(obj.getClass())) {
+                                value = fields[colIndex].get(obj);
+                            }
+
+                            // 🔹 Định dạng giá trị trước khi gán vào ô Excel
+                            if (value != null) {
+                                if (value instanceof Integer) {
+                                    cell.setCellValue((Integer) value); // Giữ nguyên số nguyên
+                                } else if (value instanceof Double) {
+                                    cell.setCellValue((Double) value); // Giữ số thực
+                                    cell.setCellStyle(numberStyle); // Áp dụng format số thập phân
+                                } else {
+                                    cell.setCellValue(value.toString()); // Ghi chuỗi nếu không phải số
+                                }
+                            } else {
+                                cell.setCellValue(""); // Nếu không có dữ liệu, để trống
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                            cell.setCellValue(""); // Nếu lỗi, đặt giá trị trống
+                        }
+                    }
+                    // **GHI LOẠI MÁY VÀO CỘT CUỐI CÙNG**
+                    Cell typeCell = row.createCell(typeColumnIndex);
+                    if (obj instanceof Laptop) {
+                        typeCell.setCellValue("Laptop");
+                    } else {
+                        typeCell.setCellValue("PC");
+                    }
+                }
+
+                // Ghi file Excel ra đĩa
+                try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                }
+
+                JOptionPane.showMessageDialog(null, "Xuất Excel thành công: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi lưu file Excel", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     private CellStyle createHeaderStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
@@ -394,61 +463,58 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         }
     }
     public void fillData(File file) {
-//        try (FileInputStream fis = new FileInputStream(file);
-//             Workbook workbook = new XSSFWorkbook(fis)) {
-//
-//            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
-//            Iterator<Row> rowIterator = sheet.iterator();
-//
-//            // Bỏ qua dòng đầu tiên nếu là header
-//            if (rowIterator.hasNext()) {
-//                rowIterator.next();
-//            }
-//
-//            while (rowIterator.hasNext()) {
-//                Row row = rowIterator.next();
-//
-//                // Đọc dữ liệu từ các cột của file Excel
-//                String tenmay = row.getCell(0).getStringCellValue();
-//                int soluong = (int) row.getCell(1).getNumericCellValue();
-//                double gia = row.getCell(2).getNumericCellValue();
-//                String tenCPU = row.getCell(4).getStringCellValue();
-//                String ram = row.getCell(5).getStringCellValue();
-//                String xuatxu = row.getCell(6).getStringCellValue();
-//                String cardmanhinh = row.getCell(7).getStringCellValue();
-//                String rom = row.getCell(11).getStringCellValue();
-//                String loaimay = row.getCell(12).getStringCellValue();
-//                System.out.println(loaimay);
-//                String manhacungcap = row.getCell(13).getStringCellValue();
-//                double dungluongluutru = row.getCell(14).getNumericCellValue(); // Đọc số thay vì String
-//
-//                // Kiểm tra loại máy để tạo đối tượng Laptop hoặc PC
-//                if (loaimay.equalsIgnoreCase("Laptop")) {
-//                    int soLuongLaptop = LaptopDAO.getInstance().selectAll().size();
-//                    String mamay = "LP" + (soLuongLaptop + 1);
-//                    double kichthuocman = row.getCell(9).getNumericCellValue();
-//                    String dungluongpin = row.getCell(10).getStringCellValue(); // Sử dụng String vì constructor yêu cầu
-//
-//                    // Tạo đối tượng Laptop với đúng tham số
-//                    Laptop laptop = new Laptop(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, dungluongpin, kichthuocman, manhacungcap, dungluongluutru);
-//                    LaptopDAO.getInstance().insert(laptop);
-//                } else {
-//                    int soLuongPC = PCDAO.getInstance().selectAll().size();
-//                    String mamay = "PC" + (soLuongPC + 1);
-//                    String mainboard = row.getCell(7).getStringCellValue();
-//                    int congsuatnguon = (int) row.getCell(8).getNumericCellValue();
-//
-//                    // Tạo đối tượng PC với đúng tham số
-//                    PC pc = new PC(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, congsuatnguon, mainboard, manhacungcap, dungluongluutru);
-//                    PCDAO.getInstance().insert(pc);
-//                }
-//            }
-//            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        updateTableDataFormDAO();
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+            ArrayList<Computer> computers = new ArrayList<>();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                Computer computer = null;
+                // Đọc dữ liệu từ các cột của file Excel
+                String tenmay = row.getCell(1).getStringCellValue();
+                int soluong = (int) row.getCell(2).getNumericCellValue();
+                double gia = row.getCell(3).getNumericCellValue();
+                double giaBan = row.getCell(4).getNumericCellValue();
+                String tenCPU = row.getCell(5).getStringCellValue();
+                String ram = row.getCell(6).getStringCellValue();
+                String xuatxu = row.getCell(7).getStringCellValue();
+                String cardmanhinh = row.getCell(8).getStringCellValue();
+                String rom = row.getCell(9).getStringCellValue();
+                String manhacungcap = row.getCell(10).getStringCellValue();
+                double dungluongluutru = row.getCell(11).getNumericCellValue(); // Đọc số thay vì String
+                String loaimay = row.getCell(16).getStringCellValue();
+
+
+                // Kiểm tra loại máy để tạo đối tượng Laptop hoặc PC
+                if (loaimay.equalsIgnoreCase("Laptop")) {
+                    double kichthuocman = row.getCell(12).getNumericCellValue();
+                    String dungluongpin = row.getCell(13).getStringCellValue(); // Sử dụng String vì constructor yêu cầu
+
+                    // Tạo đối tượng Laptop với đúng tham số
+                     computer = new Laptop(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, dungluongpin, kichthuocman, manhacungcap, dungluongluutru,giaBan,null);
+                } else {
+                    String mainboard = row.getCell(14).getStringCellValue();
+                    int congsuatnguon = (int) row.getCell(15).getNumericCellValue();
+
+                    // Tạo đối tượng PC với đúng tham số
+                    computer = new PC(cardmanhinh, gia, 0, ram, rom, soluong, tenCPU, tenmay, xuatxu, congsuatnguon, mainboard, manhacungcap, dungluongluutru,giaBan,null);
+                }
+                computers.add(computer);
+            }
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(computers, columnNames, "Chi nhánh");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
     }
+
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
                 JOptionPane.YES_NO_OPTION);

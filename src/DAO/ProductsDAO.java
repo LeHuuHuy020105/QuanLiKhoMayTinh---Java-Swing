@@ -17,6 +17,13 @@ public class ProductsDAO implements DAOInterface<Computer> {
 
     @Override
     public int insert(Computer computer) {
+        if(computer instanceof Laptop){
+            Laptop laptop = (Laptop) computer;
+            LaptopDAO.getInstance().insert(laptop);
+        }else {
+            PC pc = (PC) computer;
+            PCDAO.getInstance().insert(pc);
+        }
         return 0;
     }
 

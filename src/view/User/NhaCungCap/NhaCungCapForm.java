@@ -1,11 +1,17 @@
 package view.User.NhaCungCap;
 
+import DAO.LaptopDAO;
+import DAO.PCDAO;
 import DAO.ProducersDAO;
 import controller.*;
+import model.Computer;
+import model.Laptop;
+import model.PC;
 import model.Producer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
+import view.User.Excel.ConfirmDataExcel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -25,11 +31,11 @@ import java.util.Iterator;
 public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer>, ExcelIntrerface {
 
     private static final long serialVersionUID = 1L;
+    private String[] columnNames;
 
     private JTextField input_Search;
     private JTable table_NCC;
-    private JFileChooser jFileChooser;
-
+    private JFileChooser jChooser = new JFileChooser();
     private JComboBox cbx_Search;
 
     /**
@@ -223,14 +229,15 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
+        columnNames = new String[]{
+                "STT", "Mã NCC", "Tên NCC", "Địa chỉ", "SDT"
+        };
         table_NCC = new JTable();
         table_NCC.setFont(new Font("Tahoma", Font.PLAIN, 14));
         table_NCC.setModel(new DefaultTableModel(
                 new Object[][]{
                 },
-                new String[]{
-                        "STT", "Mã NCC", "Tên NCC", "Địa chỉ", "SDT"
-                }
+                columnNames
         ));
         JScrollPane scrollPane = new JScrollPane(table_NCC);
         scrollPane.setBounds(10, 127, 1237, 626);
@@ -272,12 +279,11 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
 
     @Override
     public void NhapExelMouseClicked() {
-        jFileChooser = new JFileChooser();
-        jFileChooser.showOpenDialog(null);
-        File file = jFileChooser.getSelectedFile();
+        jChooser.showOpenDialog(null);
+        File file = jChooser.getSelectedFile();
         if (!file.getName().endsWith("xlsx")) {
             JOptionPane.showMessageDialog(null,
-                    "Vui lòng chọn file Excel.",
+                    Notification.not_SelectedExcel,
                     "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             fillData(file);
@@ -285,11 +291,10 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     }
 
     @Override
-    public void XuatExcelMouseClicked() {
-        jFileChooser = new JFileChooser();
-        jFileChooser.setDialogTitle("Chọn nơi lưu trữ file Excel");
-        jFileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
-        exportTableToExcel(table_NCC, jFileChooser);
+    public void XuatExcelMouseClicked(){
+        jChooser.setDialogTitle("Chọn nơi lưu file Excel");
+        jChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
+        exportTableToExcel(table_NCC,jChooser);
     }
 
     public void exportTableToExcel(JTable jTable, JFileChooser jFileChooser) {
@@ -340,6 +345,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
         }
     }
 
+
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -351,22 +357,46 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
-
+            ArrayList<Producer> producers = new ArrayList<>();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                String maNCC = row.getCell(0).getStringCellValue();
-                String tenNCC = row.getCell(1).getStringCellValue();
-                String diaChi = row.getCell(2).getStringCellValue();
-                String sdt = row.getCell(3).getStringCellValue();
-                Producer producer = new Producer(diaChi, maNCC, sdt, tenNCC);
-                ProducersDAO.getInstance().update(producer);
+                String maNCC = row.getCell(1).getStringCellValue();
+                String tenNCC = row.getCell(2).getStringCellValue();
+                String diaChi = row.getCell(3).getStringCellValue();
+                String sdt = row.getCell(4).getStringCellValue();
+                Producer producer = new Producer(diaChi,maNCC,sdt,tenNCC);
+                producers.add(producer);
             }
-            JOptionPane.showMessageDialog(this, "Nhập Excel thành công !");
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(producers, columnNames, "Chi nhánh");
         } catch (IOException e) {
             e.printStackTrace();
         }
         updateTableDataFormDAO();
     }
+    private String getCellValue(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim();
+            case NUMERIC:
+                if (cell.getColumnIndex() == 1) { // Kiểm tra nếu cột Mã NCC
+                    return String.valueOf((long) cell.getNumericCellValue()); // Chuyển số thành chuỗi
+                } else {
+                    return String.valueOf(cell.getNumericCellValue()); // Số khác thì giữ nguyên
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return "";
+        }
+    }
+
     public CellStyle createHeaderStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         org.apache.poi.ss.usermodel.Font font = workbook.createFont();

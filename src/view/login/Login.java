@@ -142,8 +142,10 @@ public class Login extends JFrame {
         User currentUser = null;
         try {
             currentUser = UserDAO.getInstance().getCurrentUser(username, password);
+            System.out.println("cur: "+currentUser);
             if(currentUser.getStatus()==1){
-                new Dashboard(currentUser);
+                System.out.println("huyyy");
+                Dashboard dashboard = new Dashboard(currentUser);
                 this.dispose();
             }else {
                 JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khoá !");

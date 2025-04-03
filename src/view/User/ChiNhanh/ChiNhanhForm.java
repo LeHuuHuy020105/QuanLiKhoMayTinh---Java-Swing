@@ -1,13 +1,12 @@
 package view.User.ChiNhanh;
 
 import DAO.BrandDAO;
-import DAO.ProducersDAO;
 import controller.*;
 import model.Branch;
-import model.Producer;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
+import view.User.Excel.ConfirmDataExcel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -34,13 +33,14 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
     private JTextField input_Search;
     private JTable table_CN;
     private JFileChooser jFileChooser;
-
+    private String[] columnNames;
     private JComboBox cbx_Search;
 
     /**
      * Create the panel.
      */
     public ChiNhanhForm() {
+        this.jFileChooser = new JFileChooser();
         setLayout(null);
         setSize(1257, 764);
         Box verticalBox = Box.createVerticalBox();
@@ -228,14 +228,15 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
+        columnNames = new String[]{
+                "STT", "Mã chi nhánh", "Địa chỉ", "SDT"
+        };
         table_CN = new JTable();
         table_CN.setFont(new Font("Tahoma", Font.PLAIN, 14));
         table_CN.setModel(new DefaultTableModel(
                 new Object[][]{
                 },
-                new String[]{
-                        "STT", "Mã chi nhánh", "Địa chỉ", "SDT"
-                }
+                columnNames
         ));
         JScrollPane scrollPane = new JScrollPane(table_CN);
         scrollPane.setBounds(10, 127, 1237, 626);
@@ -276,7 +277,6 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
     @Override
     public void NhapExelMouseClicked() {
-        jFileChooser = new JFileChooser();
         jFileChooser.showOpenDialog(null);
         File file = jFileChooser.getSelectedFile();
         if (!file.getName().endsWith("xlsx")) {
@@ -355,22 +355,25 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
-
+            ArrayList<Branch> branches = new ArrayList<>();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                String maNCC = row.getCell(0).getStringCellValue();
-                String tenNCC = row.getCell(1).getStringCellValue();
-                String diaChi = row.getCell(2).getStringCellValue();
-                String sdt = row.getCell(3).getStringCellValue();
-                Producer producer = new Producer(diaChi, maNCC, sdt, tenNCC);
-                ProducersDAO.getInstance().update(producer);
+                String tenCN = row.getCell(0).getStringCellValue();
+                String diaChi = row.getCell(1).getStringCellValue();
+                String tenQuan = row.getCell(2).getStringCellValue();
+                String thanhPho = row.getCell(3).getStringCellValue();
+                String sdt = row.getCell(4).getStringCellValue();
+                String moTa = row.getCell(5).getStringCellValue();
+                Branch branch = new Branch(diaChi,moTa,sdt,tenCN,tenQuan,thanhPho);
+               branches.add(branch);
             }
-            JOptionPane.showMessageDialog(this, "Nhập Excel thành công !");
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(branches, columnNames, "Chi nhánh");
         } catch (IOException e) {
             e.printStackTrace();
         }
         updateTableDataFormDAO();
     }
+
     public CellStyle createHeaderStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         org.apache.poi.ss.usermodel.Font font = workbook.createFont();

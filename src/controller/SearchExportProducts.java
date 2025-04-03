@@ -1,9 +1,8 @@
 package controller;
 
-import DAO.BrandDAO;
-import DAO.ExportProductsDAO;
-import DAO.StatusDeliveryDAO;
+import DAO.*;
 import model.ExportProducts;
+import model.ImportProducts;
 
 import java.util.ArrayList;
 
@@ -44,5 +43,23 @@ public class SearchExportProducts {
             }
         }
         return ketQua;
+    }
+    public ArrayList<ExportProducts> searchAll(String input) {
+        ArrayList<ExportProducts> exportProducts = ExportProductsDAO.getInstance().selectAll();
+        ArrayList<ExportProducts> result = new ArrayList<>();
+        input = input.toLowerCase().trim();
+        try {
+            int maphieuxuat = Integer.parseInt(input);
+            System.out.println(maphieuxuat);
+            for (ExportProducts exportProducts1 : exportProducts) {
+                String diaChi = BrandDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
+                if (exportProducts1.getMaPhieuXuat() == maphieuxuat || diaChi.toLowerCase().trim().contains(input)) {
+                    result.add(exportProducts1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

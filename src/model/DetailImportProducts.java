@@ -9,6 +9,11 @@ public class DetailImportProducts {
     public DetailImportProducts() {
     }
 
+    public DetailImportProducts(int maMay, int soluong) {
+        this.maMay = maMay;
+        this.soluong = soluong;
+    }
+
     public DetailImportProducts(int maMay, int maphieunhap, int soluong) {
         this.maMay = maMay;
         this.maphieunhap = maphieunhap;

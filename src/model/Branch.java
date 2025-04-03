@@ -12,7 +12,16 @@ public class Branch {
     public Branch() {
     }
 
-    public Branch(String diaChi, int maChiNhanh, String soDienThoai,String tenChiNhanh,String tenQuan,String thanhPho,String moTa) {
+    public Branch(String diaChi, String moTa, String soDienThoai, String tenChiNhanh, String tenQuan, String thanhPho) {
+        this.diaChi = diaChi;
+        this.moTa = moTa;
+        this.soDienThoai = soDienThoai;
+        this.tenChiNhanh = tenChiNhanh;
+        this.tenQuan = tenQuan;
+        this.thanhPho = thanhPho;
+    }
+
+    public Branch(String diaChi, int maChiNhanh, String soDienThoai, String tenChiNhanh, String tenQuan, String thanhPho, String moTa) {
         this.diaChi = diaChi;
         this.maChiNhanh = maChiNhanh;
         this.soDienThoai = soDienThoai;

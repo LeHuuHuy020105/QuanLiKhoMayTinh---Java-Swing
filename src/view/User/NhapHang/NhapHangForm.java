@@ -8,7 +8,12 @@ import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
+import view.User.Excel.ConfirmDataExcel;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -16,8 +21,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class NhapHangForm extends JPanel implements updateDataToTable<Computer> {
 
@@ -32,12 +41,14 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     private User currentUser ;
     private ArrayList<DetailImportProducts> detailImportProducts;
     private JLabel label_TotalPrice;
+    private JFileChooser jFileChooser;
 
     /**
      * Create the panel.
      */
     public NhapHangForm(User user) {
         this.detailImportProducts = new ArrayList<>();
+        jFileChooser = new JFileChooser();
         this.currentUser = user;
         setLayout(null);
         setSize(1257, 735);
@@ -116,6 +127,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                NhapExcelMouseClicked();
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -221,6 +233,43 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     public void loadNhaphangForm(){
         input_NguoiTaoPhieu.setText(currentUser.getFullName());
         input_NguoiTaoPhieu.setEditable(false);
+    }
+    public void NhapExcelMouseClicked(){
+        jFileChooser.showOpenDialog(null);
+        File file = jFileChooser.getSelectedFile();
+        if(!file.getName().endsWith("xlsx")){
+            JOptionPane.showMessageDialog(null,"Vui lòng chọn file Excel.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            fillData(file);
+        }
+    }
+    public void fillData(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int maMay = (int) row.getCell(0).getNumericCellValue();
+                int soLuong =  (int) row.getCell(1).getNumericCellValue();
+                DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,soLuong);
+                detailImportProducts.add(detailImportProducts1);
+                updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+            }
+            setTotalPrice();
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
     }
     public void jTextFieldSearchKeyReleased() {
         String luaChon = (String) cbx_luaChon.getSelectedItem();

@@ -5,6 +5,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,10 +15,7 @@ import DAO.*;
 import com.toedter.calendar.JDateChooser;
 import controller.SearchExportProducts;
 import controller.updateDataToTable;
-import model.Computer;
-import model.DetailExportProducts;
-import model.ExportProducts;
-import model.ImportProducts;
+import model.*;
 import view.User.PhieuNhap.ChiTietPhieuNhapForm;
 import view.User.PhieuNhap.KhoiPhucPhieuNhapForm;
 
@@ -31,17 +30,24 @@ import java.awt.event.ItemEvent;
 public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportProducts> {
 
 	private static final long serialVersionUID = 1L;
+	private JButton btnNhapExcel;
+	private JButton btnSua;
+	private JButton btnXuatExcel;
+	private JButton btnXemChiTiet;
+	private JButton btn_Xoa;
 	private JDateChooser date_Start;
 	private JDateChooser date_End;
 	private JTextField input_TimKiem;
 	private JTable table_PhieuXuatHang;
 	private JComboBox cbx_TimKiem;
 	private JComboBox cbx_TrangThai;
+	private User currentUser;
 
 	/**
 	 * Create the panel.
 	 */
-	public PhieuXuatForm() {
+	public PhieuXuatForm(User currentUser) {
+		this.currentUser = currentUser;
 		setLayout(null);
 		setSize(1257,911);
 
@@ -68,25 +74,25 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		panel_5_1.setLayout(null);
 		verticalBox.add(panel_5_1);
 
-		JButton btnNewButton = new JButton("Xoá");
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		btn_Xoa = new JButton("Xoá");
+		btn_Xoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				XoaMouseClicked();
 			}
 		});
-		btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
-		btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnNewButton.setFocusPainted(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBackground(UIManager.getColor("Button.background"));
-		btnNewButton.setBounds(10, 0, 70, 52);
-		panel_5_1.add(btnNewButton);
+		btn_Xoa.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btn_Xoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+		btn_Xoa.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn_Xoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btn_Xoa.setFocusPainted(false);
+		btn_Xoa.setContentAreaFilled(false);
+		btn_Xoa.setBorderPainted(false);
+		btn_Xoa.setBackground(UIManager.getColor("Button.background"));
+		btn_Xoa.setBounds(10, 0, 70, 52);
+		panel_5_1.add(btn_Xoa);
 
-		JButton btnXemChiTiet = new JButton("Xem chi tiết");
+		btnXemChiTiet = new JButton("Xem chi tiết");
 		btnXemChiTiet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -104,7 +110,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnXemChiTiet.setBounds(170, 0, 107, 52);
 		panel_5_1.add(btnXemChiTiet);
 
-		JButton btnXuatExcel = new JButton("Xuất Excel");
+		btnXuatExcel = new JButton("Xuất Excel");
 		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
 		btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -116,7 +122,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnXuatExcel.setBounds(409, 0, 99, 52);
 		panel_5_1.add(btnXuatExcel);
 
-		JButton btnNhapExcel = new JButton("Nhập Excel");
+		btnNhapExcel = new JButton("Nhập Excel");
 		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
 		btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -128,7 +134,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		btnNhapExcel.setBounds(287, 0, 98, 52);
 		panel_5_1.add(btnNhapExcel);
 
-		JButton btnSua = new JButton("Sửa");
+		btnSua = new JButton("Sửa");
 		btnSua.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -155,7 +161,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		panel_5_1_1.setLayout(null);
 		verticalBox_1.add(panel_5_1_1);
 
-		String[] luachonStrings = new String[] {"Mã phiếu xuất","Địa chỉ"};
+		String[] luachonStrings = new String[] {"Tất cả","Mã phiếu xuất","Địa chỉ"};
 		cbx_TimKiem = new JComboBox(luachonStrings);
 		cbx_TimKiem.setBackground(UIManager.getColor("Button.background"));
 		cbx_TimKiem.setBounds(10, 11, 126, 30);
@@ -188,6 +194,11 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		verticalBox_1_1.add(panel_5_1_1_1);
 
 		date_Start = new JDateChooser();
+		date_Start.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				applyFilters();
+			}
+		});
 		date_Start.setBounds(87, 11, 165, 30);
 		panel_5_1_1_1.add(date_Start);
 
@@ -202,6 +213,11 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		panel_5_1_1_1.add(lbln);
 
 		date_End = new JDateChooser();
+		date_End.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				applyFilters();
+			}
+		});
 		date_End.setBounds(435, 11, 165, 30);
 		panel_5_1_1_1.add(date_End);
 
@@ -218,7 +234,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		cbx_TrangThai = new JComboBox(trangthaiStrings);
 		cbx_TrangThai.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				FilterTrangThai();
+				applyFilters();
 			}
 		});
 		cbx_TrangThai.setBackground(UIManager.getColor("Button.background"));
@@ -238,11 +254,14 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 				}
 		));
 		scrollPane.setViewportView(table_PhieuXuatHang);
+		Permission();
 		updateTableDataFormDAO();
 	}
-	public void fillData(){
-
+	public void Permission(){
+		int idRole = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+		PermissionsDAO.applyPermissions(idRole,"Phiếu xuất",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
 	}
+
 	@Override
 	public void updateTableDataFormDAO() {
 		ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
@@ -318,135 +337,128 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 	}
 	public void applyFilters() {
-//		String statusFilter = cbx_TrangThai.getSelectedItem() + "";
-//		String keyword = input_TimKiem.getText().trim().toLowerCase();
-//		String cbxLuaChon = cbx_TimKiem.getSelectedItem() + "";
-//		Timestamp dateStart = null, dateEnd = null;
-//
-//		// Lấy giá trị từ JDateChooser
-//		if (date_Start.getDate() != null) {
-//			dateStart = new Timestamp(date_Start.getDate().getTime());
-//		}
-//		if (date_End.getDate() != null) {
-//			dateEnd = new Timestamp(date_End.getDate().getTime());
-//		}
-//
-//		// Lấy danh sách tất cả sản phẩm
-//		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
-//
-//		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
-//
-//		for (ExportProducts exportProducts : allExportProducts) {
-//			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(exportProducts, statusFilter);
-//			boolean matchKeyword = keyword.isEmpty() || matchKeyword(exportProducts, keyword, cbxLuaChon);
-//			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, exportProducts);
-//
-//			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
-//			if (matchStatus && matchKeyword && matchTime) {
-//				filteredExportProducts.add(exportProducts);
-//			}
-//		}
-//
-//		updateTableData(filteredExportProducts);
+		String statusFilter = cbx_TrangThai.getSelectedItem() + "";
+		String keyword = input_TimKiem.getText().trim().toLowerCase();
+		String cbxLuaChon = cbx_TimKiem.getSelectedItem() + "";
+		Timestamp dateStart = null, dateEnd = null;
+
+		// Lấy giá trị từ JDateChooser
+		if (date_Start.getDate() != null) {
+			dateStart = new Timestamp(date_Start.getDate().getTime());
+		}
+		if (date_End.getDate() != null) {
+			dateEnd = new Timestamp(date_End.getDate().getTime());
+		}
+
+		// Lấy danh sách tất cả sản phẩm
+		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
+
+		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
+
+		for (ExportProducts exportProducts : allExportProducts) {
+			System.out.println("-----Tat ca-----");
+			System.out.println(exportProducts);
+			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(exportProducts, statusFilter);
+			boolean matchKeyword = keyword.isEmpty() || matchKeyword(exportProducts, keyword, cbxLuaChon);
+			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, exportProducts);
+			System.out.println("bool: "+ matchTime);
+			// Chỉ thêm nếu thỏa mãn cả 3 điều kiện
+			if (matchStatus && matchKeyword && matchTime) {
+				filteredExportProducts.add(exportProducts);
+			}
+		}
+		updateTableData(filteredExportProducts);
 	}
 
-//	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
-//		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
-//		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
-//		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
-//		LocalDate productDate = (exportProducts.getNgayNhanDonXuat() != null)
-//				? exportProducts.getNgayNhanDonXuat().toLocalDateTime().toLocalDate()
-//				: null;
-//		LocalDate productCancelDate = (exportProducts.getThoiDiemHuyPhieu() != null)
-//				? exportProducts.getThoiDiemHuyPhieu().toLocalDateTime().toLocalDate()
-//				: null;
-//
-//		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
-//		if (startDate == null && endDate == null) {
-//			return true;
-//		}
-//
-//		// Kiểm tra productDate
-//		boolean matchesDate = true;
-//		if (productDate != null) {
-//			if (startDate != null && endDate != null) {
-//				// Trường hợp cả startDate và endDate đều có giá trị
-//				// Kiểm tra xem productDate có nằm trong khoảng [startDate, endDate] không
-//				matchesDate = !productDate.isBefore(startDate) && !productDate.isAfter(endDate);
-//			} else if (startDate != null) {
-//				// Trường hợp chỉ có startDate (endDate là null)
-//				// Kiểm tra xem productDate có từ startDate trở về sau không
-//				matchesDate = !productDate.isBefore(startDate);
-//			} else if (endDate != null) {
-//				// Trường hợp chỉ có endDate (startDate là null)
-//				// Kiểm tra xem productDate có trước endDate không
-//				matchesDate = !productDate.isAfter(endDate);
-//			}
-//		}
-//
-//		// Kiểm tra productCancelDate (nếu có)
-//		boolean matchesCancelDate = true;
-//		if (productCancelDate != null) {
-//			if (startDate != null && endDate != null) {
-//				// Trường hợp cả startDate và endDate đều có giá trị
-//				matchesCancelDate = !productCancelDate.isBefore(startDate) && !productCancelDate.isAfter(endDate);
-//			} else if (startDate != null) {
-//				// Trường hợp chỉ có startDate (endDate là null)
-//				matchesCancelDate = !productCancelDate.isBefore(startDate);
-//			} else if (endDate != null) {
-//				// Trường hợp chỉ có endDate (startDate là null)
-//				matchesCancelDate = !productCancelDate.isAfter(endDate);
-//			}
-//		}else {
-//			matchesCancelDate =false;
-//		}
-//		System.out.print("iD: " + exportProducts.getMaPhieuXuat()+" - ");
-//		System.out.print(matchesDate+ " - ");
-//		System.out.println(matchesCancelDate);
-//
-//		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
-//		return matchesDate || matchesCancelDate;
-//	}
+	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
+		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
+		System.out.println("Macht time");
+		System.out.println("1: "+ dateStart);
+		System.out.println("2: "+ dateEnd);
+		System.out.println("3: "+ exportProducts.getNgayNhanDonXuat());
+		System.out.println("4: "+ exportProducts.getThoiDiemHuyPhieu());
+		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
+		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
+		LocalDate productDate = (exportProducts.getNgayLenDonXuat() != null)
+				? exportProducts.getNgayLenDonXuat().toLocalDateTime().toLocalDate()
+				: null;
+		LocalDate productCancelDate = (exportProducts.getThoiDiemHuyPhieu() != null)
+				? exportProducts.getThoiDiemHuyPhieu().toLocalDateTime().toLocalDate()
+				: null;
 
-	// Kiểm tra tình trạng tồn kho
-//	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
-//		int status = -1;
-//		switch (statusFilter) {
-//			case "Bình thường":
-//				status = 1;
-//				break;
-//			case "Đã huỷ":
-//				status = 0;
-//				break;
-//		}
-//		return exportProducts.getTrangThai() == status;
-//	}
-//
-//	public ArrayList<ImportProducts> search(String luaChon, String input) {
-//		ArrayList<ExportProducts> result = new ArrayList<>();
-//		SearchExportProducts searchExportProducts = new SearchExportProducts();
-//		switch (luaChon) {
-//			case "Tất cả":
-//				result = searchExportProducts.searchAll(input);
-//				break;
-//			case "Mã phiếu xuất":
-//				result = searchExportProducts.searchMaPhieuNhap(input);
-//				break;
-//			case "Tổng tiền":
-//				result = searchExportProducts.searchTongTien(input);
-//				break;
-//			case "Tên người tạo":
-//				result = searchExportProducts.searchNguoiTao(input);
-//				break;
-//		}
-//		return result;
-//	}
-//
-	public void FilterTrangThai(){
-//		String trangThai = cbx_TrangThai.getSelectedItem()+"";
-//		SearchExportProducts searchExportProducts = new SearchExportProducts();
-//		ArrayList<ExportProducts>result = searchExportProducts.searchTrangThai(trangThai);
-//		updateTableData(result);
+		// Nếu cả dateStart và dateEnd đều null, không có điều kiện thời gian, trả về true
+		if (startDate == null && endDate == null) {
+			return true;
+		}
+
+		// Kiểm tra productDate
+		boolean matchesDate = true;
+		if (productDate != null) {
+			if (startDate != null && endDate != null) {
+				// Trường hợp cả startDate và endDate đều có giá trị
+				// Kiểm tra xem productDate có nằm trong khoảng [startDate, endDate] không
+				matchesDate = !productDate.isBefore(startDate) && !productDate.isAfter(endDate);
+			} else if (startDate != null) {
+				// Trường hợp chỉ có startDate (endDate là null)
+				// Kiểm tra xem productDate có từ startDate trở về sau không
+				matchesDate = !productDate.isBefore(startDate);
+			} else if (endDate != null) {
+				// Trường hợp chỉ có endDate (startDate là null)
+				// Kiểm tra xem productDate có trước endDate không
+				matchesDate = !productDate.isAfter(endDate);
+			}
+		}
+
+		// Kiểm tra productCancelDate (nếu có)
+		boolean matchesCancelDate = true;
+		if (productCancelDate != null) {
+			if (startDate != null && endDate != null) {
+				// Trường hợp cả startDate và endDate đều có giá trị
+				matchesCancelDate = !productCancelDate.isBefore(startDate) && !productCancelDate.isAfter(endDate);
+			} else if (startDate != null) {
+				// Trường hợp chỉ có startDate (endDate là null)
+				matchesCancelDate = !productCancelDate.isBefore(startDate);
+			} else if (endDate != null) {
+				// Trường hợp chỉ có endDate (startDate là null)
+				matchesCancelDate = !productCancelDate.isAfter(endDate);
+			}
+		}else {
+			matchesCancelDate =false;
+		}
+		System.out.print("iD: " + exportProducts.getMaPhieuXuat()+" - ");
+		System.out.print(matchesDate+ " - ");
+		System.out.println(matchesCancelDate);
+
+		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
+		return matchesDate || matchesCancelDate;
+	}
+
+//	 Kiểm tra tình trạng tồn kho
+	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
+		int status = StatusDeliveryDAO.getInstance().selectByName(statusFilter);
+		return exportProducts.getTrangThai() == status;
+	}
+
+	public ArrayList<ExportProducts> search(String luaChon, String input) {
+		ArrayList<ExportProducts> result = new ArrayList<>();
+		SearchExportProducts searchExportProducts = new SearchExportProducts();
+		switch (luaChon) {
+			case "Tất cả":
+				result = searchExportProducts.searchAll(input);
+				break;
+			case "Mã phiếu xuất":
+				result = searchExportProducts.searchMaPhieuXuat(input);
+				break;
+			case "Địa chỉ":
+				result = searchExportProducts.searchDiaChi(input);
+				break;
+		}
+		return result;
+	}
+
+	public boolean matchKeyword(ExportProducts exportProducts, String keyword, String luaChon) {
+		ArrayList<ExportProducts> exportProductsFilter = search(luaChon, keyword);
+		return exportProductsFilter.contains(exportProducts);
 	}
 
 }

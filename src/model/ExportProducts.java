@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class ExportProducts {
     private int maPhieuXuat;
@@ -87,5 +88,17 @@ public class ExportProducts {
                 ", ngayNhanDonXuat=" + ngayNhanDonXuat +
                 ", manguoidung=" + manguoidung +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ExportProducts that = (ExportProducts) o;
+        return maPhieuXuat == that.maPhieuXuat && trangThai == that.trangThai && maChiNhanh == that.maChiNhanh && manguoidung == that.manguoidung && Objects.equals(ngayLenDonXuat, that.ngayLenDonXuat) && Objects.equals(ngayNhanDonXuat, that.ngayNhanDonXuat) && Objects.equals(thoiDiemHuyPhieu, that.thoiDiemHuyPhieu);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(maPhieuXuat, ngayLenDonXuat, trangThai, ngayNhanDonXuat, maChiNhanh, manguoidung, thoiDiemHuyPhieu);
     }
 }

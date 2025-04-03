@@ -29,17 +29,25 @@ import java.beans.PropertyChangeEvent;
 public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportProducts> {
 
 	private static final long serialVersionUID = 1L;
+	private JButton btnXuatExcel;
+	private JButton btnNhapExcel;
+	private JButton btnSua;
+	private JButton btnXemChiTiet;
+	private JButton btn_Xoa;
 	private JDateChooser date_End;
 	private JDateChooser date_Start;
 	private JComboBox cbx_TimKiem;
 	private JTextField input_TimKiem;
 	private JTable table_importProducts;
 	private JComboBox cbx_TrangThai;
+	private User currentUser;
 
 	/**
 	 * Create the panel.
 	 */
-	public PhieuNhapForm() {
+	public PhieuNhapForm(User currentUser) {
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		this.currentUser = currentUser;
 		setLayout(null);
 		setSize(1257, 718);
 
@@ -66,7 +74,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1.setLayout(null);
 		verticalBox.add(panel_5_1);
 
-		JButton btn_Xoa = new JButton("Xoá");
+		btn_Xoa = new JButton("Xoá");
 		btn_Xoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -85,7 +93,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		btn_Xoa.setBounds(10, 0, 70, 52);
 		panel_5_1.add(btn_Xoa);
 
-		JButton btnXemChiTiet = new JButton("Xem chi tiết");
+		btnXemChiTiet = new JButton("Xem chi tiết");
 		btnXemChiTiet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -103,7 +111,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		btnXemChiTiet.setBounds(170, 0, 107, 52);
 		panel_5_1.add(btnXemChiTiet);
 
-		JButton btnXuatExcel = new JButton("Xuất Excel");
+		btnXuatExcel = new JButton("Xuất Excel");
 		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
 		btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -115,7 +123,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		btnXuatExcel.setBounds(409, 0, 99, 52);
 		panel_5_1.add(btnXuatExcel);
 
-		JButton btnNhapExcel = new JButton("Nhập Excel");
+		btnNhapExcel = new JButton("Nhập Excel");
 		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
 		btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -127,7 +135,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		btnNhapExcel.setBounds(287, 0, 98, 52);
 		panel_5_1.add(btnNhapExcel);
 
-		JButton btnSua = new JButton("Sửa");
+		btnSua = new JButton("Sửa");
 		btnSua.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -246,9 +254,14 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 				}
 		));
 		scrollPane.setViewportView(table_importProducts);
+		Permission();
 		updateTableDataFormDAO();
+		setVisible(true);
 	}
-
+	public void Permission(){
+		int idRole = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+		PermissionsDAO.applyPermissions(idRole,"Phiếu nhập",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
+	}
 	@Override
 	public void updateTableDataFormDAO() {
 		ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
@@ -428,15 +441,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 
 	// Kiểm tra tình trạng tồn kho
 	private boolean matchStatus(ImportProducts importProducts, String statusFilter) {
-		int status = -1;
-		switch (statusFilter) {
-			case "Bình thường":
-				status = 1;
-				break;
-			case "Đã huỷ":
-				status = 0;
-				break;
-		}
+		int status = StatusDeliveryDAO.getInstance().selectByName(statusFilter);
 		return importProducts.getTrangThai() == status;
 	}
 

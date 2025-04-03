@@ -134,6 +134,23 @@ public class UserDAO implements DAOInterface<User>{
         }
         return ketQua;
     }
+    public int getIDRoleByIDUser(int idUser){
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "select * from user_role,role where user_id =? AND user_role.role_id = role.id";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,idUser);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                ketQua=rs.getInt("role_id");
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
     public int getMaChiNhanhByIDUser(int idUser){
         int ketQua=0;
         try {
