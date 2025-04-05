@@ -251,8 +251,6 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnEffect.effectBtnHover(btnNhapExcel);    // Nút Nhập Excel
         btnEffect.effectBtnHover(btnSua);          // Nút Sửa
         btnEffect.effectBtnHover(btnXoa);          // Nút Xoá
-
-
     }
     public void Permission(){
         int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());

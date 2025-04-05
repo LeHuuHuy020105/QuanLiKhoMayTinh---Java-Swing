@@ -32,7 +32,7 @@ public class Query {
 
 
 //    User
-    public static String insertUser = "INSERT INTO USER (username,password,fullname,status,email,machinhanh) VALUES (?,?,?,?,?,?)";
+    public static String insertUser = "INSERT INTO USER (username,password,fullname,status,email,machinhanh,phone) VALUES (?,?,?,?,?,?)";
     public static String getCurrentUser = "SELECT * FROM USER WHERE username =? AND password =?" ;
 
 //    District

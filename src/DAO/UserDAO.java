@@ -26,6 +26,7 @@ public class UserDAO implements DAOInterface<User>{
             pst.setInt(4, user.getStatus());
             pst.setString(5, user.getEmail());
             pst.setInt(6, user.getMaChiNhanh());
+            pst.setString(7, user.getPhone());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
@@ -60,7 +61,8 @@ public class UserDAO implements DAOInterface<User>{
                 String fullname = rs.getString("fullname");
                 int status = rs.getInt("status");
                 int machinhanh = rs.getInt("machinhanh");
-                User user = new User(email,fullname,password,status,username,idUser,machinhanh);
+                String phone = rs.getString("phone");
+                User user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
                 ketQua.add(user);
             }
         } catch (Exception e) {
@@ -85,7 +87,8 @@ public class UserDAO implements DAOInterface<User>{
                 String fullname = rs.getString("fullname");
                 int status = rs.getInt("status");
                 int machinhanh = rs.getInt("machinhanh");
-                user = new User(email,fullname,password,status,username,idUser,machinhanh);
+                String phone = rs.getString("phone");
+                user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
             }
             JDBCUtil.closeConnection(connection);
     	} catch (Exception e) {
@@ -109,7 +112,8 @@ public class UserDAO implements DAOInterface<User>{
                 String fullname = rs.getString("fullname");
                 int status = rs.getInt("status");
                 int machinhanh = rs.getInt("machinhanh");
-                user = new User(email,fullname,password,status,username,maNguoiDung,machinhanh);
+                String phone = rs.getString("phone");
+                user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
             }
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {

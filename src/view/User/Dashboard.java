@@ -15,6 +15,7 @@ import view.User.SanPham.SanPhamForm;
 import view.User.ThongKe.ThongKeForm;
 import view.User.TonKho.TonKhoForm;
 import view.User.XuatHang.XuatHangForm;
+import view.login.Login;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -75,14 +76,55 @@ public class Dashboard extends JFrame {
         header_DashBoard.setHorizontalAlignment(SwingConstants.CENTER);
 
         panel_2 = new JPanel();
-        panel_2.setBounds(10, 162, 219, 548);
+        panel_2.setBounds(10, 162, 219, 465);
         panel.add(panel_2);
         panel_2.setLayout(new GridLayout(12, 1, 0, 0));
         panel_2.setBackground(default_selectionColor);
+        
+        JPanel panel_3 = new JPanel();
+        panel_3.setBounds(10, 650, 219, 33);
+        panel.add(panel_3);
+        panel_3.setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("Thông tin tài khoản");
+        lblNewLabel.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		ThongTinTaiKhoanMouseClicked();
+        	}
+        });
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setBounds(0, 0, 219, 33);
+        panel_3.add(lblNewLabel);
+        
+        JPanel panel_3_1 = new JPanel();
+        panel_3_1.setBounds(10, 683, 219, 33);
+        panel.add(panel_3_1);
+        panel_3_1.setLayout(null);
+        
+        JLabel lblngXut = new JLabel("Đăng xuất");
+        lblngXut.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		DangXuatMouseClicked();
+        	}
+        });
+        lblngXut.setHorizontalAlignment(SwingConstants.CENTER);
+        lblngXut.setBounds(0, 0, 219, 33);
+        panel_3_1.add(lblngXut);
 
         getRole();
         setVisible(true);
     }
+    public void DangXuatMouseClicked() {
+    	this.dispose();
+    	Login login = new Login();
+    	login.setVisible(true);
+	}
+public void ThongTinTaiKhoanMouseClicked() {
+		ThongTinTaiKhoan thongTinTaiKhoan = new ThongTinTaiKhoan(currentUser);
+		thongTinTaiKhoan.setVisible(true);
+	}
     public void getRole(){
         String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
         ArrayList<String> menuItems = UserDAO.getInstance().nameBtn_Menu(role);
@@ -225,6 +267,4 @@ public class Dashboard extends JFrame {
                 break;
         }
     }
-
-
 }

@@ -8,11 +8,23 @@ public class User {
     private int status;
     private String email;
     private int maChiNhanh;
+    private String phone;
 
     public User() {
     }
 
-    public User(String email, String fullName, String password, int status, String userName,int idUser,int maChiNhanh) {
+    public User(String email, String fullName, int idUser, int maChiNhanh, String password, String phone, int status, String userName) {
+        this.email = email;
+        this.fullName = fullName;
+        this.idUser = idUser;
+        this.maChiNhanh = maChiNhanh;
+        this.password = password;
+        this.phone = phone;
+        this.status = status;
+        this.userName = userName;
+    }
+
+    public User(String email, String fullName, String password, int status, String userName, int idUser, int maChiNhanh) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
@@ -20,6 +32,14 @@ public class User {
         this.userName = userName;
         this.idUser = idUser;
         this.maChiNhanh = maChiNhanh;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getMaChiNhanh() {
