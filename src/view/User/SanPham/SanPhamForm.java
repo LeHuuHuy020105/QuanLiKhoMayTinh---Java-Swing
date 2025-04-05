@@ -251,13 +251,15 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnEffect.effectBtnHover(btnNhapExcel);    // Nút Nhập Excel
         btnEffect.effectBtnHover(btnSua);          // Nút Sửa
         btnEffect.effectBtnHover(btnXoa);          // Nút Xoá
+        Permission();
     }
     public void Permission(){
         int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
         PermissionsDAO.applyPermissions(roleUser,"Sản phẩm",btn_Them,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
     }
     public void XemChiTietMouseClicked() {
-        ChiTietSanPham chiTietSanPham = new ChiTietSanPham(this);
+        Computer computer_Selected = getComputerSelected();
+        ChiTietSanPham chiTietSanPham = new ChiTietSanPham(computer_Selected);
         chiTietSanPham.setVisible(true);
     }
 

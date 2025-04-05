@@ -1,9 +1,7 @@
 package view.User.PhieuXuat;
 
-import DAO.DetailExportProductsDAO;
-import DAO.ExportProductsDAO;
-import DAO.InventoryDAO;
-import DAO.StatusDeliveryDAO;
+import DAO.*;
+import model.Branch;
 import model.DetailExportProducts;
 import model.ExportProducts;
 import model.Inventory;
@@ -88,29 +86,52 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
         contentPane.add(btn_HuyBo);
         fillData();
     }
-    public void fillData(){
+
+    public void fillData() {
         ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
         cbx_TrangThai.setSelectedItem(exportProducts.getTrangThai());
-        String [] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(exportProducts.getTrangThai()).toArray(new String[0]);
+        String[] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(exportProducts.getTrangThai()).toArray(new String[0]);
         cbx_TrangThai.setModel(new DefaultComboBoxModel<>(trangThai));
     }
+
     public void HuyBoMouseClicked() {
         this.dispose();
     }
+
     public void LuuMouseClicked() {
-        String trangThai = cbx_TrangThai.getSelectedItem()+"";
+        String trangThai = cbx_TrangThai.getSelectedItem() + "";
         ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
         int idStatus = StatusDeliveryDAO.getInstance().selectByName(trangThai);
         exportProducts.setTrangThai(idStatus);
         ExportProductsDAO.getInstance().update(exportProducts);
         HuyBoMouseClicked();
         phieuXuatForm.updateTableDataFormDAO();
-        ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts.getMaPhieuXuat());
-        if(trangThai.equals("Hoàn thành")){
-            for(DetailExportProducts item : detailExportProducts){
-                Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(),item.getMaMay(),item.getSoLuong());
-                InventoryDAO.getInstance().insert(inventory);
+        ArrayList<DetailExportProducts> detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts.getMaPhieuXuat());
+        Branch branch = BrandDAO.getInstance().BranchByID(exportProducts.getMaChiNhanh());
+        ArrayList<Inventory> inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        if (trangThai.equals("Hoàn thành")) {
+            for (DetailExportProducts item : detailExportProducts) {
+                Inventory inventory_Valid = isValidProduct(inventories, item);
+                System.out.println(inventory_Valid);
+                if (inventory_Valid != null) {
+                    int soLuongKho = inventory_Valid.getSoLuong();
+                    int soLuongNhap = item.getSoLuong();
+                    inventory_Valid.setSoLuong(soLuongKho + soLuongNhap);
+                    InventoryDAO.getInstance().updateSoLuong(inventory_Valid);
+                } else {
+                    Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(), item.getMaMay(), item.getSoLuong());
+                    InventoryDAO.getInstance().insert(inventory);
+                }
             }
         }
+    }
+
+    public Inventory isValidProduct(ArrayList<Inventory> inventories, DetailExportProducts detailExportProducts) {
+        for (Inventory inventory : inventories) {
+            if (inventory.getMaMay() == detailExportProducts.getMaMay()) {
+                return inventory;
+            }
+        }
+        return null;
     }
 }

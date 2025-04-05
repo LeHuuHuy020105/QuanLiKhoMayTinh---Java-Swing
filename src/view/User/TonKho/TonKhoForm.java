@@ -1,34 +1,22 @@
 package view.User.TonKho;
 
-import DAO.BrandDAO;
-import DAO.InventoryDAO;
-import DAO.ProductsDAO;
-import DAO.UserDAO;
+import DAO.*;
+import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.*;
+import view.User.SanPham.ChiTietSanPham;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JLabel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
@@ -37,6 +25,11 @@ import java.awt.event.KeyEvent;
 public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
     private static final long serialVersionUID = 1L;
+    private JButton btnXemChiTiet;
+    private JButton btnXuatExcel;
+    private JButton btnXoa;
+    private JButton btnSua;
+    private JButton btnNewButton;
     private JComboBox cbx_TimKiem;
     private JTextField input_TimKiem;
     private JTable table_product;
@@ -68,7 +61,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         panel_5_1.setLayout(null);
         verticalBox.add(panel_5_1);
 
-        JButton btnNewButton = new JButton("Thêm");
+        btnNewButton = new JButton("Thêm");
         btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
         btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -84,7 +77,13 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         btnNewButton.setEnabled(false);
         panel_5_1.add(btnNewButton);
 
-        JButton btnXemChiTiet = new JButton("Xem chi tiết");
+        btnXemChiTiet = new JButton("Xem chi tiết");
+        btnXemChiTiet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                XemChiTietMouseClicked();
+            }
+        });
         btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
         btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -100,7 +99,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         btnXemChiTiet.setEnabled(false);
         panel_5_1.add(btnXemChiTiet);
 
-        JButton btnXuatExcel = new JButton("Xuất Excel");
+        btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -112,7 +111,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         btnXuatExcel.setBounds(367, 0, 99, 52);
         panel_5_1.add(btnXuatExcel);
 
-        JButton btnSua = new JButton("Sửa");
+        btnSua = new JButton("Sửa");
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -128,7 +127,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         btnSua.setEnabled(false);
         panel_5_1.add(btnSua);
 
-        JButton btnXoa = new JButton("Xoá");
+        btnXoa = new JButton("Xoá");
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -243,8 +242,12 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         panel_5_1_1_1_1.add(lblSnPhm);
         updateTableDataFormDAO();
         fillData();
+        Permission();
     }
-
+    public void Permission(){
+        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        PermissionsDAO.applyPermissions(roleUser,"Sản phẩm",btnNewButton,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,null);
+    }
     public void fillData() {
         ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
         cbx_ChiNhanh.addItem("Tất cả");
@@ -368,5 +371,30 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         return computer.getTenMay().toLowerCase().contains(keyword) ||
                 computer.getTenCpu().toLowerCase().contains(keyword) ||
                 computer.getRam().toLowerCase().contains(keyword);
+    }
+    public Computer getComputerSelected() {
+        Computer computer_Selected = null;
+        try {
+            DefaultTableModel model = (DefaultTableModel) table_product.getModel();
+            int i_row = table_product.getSelectedRow();
+
+            if (i_row == -1) {
+                JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
+                return null;
+            }
+
+            int maMay = Integer.parseInt(model.getValueAt(i_row, 0)+"");
+
+            computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return computer_Selected;
+    }
+    public void XemChiTietMouseClicked(){
+        Computer computer_Selected = getComputerSelected();
+        ChiTietSanPham chiTietSanPham = new ChiTietSanPham(computer_Selected);
+        chiTietSanPham.setVisible(true);
     }
 }

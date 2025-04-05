@@ -63,6 +63,21 @@ public class InventoryDAO implements DAOInterface<Inventory> {
         }
         return ketQua;
     }
+    public int updateSoLuong(Inventory inventory){
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql ="update inventory_branch set soluong=? where mamay =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,inventory.getSoLuong());
+            pst.setInt(2,inventory.getMaMay());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
     public ArrayList<Inventory> InventoryByBranch (Branch branch){
         ArrayList<Inventory>ketQua = new ArrayList<>();
         try {

@@ -46,6 +46,7 @@ public class ChiTietSanPham extends JFrame {
 	private JPanel panel_image;
 	private byte[] hinhAnh;
 	private JTextField textField_giaBan;
+	private Computer computer_Selected;
 
 	/**
 	 * Launch the application.
@@ -54,9 +55,9 @@ public class ChiTietSanPham extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChiTietSanPham(SanPhamForm sanPhamForm) {
-		this.sanPhamForm = sanPhamForm;
-		this.hinhAnh = sanPhamForm.getComputerSelected().getHinhAnh();
+	public ChiTietSanPham(Computer computer_Selected) {
+		this.computer_Selected = computer_Selected;
+		this.hinhAnh = computer_Selected.getHinhAnh();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 489);
 		setLocationRelativeTo(null);
@@ -270,7 +271,6 @@ public class ChiTietSanPham extends JFrame {
 	}
 	public void hienThiThongTinSanPham(){
 		DecimalFormat df = new DecimalFormat("#,###");
-		Computer computer_Selected = sanPhamForm.getComputerSelected();
 		label_IDproduct.setText(computer_Selected.getMaMay()+"");
 		input_tenSanPham.setText(computer_Selected.getTenMay());
 		input_gia.setText(df.format(computer_Selected.getGia()));

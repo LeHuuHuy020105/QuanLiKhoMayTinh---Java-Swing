@@ -155,7 +155,7 @@ public class ThemNhaCungCap extends JFrame  {
 			String tenNCC = input_TenNCC.getText().trim();
 			String SDT = input_SDT.getText().trim();
 			String diaChi = ValueAddress.getValueAddressFrame(this, cbx_ThanhPho, cbx_Quan, cbx_Phuong, input_SoNha);
-			if (tenNCC.isEmpty() || SDT.isEmpty() || diaChi.equals("N/A")) {
+			if (tenNCC.isEmpty() || SDT.isEmpty() || input_SoNha.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
 				return;
 			}

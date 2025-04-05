@@ -323,8 +323,18 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers = InventoryBranchData();
         updateTableData(computers);
+    }
+    public ArrayList<Computer> InventoryBranchData(){
+        Branch branch = BrandDAO.getInstance().BranchByID(currentUser.getMaChiNhanh());
+        ArrayList<Inventory> inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        ArrayList<Computer> result = new ArrayList<>();
+        for(Inventory item : inventories){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
+            result.add(computer);
+        }
+        return result;
     }
 
     @Override
