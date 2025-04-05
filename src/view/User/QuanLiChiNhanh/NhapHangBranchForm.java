@@ -5,6 +5,10 @@ import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -12,8 +16,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class NhapHangBranchForm extends JPanel implements updateDataToTable<Computer> {
 
@@ -28,12 +36,13 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
     private ArrayList<DetailExportProducts> detailExportProducts;
     private JComboBox cbx_ChiNhanh;
     private User currentUser;
-
+    private JFileChooser jFileChooser;
     /**
      * Create the panel.
      */
     public NhapHangBranchForm(User currentUser) {
         this.currentUser = currentUser;
+        this.jFileChooser = new JFileChooser();
         detailExportProducts = new ArrayList<>();
         setLayout(null);
         setSize(1257, 736);
@@ -112,6 +121,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                NhapExcelMouseClicked();
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -183,7 +193,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         cbx_ChiNhanh.setBounds(834, 87, 376, 26);
         add(cbx_ChiNhanh);
 
-        JButton btnNewButton_2_1 = new JButton("Xuất hàng");
+        JButton btnNewButton_2_1 = new JButton("Nhập hàng");
         btnNewButton_2_1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -306,6 +316,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
                 updateDatabaseExportProducts(maPhieuXuat);
             }
         }
+        updateTableDataFormDAO();
         resetXuatHang();
     }
     public void updateDatabaseExportProducts(int maphieuxuat){
@@ -344,5 +355,41 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
                 break;
         }
         return result;
+    }
+    public void NhapExcelMouseClicked(){
+        jFileChooser.showOpenDialog(null);
+        File file = jFileChooser.getSelectedFile();
+        if(!file.getName().endsWith("xlsx")){
+            JOptionPane.showMessageDialog(null,"Vui lòng chọn file Excel.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            fillData(file);
+        }
+    }
+    public void fillData(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int maMay = (int) row.getCell(0).getNumericCellValue();
+                int soLuong =  (int) row.getCell(1).getNumericCellValue();
+                DetailExportProducts detailExportProducts1 = new DetailExportProducts(maMay,soLuong);
+                detailExportProducts.add(detailExportProducts1);
+                updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
+            }
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
     }
 }
