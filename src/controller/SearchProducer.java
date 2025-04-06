@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class SearchProducer {
     public ArrayList<Producer> searchTatCa(String content_Search) {
         ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return producers;
+        }
         ArrayList<Producer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Producer producer : producers) {
@@ -23,6 +26,9 @@ public class SearchProducer {
     }
     public ArrayList<Producer> searchMaNhaCungCap(String content_Search) {
         ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return producers;
+        }
         ArrayList<Producer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Producer producer : producers) {
@@ -35,6 +41,9 @@ public class SearchProducer {
 
     public ArrayList<Producer> searchDiaChi(String content_Search) {
         ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return producers;
+        }
         ArrayList<Producer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Producer producer : producers) {
@@ -46,6 +55,9 @@ public class SearchProducer {
     }
     public ArrayList<Producer> searchSDT(String content_Search) {
         ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return producers;
+        }
         ArrayList<Producer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Producer producer : producers) {
@@ -57,6 +69,9 @@ public class SearchProducer {
     }
     public ArrayList<Producer> searchTenNhaCungCap(String content_Search) {
         ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return producers;
+        }
         ArrayList<Producer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Producer producer : producers) {
@@ -66,5 +81,4 @@ public class SearchProducer {
         }
         return  ketQua;
     }
-
 }

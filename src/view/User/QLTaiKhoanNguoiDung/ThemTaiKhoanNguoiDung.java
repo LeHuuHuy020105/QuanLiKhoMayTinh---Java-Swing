@@ -173,7 +173,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame  {
 		String matKhau = new String(passwordField.getPassword());
 		String nhapLaiMatKhau = new String(Re_passwordField.getPassword());
 		String email = textField_Email.getText();
-		if(hoTen.isEmpty() || soDienThoai.isEmpty() || taiKhoan.isEmpty() || matKhau.isEmpty()) {
+		if(hoTen.isEmpty() || soDienThoai.isEmpty() || taiKhoan.isEmpty() || matKhau.isEmpty() || email.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
 			return;
 		}

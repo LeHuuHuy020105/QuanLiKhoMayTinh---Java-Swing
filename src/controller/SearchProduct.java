@@ -10,6 +10,9 @@ import java.util.ArrayList;
 public class SearchProduct {
     public ArrayList<Computer> searchTatCa(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -31,6 +34,9 @@ public class SearchProduct {
     public ArrayList<Computer> searchTenMay(String content_Search) {
         System.out.println("tim kiem ten may");
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -43,6 +49,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchSoLuong(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         int soLuong_search = Integer.parseInt(content_Search);
         for (Computer computer : computers) {
@@ -55,6 +64,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchDonGia(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         double donGia_search = Double.parseDouble(content_Search);
         for (Computer computer : computers) {
@@ -67,6 +79,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchRam(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -79,6 +94,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchCpu(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -91,6 +109,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchDungLuong(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         double dungLuong_search = Integer.parseInt(content_Search);
         for (Computer computer : computers) {
@@ -103,6 +124,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchCard(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -115,6 +139,9 @@ public class SearchProduct {
 
     public ArrayList<Computer> searchXuatXu(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Computer computer : computers) {
@@ -127,6 +154,9 @@ public class SearchProduct {
     }
     public ArrayList<Computer> searchMaMay(String content_Search) {
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         double maMay = Double.parseDouble(content_Search);
         for (Computer computer : computers) {
@@ -139,6 +169,9 @@ public class SearchProduct {
     public ArrayList<Computer>searchTenNhaCungCap(String tenNCC){
         tenNCC = tenNCC.toLowerCase();
         ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
+        if(tenNCC.equals("")){
+            return computers;
+        }
         ArrayList<Computer> ketQua = new ArrayList<>();
         for (Computer computer : computers){
             String tennhacungcap = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();

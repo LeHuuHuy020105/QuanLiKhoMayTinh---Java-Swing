@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class SearchExportProducts {
     public ArrayList<ExportProducts> searchDiaChi(String content_search){
         ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+        if(content_search.equals("")){
+            return exportProducts;
+        }
         ArrayList<ExportProducts>ketQua = new ArrayList<>();
         for(ExportProducts exportProducts1 :exportProducts){
             String diaChi = BrandDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
@@ -21,6 +24,9 @@ public class SearchExportProducts {
     public ArrayList<ExportProducts> searchMaPhieuXuat(String content_search){
         int maPhieuXuat = Integer.parseInt(content_search);
         ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+        if(content_search.equals("")){
+            return exportProducts;
+        }
         ArrayList<ExportProducts>ketQua = new ArrayList<>();
         for (ExportProducts exportProducts1 : exportProducts){
             if(exportProducts1.getMaPhieuXuat()==maPhieuXuat){
@@ -31,6 +37,9 @@ public class SearchExportProducts {
     }
     public ArrayList<ExportProducts> searchTrangThai(String trangThai){
         ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+        if(trangThai.equals("")){
+            return exportProducts;
+        }
         ArrayList<ExportProducts>ketQua = new ArrayList<>();
         int idStatus = StatusDeliveryDAO.getInstance().selectByName(trangThai);
         if(trangThai.equals("Tất cả")){
@@ -46,6 +55,9 @@ public class SearchExportProducts {
     }
     public ArrayList<ExportProducts> searchAll(String input) {
         ArrayList<ExportProducts> exportProducts = ExportProductsDAO.getInstance().selectAll();
+        if(input.equals("")){
+            return exportProducts;
+        }
         ArrayList<ExportProducts> result = new ArrayList<>();
         input = input.toLowerCase().trim();
         try {

@@ -258,7 +258,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     }
     private void SearchCustomer() {
         QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(this);
-        qlTaiKhoanNguoiDungForm.setVisible(true);
 	}
     public void fillInfoCustomer(Customer customer){
         String s = customer.getSoDienThoai()+" - "+customer.getFullName();

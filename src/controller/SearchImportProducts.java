@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class SearchImportProducts {
     public ArrayList<ImportProducts> searchAll(String input) {
         ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+        if(input.equals("")){
+            return importProducts;
+        }
         ArrayList<ImportProducts> result = new ArrayList<>();
         try {
             int maphieunhap = Integer.parseInt(input);
@@ -27,6 +30,9 @@ public class SearchImportProducts {
 
     public ArrayList<ImportProducts> searchMaPhieuNhap(String input) {
         ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+        if(input.equals("")){
+            return importProducts;
+        }
         ArrayList<ImportProducts> result = new ArrayList<>();
         int maphieunhap = Integer.parseInt(input);
         System.out.println(maphieunhap);
@@ -40,6 +46,9 @@ public class SearchImportProducts {
     }
     public ArrayList<ImportProducts> searchNguoiTao(String input) {
         ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+        if(input.equals("")){
+            return importProducts;
+        }
         ArrayList<ImportProducts> result = new ArrayList<>();
         for (ImportProducts importProducts1 : importProducts) {
             String tenNguoiDung = UserDAO.getInstance().getUsetById(importProducts1.getManguoidung()).getFullName();
@@ -51,6 +60,9 @@ public class SearchImportProducts {
     }
     public ArrayList<ImportProducts> searchTongTien(String input) {
         ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+        if(input.equals("")){
+            return importProducts;
+        }
         ArrayList<ImportProducts> result = new ArrayList<>();
         double tongTien = Double.parseDouble(input);
         for (ImportProducts importProducts1 : importProducts) {

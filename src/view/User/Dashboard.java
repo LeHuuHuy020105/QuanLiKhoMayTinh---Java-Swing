@@ -9,6 +9,7 @@ import view.User.NhapHang.NhapHangForm;
 import view.User.PhieuNhap.PhieuNhapForm;
 import view.User.PhieuXuat.PhieuXuatForm;
 import view.User.QLTaiKhoanAdmin.QLTaiKhoanForm;
+import view.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
 import view.User.QuanLiChiNhanh.NhapHangBranchForm;
 import view.User.QuanLiChiNhanh.PhieuNhapBranchForm;
 import view.User.SanPham.SanPhamForm;
@@ -264,6 +265,9 @@ public void ThongTinTaiKhoanMouseClicked() {
                 BanHang banHang = new BanHang(currentUser);
                 cardPanel.add(banHang,"Bán hàng");
                 cardLayout.show(cardPanel,"Bán hàng");
+                break;
+            case "Tài khoản khách hàng":
+                QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(currentUser);
                 break;
         }
     }

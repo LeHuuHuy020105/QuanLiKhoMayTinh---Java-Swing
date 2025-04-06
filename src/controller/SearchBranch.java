@@ -10,6 +10,9 @@ import java.util.ArrayList;
 public class SearchBranch {
     public ArrayList<Branch> searchTatCa(String content_Search) {
         ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return branches;
+        }
         ArrayList<Branch> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Branch branch : branches) {
@@ -22,6 +25,9 @@ public class SearchBranch {
     }
     public ArrayList<Branch> searchMaChiNhanh(String content_Search) {
         ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return branches;
+        }
         ArrayList<Branch> ketQua = new ArrayList<>();
         int maChiNhanh = Integer.parseInt(content_Search);
         for (Branch branch : branches) {
@@ -33,6 +39,9 @@ public class SearchBranch {
     }
     public ArrayList<Branch> searchDiaChi(String content_Search) {
         ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return branches;
+        }
         ArrayList<Branch> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Branch branch : branches) {
@@ -44,6 +53,9 @@ public class SearchBranch {
     }
     public ArrayList<Branch> searchSDT(String content_Search) {
         ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return branches;
+        }
         ArrayList<Branch> ketQua = new ArrayList<>();
         content_Search = content_Search.toLowerCase();
         for (Branch branch : branches) {

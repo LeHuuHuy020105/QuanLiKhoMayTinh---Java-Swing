@@ -1,6 +1,7 @@
 package view.User.QLTaiKhoanNguoiDung;
 
 import DAO.CustomerDAO;
+import DAO.PermissionsDAO;
 import DAO.ProducersDAO;
 import DAO.UserDAO;
 import controller.*;
@@ -43,19 +44,41 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     private JFileChooser jChooser ;
     private JComboBox cbx_Search;
     private User currentUser;
+    private String role;
     private BanHang banHang;
+    private JButton btn_ThemNCC;
+    private JButton btnXuatExcel;
+    private JButton btnNhapExcel;
+    private JButton btnSua;
+    private JButton btnXoa;
 
     /**
      * Create the panel.
      */
     public QLTaiKhoanNguoiDungForm(BanHang banHang) {
-        this.currentUser = banHang.getCurrentUser();
         this.banHang = banHang;
+        this.currentUser = banHang.getCurrentUser();
         this.jChooser  = new JFileChooser();
+        role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        Component();
+        Permission();
+    }
+    public QLTaiKhoanNguoiDungForm(User currentUser) {
+        this.currentUser = currentUser;
+        this.jChooser  = new JFileChooser();
+        role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        Component();
+        Permission();
+    }
+    public void Permission(){
+        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        PermissionsDAO.applyPermissions(roleUser,"Tài khoản khách hàng",btn_ThemNCC,btnXoa,btnSua,null,btnXuatExcel,btnNhapExcel);
+    }
+    public void Component(){
         getContentPane().setLayout(null);
         setSize(1257, 764);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         Box verticalBox = Box.createVerticalBox();
         verticalBox.setBorder(new TitledBorder(
 
@@ -86,7 +109,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         panel_5_1.setLayout(null);
         verticalBox.add(panel_5_1);
 
-        JButton btn_ThemNCC = new JButton("Thêm");
+        btn_ThemNCC = new JButton("Thêm");
         btn_ThemNCC.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -105,7 +128,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btn_ThemNCC.setBounds(10, 0, 70, 52);
         panel_5_1.add(btn_ThemNCC);
 
-        JButton btnXuatExcel = new JButton("Xuất Excel");
+        btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -124,7 +147,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btnXuatExcel.setBounds(400, 0, 99, 52);
         panel_5_1.add(btnXuatExcel);
 
-        JButton btnNhapExcel = new JButton("Nhập Excel");
+        btnNhapExcel = new JButton("Nhập Excel");
         btnNhapExcel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -143,7 +166,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btnNhapExcel.setBounds(274, 0, 98, 52);
         panel_5_1.add(btnNhapExcel);
 
-        JButton btnSua = new JButton("Sửa");
+        btnSua = new JButton("Sửa");
         btnSua.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -162,7 +185,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btnSua.setBounds(90, 0, 70, 52);
         panel_5_1.add(btnSua);
 
-        JButton btnXoa = new JButton("Xoá");
+        btnXoa = new JButton("Xoá");
         btnXoa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -210,8 +233,13 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         JPanel panel_5_1_1 = new JPanel();
         panel_5_1_1.setLayout(null);
         verticalBox_1.add(panel_5_1_1);
+        String [] cbx_SearchValue = null;
+        if(role.equals("Nhân viên bán hàng")){
+            cbx_SearchValue= new String[]{"Tất cả","Tên khách hàng","Số điện thoại"};
+        }else {
+            cbx_SearchValue= new String[]{"Tất cả","Tài khoản","Tên khách hàng","Số điện thoại"};
+        }
 
-        String [] cbx_SearchValue = new String[]{"Tất cả","Mã khách hàng","Tên khách hàng","Số điện thoại","Địa chỉ"};
         cbx_Search = new JComboBox(cbx_SearchValue);
         cbx_Search.setBackground(UIManager.getColor("Button.background"));
         cbx_Search.setBounds(10, 11, 126, 30);
@@ -241,9 +269,15 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
-        columnNames = new String[]{
-                "STT", "Mã khách hàng","Tên khách hàng", "Địa chỉ", "SDT"
-        };
+        if(role.equals("Nhân viên bán hàng")){
+            columnNames = new String[]{
+                    "STT", "Mã khách hàng","Tên khách hàng", "Địa chỉ", "SDT"
+            };
+        }else {
+            columnNames = new String[]{
+                    "STT", "Mã khách hàng","Tên tài khoản","Tên khách hàng", "Địa chỉ", "SDT"
+            };
+        }
         table_NCC = new JTable();
         table_NCC.setFont(new Font("Tahoma", Font.PLAIN, 14));
         table_NCC.setModel(new DefaultTableModel(
@@ -254,29 +288,29 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         JScrollPane scrollPane = new JScrollPane(table_NCC);
         scrollPane.setBounds(10, 127, 1237, 529);
         getContentPane().add(scrollPane);
-        JButton btnNewButton_2_1 = new JButton("Xác nhận");
-        btnNewButton_2_1.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		XacNhanKHMouseClicked();
-        	}
-        });
-        btnNewButton_2_1.setIcon(null);
-        btnNewButton_2_1.setForeground(Color.WHITE);
-        btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton_2_1.setBorderPainted(false);
-        btnNewButton_2_1.setBackground(new Color(60, 179, 113));
-        btnNewButton_2_1.setBounds(1094, 666, 139, 41);
-        getContentPane().add(btnNewButton_2_1);
-        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+
         if(role.equals("Nhân viên bán hàng")){
-        	
+            JButton btnNewButton_2_1 = new JButton("Xác nhận");
+            btnNewButton_2_1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    XacNhanKHMouseClicked();
+                }
+            });
+            btnNewButton_2_1.setIcon(null);
+            btnNewButton_2_1.setForeground(Color.WHITE);
+            btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            btnNewButton_2_1.setBorderPainted(false);
+            btnNewButton_2_1.setBackground(new Color(60, 179, 113));
+            btnNewButton_2_1.setBounds(1094, 666, 139, 41);
+            getContentPane().add(btnNewButton_2_1);
         }
         updateTableDataFormDAO();
+        setVisible(true);
     }
     public void XacNhanKHMouseClicked() {
 		Customer customer = getCustomerSelected();
-        this.banHang.fillInfoCustomer(customer);
+        banHang.fillInfoCustomer(customer);
         this.dispose();
 	}
     public void ThemNhaCungCapMouseClicked() {
@@ -294,15 +328,27 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
         model.setRowCount(0);
         int i = 0;
+        boolean isStaff = role.equals("Nhân viên bán hàng");
         for (Customer customer : t) {
             i++;
-            model.addRow(new Object[]{
-                    i,
-                    customer.getMaKhachHang(),
-                    customer.getFullName(),
-                    customer.getDiaChi(),
-                    customer.getSoDienThoai()
-            });
+            if(isStaff){
+                model.addRow(new Object[]{
+                        i,
+                        customer.getMaKhachHang(),
+                        customer.getFullName(),
+                        customer.getDiaChi()==null? "N/a" : customer.getDiaChi(),
+                        customer.getSoDienThoai()
+                });
+            }else {
+                model.addRow(new Object[]{
+                        i,
+                        customer.getMaKhachHang(),
+                        customer.getUserName(),
+                        customer.getFullName(),
+                        customer.getDiaChi()==null? "N/a" : customer.getDiaChi(),
+                        customer.getSoDienThoai()
+                });
+            }
         }
     }
 
@@ -441,23 +487,23 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     }
     public ArrayList<Customer> SearchFn(String luachon , String content_Search){
         ArrayList<Customer>result = new ArrayList<>();
-        content_Search = content_Search.toLowerCase();
         SearchCustomer searchCustomer = new SearchCustomer();
         switch (luachon){
             case "Tất cả":
-                result = searchCustomer.searchTatCa(content_Search);
+                if(role.equals("Nhân viên bán hàng")){
+                    result = searchCustomer.searchAllForStaff(content_Search);
+                }else {
+                    result = searchCustomer.searchAll(content_Search);
+                }
                 break;
-            case "Mã khách hàng":
-                result = searchCustomer.searchMaKH(content_Search);
+            case "Tài khoản":
+                result = searchCustomer.searchTaiKhoan(content_Search);
                 break;
             case "Tên khách hàng":
                 result = searchCustomer.searchTen(content_Search);
                 break;
             case "Số điện thoại":
                 result = searchCustomer.searchSoDienThoai(content_Search);
-                break;
-            case "Địa chỉ":
-                result = searchCustomer.searchDiaChi(content_Search);
                 break;
         }
         return result;

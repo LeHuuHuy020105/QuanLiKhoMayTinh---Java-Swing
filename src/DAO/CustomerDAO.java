@@ -96,4 +96,52 @@ public class CustomerDAO implements DAOInterface<Customer>{
         }
         return customer;
     }
+    public ArrayList<Customer>selectAllOnline(){
+        ArrayList<Customer> ketQua = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "select * from customer where loaitaikhoan = 'online'";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                int maKhachHang = rs.getInt("makhachhang");
+                String taiKhoan = rs.getString("username");
+                String matKhau = rs.getString("password");
+                String sdt = rs.getString("phone");
+                String hoVaTen = rs.getString("fullname");
+                String diaChi = rs.getString("diachi");
+                String email = rs.getString("email");
+                String loaiTaiKhoan = rs.getString("loaitaikhoan");
+                Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
+                ketQua.add(customer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
+    public ArrayList<Customer>selectAllOffline(){
+        ArrayList<Customer> ketQua = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "select * from customer where loaitaikhoan = 'offline'";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                int maKhachHang = rs.getInt("makhachhang");
+                String taiKhoan = rs.getString("username");
+                String matKhau = rs.getString("password");
+                String sdt = rs.getString("phone");
+                String hoVaTen = rs.getString("fullname");
+                String diaChi = rs.getString("diachi");
+                String email = rs.getString("email");
+                String loaiTaiKhoan = rs.getString("loaitaikhoan");
+                Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
+                ketQua.add(customer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
 }
