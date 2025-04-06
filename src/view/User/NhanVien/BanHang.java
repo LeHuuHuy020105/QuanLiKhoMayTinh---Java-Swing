@@ -6,6 +6,7 @@ import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.*;
 import view.Icon;
+import view.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -29,9 +30,9 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private User currentUser ;
     private ArrayList<DetailBill> detailBills;
     private JLabel label_TotalPrice;
-    private JTextField textField_searchCustomer;
 	private JLabel lbl_infoCustomer;
     private Customer customer;
+    private JTextField textField_InfoCustomer;
 
     /**
      * Create the panel.
@@ -225,11 +226,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         lblNewLabel_1_1_1.setBounds(676, 114, 123, 27);
         add(lblNewLabel_1_1_1);
         
-        textField_searchCustomer = new JTextField();
-        textField_searchCustomer.setBounds(822, 112, 266, 27);
-        add(textField_searchCustomer);
-        textField_searchCustomer.setColumns(10);
-        
         JButton btnNewButton_3 = new JButton("New button");
         btnNewButton_3.addMouseListener(new MouseAdapter() {
         	@Override
@@ -241,20 +237,19 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         	public void actionPerformed(ActionEvent e) {
         	}
         });
-        btnNewButton_3.setBounds(1098, 115, 47, 21);
+        btnNewButton_3.setBounds(1188, 119, 47, 21);
         add(btnNewButton_3);
-        
-        JButton btnNewButton_3_1 = new JButton("New button");
-        btnNewButton_3_1.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
-        });
-        btnNewButton_3_1.setBounds(1149, 115, 65, 21);
-        add(btnNewButton_3_1);
         
         lbl_infoCustomer = new JLabel("");
         lbl_infoCustomer.setBounds(676, 167, 374, 27);
         add(lbl_infoCustomer);
+        
+        textField_InfoCustomer = new JTextField();
+        textField_InfoCustomer.setText((String) null);
+        textField_InfoCustomer.setEditable(false);
+        textField_InfoCustomer.setColumns(10);
+        textField_InfoCustomer.setBounds(772, 116, 397, 27);
+        add(textField_InfoCustomer);
         
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
         ArrayList<String> items = dataCustomer(customers);
@@ -262,11 +257,13 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         setVisible(true);
     }
     private void SearchCustomer() {
-    	customer = CustomerDAO.getInstance().findByPhone(textField_searchCustomer.getText());
-        String s = customer.getFullName()+" - "+customer.getSoDienThoai();
-        lbl_infoCustomer.setText(s);
-
+        QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(this);
+        qlTaiKhoanNguoiDungForm.setVisible(true);
 	}
+    public void fillInfoCustomer(Customer customer){
+        String s = customer.getSoDienThoai()+" - "+customer.getFullName();
+        textField_InfoCustomer.setText(s);
+    }
     public ArrayList<String> dataCustomer(ArrayList<Customer> customers){
         ArrayList<String> result = new ArrayList<>();
         for(Customer customer : customers){
@@ -573,6 +570,14 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 //            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 //        }
         System.out.println("abc");
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }
 

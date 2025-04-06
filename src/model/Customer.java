@@ -8,11 +8,27 @@ public class Customer {
     private String soDienThoai;
     private String diaChi;
     private String fullName;
+    private String loaiTaiKhoan;
 
     public Customer() {
     }
 
-    public Customer(String diaChi, String email, String fullName, int maKhachHang, String password, String soDienThoai, String userName) {
+    public Customer(String soDienThoai, String fullName, String loaiTaiKhoan) {
+        this.soDienThoai = soDienThoai;
+        this.fullName = fullName;
+        this.loaiTaiKhoan = loaiTaiKhoan;
+    }
+
+    public Customer(String userName, String password, String loaiTaiKhoan, String fullName, String email, String soDienThoai) {
+        this.userName = userName;
+        this.password = password;
+        this.loaiTaiKhoan = loaiTaiKhoan;
+        this.fullName = fullName;
+        this.email = email;
+        this.soDienThoai = soDienThoai;
+    }
+
+    public Customer(String diaChi, String email, String fullName, int maKhachHang, String password, String soDienThoai, String userName, String loaiTaiKhoan) {
         this.diaChi = diaChi;
         this.email = email;
         this.fullName = fullName;
@@ -20,6 +36,14 @@ public class Customer {
         this.password = password;
         this.soDienThoai = soDienThoai;
         this.userName = userName;
+    }
+
+    public String getLoaiTaiKhoan() {
+        return loaiTaiKhoan;
+    }
+
+    public void setLoaiTaiKhoan(String loaiTaiKhoan) {
+        this.loaiTaiKhoan = loaiTaiKhoan;
     }
 
     public String getDiaChi() {

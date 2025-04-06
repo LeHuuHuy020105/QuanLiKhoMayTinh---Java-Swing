@@ -17,7 +17,24 @@ public class CustomerDAO implements DAOInterface<Customer>{
 
     @Override
     public int insert(Customer customer) {
-        return 0;
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "INSERT INTO customer(username,password,phone,fullname,diachi,email,loaitaikhoan) values (?,?,?,?,?,?,?)";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, customer.getUserName());
+            pst.setString(2, customer.getPassword());
+            pst.setString(3, customer.getSoDienThoai());
+            pst.setString(4, customer.getFullName());
+            pst.setString(5, customer.getDiaChi());
+            pst.setString(6, customer.getEmail());
+            pst.setString(7, customer.getLoaiTaiKhoan());
+            ketQua = pst.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -46,7 +63,8 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 String hoVaTen = rs.getString("fullname");
                 String diaChi = rs.getString("diachi");
                 String email = rs.getString("email");
-                Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan);
+                String loaiTaiKhoan = rs.getString("loaitaikhoan");
+                Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
                 ketQua.add(customer);
             }
         } catch (Exception e) {
@@ -54,13 +72,13 @@ public class CustomerDAO implements DAOInterface<Customer>{
         }
         return ketQua;
     }
-    public Customer findByPhone(String phone) {
+    public Customer findByID(int maKH) {
         Customer customer = null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from customer where phone = ?";
+            String sql = "select * from customer where makhachhang = ?";
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1,phone);
+            pst.setInt(1,maKH);
             ResultSet rs = pst.executeQuery();
             while(rs.next()) {
                 int maKhachHang = rs.getInt("makhachhang");
@@ -70,7 +88,8 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 String hoVaTen = rs.getString("fullname");
                 String diaChi = rs.getString("diachi");
                 String email = rs.getString("email");
-                customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan);
+                String loaiTaiKhoan = rs.getString("loaitaikhoan");
+                customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
             }
         } catch (Exception e) {
             e.printStackTrace();
