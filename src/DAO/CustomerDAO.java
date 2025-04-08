@@ -44,6 +44,13 @@ public class CustomerDAO implements DAOInterface<Customer>{
 
     @Override
     public int delete(Customer customer) {
+        int ketQua = 0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "Delete from customer where makhachhang=?";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 

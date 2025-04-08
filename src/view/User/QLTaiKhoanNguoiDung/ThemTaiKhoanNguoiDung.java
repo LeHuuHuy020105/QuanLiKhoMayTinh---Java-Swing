@@ -18,6 +18,7 @@ import java.awt.event.*;
 public class ThemTaiKhoanNguoiDung extends JFrame  {
 
 	private static final long serialVersionUID = 1L;
+	private JComboBox cbx_LoaiTK;
 	private JPanel contentPane;
 	private JTextField input_HoTen;
 	private JTextField input_SDT;
@@ -39,7 +40,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame  {
 		this.currentUser = qlTaiKhoanNguoiDungForm.getCurrentUser();
 		this.qlTaiKhoanNguoiDungForm = qlTaiKhoanNguoiDungForm;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 388, 710);
+		setBounds(100, 100, 388, 780);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -91,7 +92,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame  {
 		btn_ThemSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btn_ThemSanPham.setBorderPainted(false);
 		btn_ThemSanPham.setBackground(new Color(60, 179, 113));
-		btn_ThemSanPham.setBounds(10, 622, 131, 41);
+		btn_ThemSanPham.setBounds(10, 692, 131, 41);
 		contentPane.add(btn_ThemSanPham);
 
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
@@ -104,7 +105,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame  {
 		btnNewButton_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2_1_1.setBorderPainted(false);
 		btnNewButton_2_1_1.setBackground(Color.RED);
-		btnNewButton_2_1_1.setBounds(210, 622, 139, 41);
+		btnNewButton_2_1_1.setBounds(199, 692, 139, 41);
 		contentPane.add(btnNewButton_2_1_1);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Tài khoản");
@@ -144,16 +145,49 @@ public class ThemTaiKhoanNguoiDung extends JFrame  {
 		Re_passwordField = new JPasswordField();
 		Re_passwordField.setBounds(10, 480, 328, 28);
 		contentPane.add(Re_passwordField);
+		
+		JLabel lblNewLabel_1_1_1_1_1_1 = new JLabel("Loại tài khoản");
+		lblNewLabel_1_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_1_1_1.setBounds(10, 598, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_1_1_1);
+		
+		String[] loaiTK = new String[]{"online","offline"};
+ 		cbx_LoaiTK = new JComboBox(loaiTK);
+		cbx_LoaiTK.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				cbxLoaiTKMouseClicked();
+			}
+		});
+		cbx_LoaiTK.setBounds(10, 636, 328, 28);
+		contentPane.add(cbx_LoaiTK);
 		setVisible(true);
 		Permission();
 	}
 	private void Permission() {
 		String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
 		if(role.equals("Nhân viên bán hàng")) {
-			textField_TK.setEditable(false);
-			passwordField.setEditable(false);
-			Re_passwordField.setEditable(false);
-			textField_Email.setEditable(false);
+			PerrmissionStaff();
+			cbx_LoaiTK.setEnabled(false);
+		}
+	}
+	public void PerrmissionStaff(){
+		textField_TK.setEditable(false);
+		passwordField.setEditable(false);
+		Re_passwordField.setEditable(false);
+		textField_Email.setEditable(false);
+	}
+	public void PerrmissionAdmin(){
+		textField_TK.setEditable(true);
+		passwordField.setEditable(true);
+		Re_passwordField.setEditable(true);
+		textField_Email.setEditable(true);
+	}
+	public void cbxLoaiTKMouseClicked(){
+		String loaiTK = cbx_LoaiTK.getSelectedItem()+"";
+		if(loaiTK.equals("offline")){
+			PerrmissionStaff();
+		}else {
+			PerrmissionAdmin();
 		}
 	}
 	private void ThemNhaCungCapMouseClicked() {

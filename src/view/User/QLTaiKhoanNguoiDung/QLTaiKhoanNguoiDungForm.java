@@ -509,11 +509,11 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         return result;
     }
     public void XoaMouseClicked(){
-//        int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
-//        if(luaChon == JOptionPane.YES_OPTION){
-//            ProducersDAO.getInstance().delete(getProducerSelected());
-//            updateTableDataFormDAO();
-//        }
+        int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá tài khoản người dùng", JOptionPane.YES_NO_OPTION);
+        if(luaChon == JOptionPane.YES_OPTION){
+            CustomerDAO.getInstance().delete(getCustomerSelected());
+            updateTableDataFormDAO();
+        }
     }
     public void SuaMouseClick(){
 
