@@ -16,6 +16,70 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `address`
+--
+
+DROP TABLE IF EXISTS `address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `address` (
+  `madiachi` int(11) NOT NULL AUTO_INCREMENT,
+  `diachi` varchar(400) NOT NULL,
+  PRIMARY KEY (`madiachi`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `address`
+--
+
+LOCK TABLES `address` WRITE;
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bills`
+--
+
+DROP TABLE IF EXISTS `bills`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bills` (
+  `maphieu` int(11) NOT NULL AUTO_INCREMENT,
+  `thoidiemtao` timestamp NOT NULL DEFAULT current_timestamp(),
+  `thanhtien` double DEFAULT NULL,
+  `tongtien` double DEFAULT NULL,
+  `manhanvien` int(11) DEFAULT NULL,
+  `makhachhang` int(11) NOT NULL,
+  `machinhanh` int(11) DEFAULT NULL,
+  `hinhthuc` varchar(50) NOT NULL,
+  `thoidiemhuy` timestamp NULL DEFAULT NULL,
+  `trangthai` int(11) DEFAULT NULL,
+  `madiachi` int(11) DEFAULT NULL,
+  PRIMARY KEY (`maphieu`),
+  KEY `manhanvien` (`manhanvien`),
+  KEY `makhachhang` (`makhachhang`),
+  KEY `machinhanh` (`machinhanh`),
+  KEY `trangthai` (`trangthai`),
+  CONSTRAINT `bills_ibfk_1` FOREIGN KEY (`manhanvien`) REFERENCES `user` (`id`),
+  CONSTRAINT `bills_ibfk_2` FOREIGN KEY (`makhachhang`) REFERENCES `customer` (`makhachhang`),
+  CONSTRAINT `bills_ibfk_3` FOREIGN KEY (`machinhanh`) REFERENCES `branch` (`machinhanh`),
+  CONSTRAINT `bills_ibfk_4` FOREIGN KEY (`trangthai`) REFERENCES `status` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bills`
+--
+
+LOCK TABLES `bills` WRITE;
+/*!40000 ALTER TABLE `bills` DISABLE KEYS */;
+INSERT INTO `bills` VALUES (1,'2025-04-05 01:58:04',0,0,5,1,2,'offline',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `bills` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `branch`
 --
 
@@ -32,7 +96,7 @@ CREATE TABLE `branch` (
   `mota` text DEFAULT NULL,
   PRIMARY KEY (`machinhanh`),
   UNIQUE KEY `sodienthoai` (`sodienthoai`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,8 +105,36 @@ CREATE TABLE `branch` (
 
 LOCK TABLES `branch` WRITE;
 /*!40000 ALTER TABLE `branch` DISABLE KEYS */;
-INSERT INTO `branch` VALUES (1,'Chi nhÃ¡nh Quáº­n 1','123 LÃª Lá»£i','Quáº­n 1','TP.HCM','0399097211','Chi nhÃ¡nh trung tÃ¢m táº¡i Quáº­n 1'),(2,'Chi nhÃ¡nh Thá»§ Äá»©c','789 Pháº¡m VÄƒn Äá»“ng','Thá»§ Äá»©c','TP.HCM','0903335692','Chi nhÃ¡nh má»›i má»Ÿ táº¡i thÃ nh phá»‘ Thá»§ Äá»©c'),(3,'Chi NhÃ¡nh HÃ  Ná»™i 2','2a,PhÆ°á»ng PhÃºc XÃ¡,Quáº­n Ba ÄÃ¬nh, HÃ  Ná»™i','Quáº­n Ba ÄÃ¬nh',' HÃ  Ná»™i','123456789','a'),(4,'Chi NhÃ¡nh HÃ  Giang','2a,PhÆ°á»ng Quang Trung,ThÃ nh phá»‘ HÃ  Giang, HÃ  Giang','ThÃ nh phá»‘ HÃ  Giang',' HÃ  Giang','4','2');
+INSERT INTO `branch` VALUES (1,'Chi nhÃ¡nh Quáº­n 1','123 LÃª Lá»£i','Quáº­n 1','TP.HCM','0399097211','Chi nhÃ¡nh trung tÃ¢m táº¡i Quáº­n 1'),(2,'Chi nhÃ¡nh Thá»§ Äá»©c','789 Pháº¡m VÄƒn Äá»“ng','Thá»§ Äá»©c','TP.HCM','0903335692','Chi nhÃ¡nh má»›i má»Ÿ táº¡i thÃ nh phá»‘ Thá»§ Äá»©c'),(3,'Chi NhÃ¡nh HÃ  Ná»™i 2','2a,PhÆ°á»ng PhÃºc XÃ¡,Quáº­n Ba ÄÃ¬nh, HÃ  Ná»™i','Quáº­n Ba ÄÃ¬nh',' HÃ  Ná»™i','123456789','a'),(4,'Chi NhÃ¡nh HÃ  Giang','2a,PhÆ°á»ng Quang Trung,ThÃ nh phá»‘ HÃ  Giang, HÃ  Giang','ThÃ nh phá»‘ HÃ  Giang',' HÃ  Giang','4','2'),(5,'Chi NhÃ¡nh A','9a,PhÆ°á»ng PhÃºc XÃ¡,Quáº­n Ba ÄÃ¬nh, HÃ  Ná»™i','Quáº­n 1','Há»“ ChÃ­ Minh','0123456789','Chi nhÃ¡nh chÃ­nh'),(6,'Chi NhÃ¡nh B','10a,PhÆ°á»ng Quang Trung,ThÃ nh phá»‘ HÃ  Giang, HÃ  Giang','Quáº­n 2','HÃ  Ná»™i','0987654321','Chi nhÃ¡nh phá»¥');
 /*!40000 ALTER TABLE `branch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cart` (
+  `magiohang` int(11) NOT NULL AUTO_INCREMENT,
+  `makhachhang` int(11) NOT NULL,
+  `mamay` int(11) NOT NULL,
+  `soluong` int(11) NOT NULL,
+  `thoigiantao` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`magiohang`),
+  KEY `makhachhang` (`makhachhang`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`makhachhang`) REFERENCES `customer` (`makhachhang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cart`
+--
+
+LOCK TABLES `cart` WRITE;
+/*!40000 ALTER TABLE `cart` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -70,6 +162,91 @@ INSERT INTO `country` VALUES ('AR','Argentina'),('AT','Austria'),('AU','Australi
 UNLOCK TABLES;
 
 --
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer` (
+  `makhachhang` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `phone` varchar(10) NOT NULL,
+  `fullname` varchar(100) NOT NULL,
+  `diachi` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `loaitaikhoan` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`makhachhang`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer`
+--
+
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES (1,'user1','user1','0399097211','huy',NULL,NULL,'online'),(2,NULL,NULL,'1','user1',NULL,NULL,'offline'),(3,NULL,NULL,'2','user2',NULL,NULL,'offline'),(4,NULL,NULL,'3','user3',NULL,NULL,'offline');
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_address`
+--
+
+DROP TABLE IF EXISTS `customer_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer_address` (
+  `makhachhang` int(11) NOT NULL,
+  `madiachi` int(11) NOT NULL,
+  KEY `makhachhang` (`makhachhang`),
+  KEY `madiachi` (`madiachi`),
+  CONSTRAINT `customer_address_ibfk_1` FOREIGN KEY (`makhachhang`) REFERENCES `customer` (`makhachhang`),
+  CONSTRAINT `customer_address_ibfk_2` FOREIGN KEY (`madiachi`) REFERENCES `address` (`madiachi`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_address`
+--
+
+LOCK TABLES `customer_address` WRITE;
+/*!40000 ALTER TABLE `customer_address` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detailbill`
+--
+
+DROP TABLE IF EXISTS `detailbill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `detailbill` (
+  `maphieu` int(11) NOT NULL,
+  `mamay` int(11) NOT NULL,
+  `soluong` int(11) DEFAULT NULL,
+  KEY `maphieu` (`maphieu`),
+  KEY `mamay` (`mamay`),
+  CONSTRAINT `detailbill_ibfk_1` FOREIGN KEY (`maphieu`) REFERENCES `bills` (`maphieu`),
+  CONSTRAINT `detailbill_ibfk_2` FOREIGN KEY (`mamay`) REFERENCES `product` (`mamay`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detailbill`
+--
+
+LOCK TABLES `detailbill` WRITE;
+/*!40000 ALTER TABLE `detailbill` DISABLE KEYS */;
+INSERT INTO `detailbill` VALUES (1,1,1),(1,26,1);
+/*!40000 ALTER TABLE `detailbill` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `detailexportproducts`
 --
 
@@ -93,7 +270,7 @@ CREATE TABLE `detailexportproducts` (
 
 LOCK TABLES `detailexportproducts` WRITE;
 /*!40000 ALTER TABLE `detailexportproducts` DISABLE KEYS */;
-INSERT INTO `detailexportproducts` VALUES (1,1,1);
+INSERT INTO `detailexportproducts` VALUES (16,27,1),(16,26,1),(17,26,1),(17,1,1),(18,26,1),(18,27,1),(19,27,1),(20,26,1),(21,26,1);
 /*!40000 ALTER TABLE `detailexportproducts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +298,7 @@ CREATE TABLE `detailimportproducts` (
 
 LOCK TABLES `detailimportproducts` WRITE;
 /*!40000 ALTER TABLE `detailimportproducts` DISABLE KEYS */;
-INSERT INTO `detailimportproducts` VALUES (13,1,1),(14,1,1),(15,1,3),(16,1,3),(17,1,1),(18,1,1),(19,1,10),(20,1,1),(21,1,5);
+INSERT INTO `detailimportproducts` VALUES (13,1,1),(14,1,1),(15,1,3),(16,1,3),(17,1,1),(18,1,1),(19,1,10),(20,1,1),(21,1,5),(22,1,1),(23,1,10),(24,1,1),(25,1,1),(26,1,1),(26,27,1),(26,10,1),(27,1,1),(27,2,1),(28,1,1),(28,27,1),(29,1,1),(29,27,1),(29,14,1);
 /*!40000 ALTER TABLE `detailimportproducts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +347,7 @@ CREATE TABLE `exportproducts` (
   KEY `id` (`id`),
   CONSTRAINT `exportproducts_ibfk_1` FOREIGN KEY (`machinhanh`) REFERENCES `branch` (`machinhanh`),
   CONSTRAINT `exportproducts_ibfk_2` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +356,7 @@ CREATE TABLE `exportproducts` (
 
 LOCK TABLES `exportproducts` WRITE;
 /*!40000 ALTER TABLE `exportproducts` DISABLE KEYS */;
-INSERT INTO `exportproducts` VALUES (1,'2025-03-25 08:23:06',4,NULL,1,1,NULL);
+INSERT INTO `exportproducts` VALUES (1,'2025-03-25 08:23:06',4,NULL,1,1,NULL),(2,'2025-04-01 02:39:42',6,NULL,1,1,NULL),(3,'2025-04-01 02:59:32',1,NULL,2,1,NULL),(4,'2025-04-01 03:15:37',1,NULL,1,1,NULL),(5,'2025-04-03 10:06:00',1,NULL,1,1,NULL),(6,'2025-04-03 10:09:23',1,NULL,1,1,NULL),(7,'2025-04-03 10:10:52',1,NULL,1,1,NULL),(8,'2025-04-03 10:13:25',1,NULL,1,1,NULL),(9,'2025-04-03 10:16:01',1,NULL,1,1,NULL),(10,'2025-04-03 10:17:45',1,NULL,1,1,NULL),(11,'2025-04-03 10:22:11',1,NULL,1,1,NULL),(12,'2025-04-03 10:24:40',1,NULL,1,1,NULL),(13,'2025-04-03 11:46:12',1,NULL,1,1,NULL),(14,'2025-04-05 01:48:29',5,'2025-04-05 01:49:51',2,2,NULL),(15,'2025-04-05 01:51:16',5,'2025-04-05 01:51:43',2,2,NULL),(16,'2025-04-05 09:47:17',5,'2025-04-05 09:48:03',2,2,NULL),(17,'2025-04-05 09:47:37',5,'2025-04-05 09:48:24',2,2,NULL),(18,'2025-04-05 09:52:14',5,'2025-04-05 09:52:28',2,1,NULL),(19,'2025-04-05 09:53:21',1,NULL,1,1,NULL),(20,'2025-04-05 09:53:46',5,'2025-04-05 09:54:18',2,1,NULL),(21,'2025-04-05 09:55:36',5,'2025-04-05 09:55:47',2,1,NULL);
 /*!40000 ALTER TABLE `exportproducts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +378,7 @@ CREATE TABLE `importproducts` (
   PRIMARY KEY (`maphieunhap`),
   KEY `id` (`id`),
   CONSTRAINT `importproducts_ibfk_1` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +387,7 @@ CREATE TABLE `importproducts` (
 
 LOCK TABLES `importproducts` WRITE;
 /*!40000 ALTER TABLE `importproducts` DISABLE KEYS */;
-INSERT INTO `importproducts` VALUES (13,25990000,'2025-03-18 08:41:35',1,5,'2025-03-18 09:48:28',NULL),(14,25990000,'2025-03-18 09:48:41',1,5,'2025-03-18 09:49:18',NULL),(15,77970000,'2025-03-18 09:51:18',1,0,'2025-03-18 09:53:52',NULL),(16,77970000,'2025-03-18 09:57:06',1,6,'2025-03-18 09:58:26',NULL),(17,25990000,'2025-03-19 06:43:41',1,5,'2025-03-19 06:45:01',NULL),(18,25990000,'2025-03-21 02:11:41',1,2,'2025-03-21 02:12:02',NULL),(19,259900000,'2025-03-25 07:35:56',1,6,'2025-03-25 07:37:25','2025-03-25 07:37:03'),(20,25990000,'2025-03-25 07:46:48',1,5,NULL,'2025-03-25 07:49:52'),(21,129950000,'2025-03-25 07:51:51',1,5,NULL,'2025-03-25 07:52:22');
+INSERT INTO `importproducts` VALUES (13,25990000,'2025-03-18 08:41:35',1,5,'2025-03-18 09:48:28',NULL),(14,25990000,'2025-03-18 09:48:41',1,5,'2025-03-18 09:49:18',NULL),(15,77970000,'2025-03-18 09:51:18',1,0,'2025-03-18 09:53:52',NULL),(16,77970000,'2025-03-18 09:57:06',1,6,'2025-03-18 09:58:26',NULL),(17,25990000,'2025-03-19 06:43:41',1,5,'2025-03-19 06:45:01',NULL),(18,25990000,'2025-03-21 02:11:41',1,2,'2025-03-21 02:12:02',NULL),(19,259900000,'2025-03-25 07:35:56',1,6,'2025-03-25 07:37:25','2025-03-25 07:37:03'),(20,25990000,'2025-03-25 07:46:48',1,5,NULL,'2025-03-25 07:49:52'),(21,129950000,'2025-03-25 07:51:51',1,5,NULL,'2025-03-25 07:52:22'),(22,25990000,'2025-04-01 02:38:42',1,6,'2025-04-01 02:38:59',NULL),(23,259900000,'2025-04-01 03:19:35',1,5,NULL,'2025-04-01 03:20:02'),(24,25990000,'2025-04-03 10:01:39',1,1,NULL,NULL),(25,25990000,'2025-04-03 10:04:32',1,5,NULL,'2025-04-03 10:05:10'),(26,66980000,'2025-04-03 11:37:34',1,1,NULL,NULL),(27,40990000,'2025-04-03 11:40:28',1,1,NULL,NULL),(28,51980000,'2025-04-03 11:43:50',1,1,NULL,NULL),(29,67970000,'2025-04-05 01:43:32',1,5,NULL,'2025-04-05 01:45:06');
 /*!40000 ALTER TABLE `importproducts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,7 +408,7 @@ CREATE TABLE `interfaceuser` (
   `nhapexcel` int(1) DEFAULT 0,
   `xemchitiet` int(1) DEFAULT 0,
   PRIMARY KEY (`magiaodien`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -240,7 +417,7 @@ CREATE TABLE `interfaceuser` (
 
 LOCK TABLES `interfaceuser` WRITE;
 /*!40000 ALTER TABLE `interfaceuser` DISABLE KEYS */;
-INSERT INTO `interfaceuser` VALUES (1,'Sáº£n pháº©m',0,0,1,1,1,1),(2,'NhÃ  cung cáº¥p',1,1,1,1,1,1),(3,'Nháº­p hÃ ng',0,0,0,0,0,0),(4,'Phiáº¿u nháº­p',1,1,1,1,1,1),(5,'Xuáº¥t hÃ ng',0,0,0,0,0,0),(6,'Phiáº¿u xuáº¥t',1,1,1,1,1,1),(7,'Tá»“n kho',1,1,1,1,1,1),(8,'TÃ i khoáº£n user',1,1,1,1,1,1),(9,'Chi nhÃ¡nh',1,1,1,1,1,1),(10,'Nháº­p hÃ ng - CN',0,0,0,0,0,0),(11,'Phiáº¿u nháº­p - CN',1,1,1,1,1,1);
+INSERT INTO `interfaceuser` VALUES (1,'Sáº£n pháº©m',1,1,1,1,1,1),(2,'NhÃ  cung cáº¥p',1,1,1,1,1,1),(3,'Nháº­p hÃ ng',0,0,0,0,0,0),(4,'Phiáº¿u nháº­p',1,1,1,1,1,1),(5,'Xuáº¥t hÃ ng',0,0,0,0,0,0),(6,'Phiáº¿u xuáº¥t',1,1,1,1,1,1),(7,'Tá»“n kho',0,0,0,1,0,1),(8,'TÃ i khoáº£n user',1,1,1,1,1,1),(9,'Chi nhÃ¡nh',1,1,1,1,1,1),(10,'Nháº­p hÃ ng - CN',0,0,0,0,0,0),(11,'Phiáº¿u nháº­p - CN',1,1,1,1,1,1),(12,'BÃ¡n hÃ ng',0,0,0,0,0,0),(13,'Thá»‘ng kÃª',0,0,0,0,0,0),(14,'Phiáº¿u nháº­p',0,1,0,0,0,1),(15,'Phiáº¿u xuáº¥t',0,1,0,0,0,1),(16,'TÃ i khoáº£n khÃ¡ch hÃ ng',1,1,1,1,1,1),(17,'TÃ i khoáº£n khÃ¡ch hÃ ng',1,1,1,0,0,0);
 /*!40000 ALTER TABLE `interfaceuser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,8 +445,32 @@ CREATE TABLE `inventory_branch` (
 
 LOCK TABLES `inventory_branch` WRITE;
 /*!40000 ALTER TABLE `inventory_branch` DISABLE KEYS */;
-INSERT INTO `inventory_branch` VALUES (3,1,2),(3,2,2),(3,3,2),(3,5,10),(4,8,1),(4,9,11),(2,1,1),(2,2,1),(2,1,1),(2,2,1),(2,1,1),(2,2,1),(1,1,1),(1,18,1);
+INSERT INTO `inventory_branch` VALUES (2,27,1),(2,26,2),(2,1,1);
 /*!40000 ALTER TABLE `inventory_branch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `point_customer`
+--
+
+DROP TABLE IF EXISTS `point_customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `point_customer` (
+  `makhachhang` int(11) NOT NULL,
+  `diemtichluy` double DEFAULT NULL,
+  KEY `makhachhang` (`makhachhang`),
+  CONSTRAINT `point_customer_ibfk_1` FOREIGN KEY (`makhachhang`) REFERENCES `customer` (`makhachhang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `point_customer`
+--
+
+LOCK TABLES `point_customer` WRITE;
+/*!40000 ALTER TABLE `point_customer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `point_customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -323,12 +524,13 @@ CREATE TABLE `product` (
   `manhacungcap` varchar(50) NOT NULL,
   `dungluongluutru` double NOT NULL,
   `giaban` int(11) NOT NULL,
+  `hinhanh` longblob DEFAULT NULL,
   PRIMARY KEY (`mamay`),
   KEY `xuatxu` (`xuatxu`),
   KEY `manhacungcap` (`manhacungcap`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`xuatxu`) REFERENCES `country` (`maquocgia`),
   CONSTRAINT `product_ibfk_2` FOREIGN KEY (`manhacungcap`) REFERENCES `producer` (`manhacungcap`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +539,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Laptop Gaming ASUS ROG',17,25990000,'Intel Core i7-12700H','16GB','VN','NVIDIA RTX 3050',NULL,NULL,15.6,'6-cell 80Wh','512GB SSD','Laptop','ASUS',512,30990000),(2,'Laptop AA',10,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,25000000),(3,'Laptop BB',5,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,30000000),(4,'Laptop AA',10,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,23000000),(5,'Laptop BB',6,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,35000000),(6,'Laptop Dell XPS 15',8,32990000,'Intel Core i9-12900HK','32GB','US','NVIDIA RTX 3060',NULL,NULL,15.6,'6-cell 97Wh','1TB SSD','Laptop','DELL',1024,50000000),(7,'Laptop HP Envy 13',12,18990000,'Intel Core i5-1240P','16GB','JP','Intel Iris Xe',NULL,NULL,13.3,'4-cell 65Wh','512GB SSD','Laptop','HP',512,30000000),(8,'MacBook Pro 16',6,57990000,'Apple M2 Max','32GB','US','Apple M2 Max GPU',NULL,NULL,16,'100Wh','2TB SSD','Laptop','APPLE',2048,80000000),(9,'Acer Predator Helios 300',15,27990000,'Intel Core i7-12650H','16GB','TW','NVIDIA RTX 3070',NULL,NULL,17.3,'4-cell 90Wh','1TB SSD','Laptop','ACER',1024,38000000),(10,'Laptop A',10,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,25000000),(11,'Laptop B',5,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,32000000),(12,'PC Gaming MSI Aegis',5,40990000,'Intel Core i9-13900K','32GB','US','NVIDIA RTX 4090','MSI Z690',850,NULL,NULL,'2TB SSD','PC','MSI',2048,55000000),(13,'PC Workstation Dell Precision',3,52990000,'Intel Xeon W-2235','64GB','US','NVIDIA Quadro RTX 5000','Dell Precision T7920',1000,NULL,NULL,'4TB SSD','PC','DELL',4096,70000000),(14,'PC VÄƒn phÃ²ng HP ProDesk',10,15990000,'Intel Core i5-12400','8GB','JP','Intel UHD 730','HP ProDesk 400 G7',300,NULL,NULL,'512GB SSD','PC','HP',512,20000000),(15,'PC Gaming Razer Tomahawk',7,37990000,'Intel Core i7-13700KF','32GB','US','NVIDIA RTX 3080 Ti','ASUS ROG Strix Z690',750,NULL,NULL,'1TB SSD','PC','ASUS',1024,50000000),(16,'PC Äá»“ há»a Mac Studio',4,65990000,'Apple M1 Ultra','128GB','US','Apple M1 Ultra GPU','Mac Studio Board',350,NULL,NULL,'8TB SSD','PC','APPLE',8192,85000000),(17,'PC Gaming',7,25000000,'Intel i7','32GB','CN','NVIDIA RTX','ASUS ROG',750,NULL,NULL,'1TB','PC','MSI',1,35000000),(18,'PC VÄƒn phÃ²ng',14,10000000,'Intel i3','8GB','VN','Intel UHD','Gigabyte',500,NULL,NULL,'256GB','PC','HP',256,15000000);
+INSERT INTO `product` VALUES (1,'Laptop Gaming ASUS ROG',15,25990000,'Intel Core i7-12700H','16GB','VN','NVIDIA RTX 3050',NULL,NULL,15.6,'6-cell 80Wh','512GB SSD','Laptop','ASUS',512,30990000,NULL),(2,'Laptop AA',7,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,25000000,NULL),(3,'Laptop BB',5,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,30000000,NULL),(4,'Laptop AA',10,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,23000000,NULL),(5,'Laptop BB',6,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,35000000,NULL),(6,'Laptop Dell XPS 15',7,32990000,'Intel Core i9-12900HK','32GB','US','NVIDIA RTX 3060',NULL,NULL,15.6,'6-cell 97Wh','1TB SSD','Laptop','DELL',1024,50000000,NULL),(7,'Laptop HP Envy 13',12,18990000,'Intel Core i5-1240P','16GB','JP','Intel Iris Xe',NULL,NULL,13.3,'4-cell 65Wh','512GB SSD','Laptop','HP',512,30000000,NULL),(8,'MacBook Pro 16',6,57990000,'Apple M2 Max','32GB','US','Apple M2 Max GPU',NULL,NULL,16,'100Wh','2TB SSD','Laptop','APPLE',2048,80000000,NULL),(9,'Acer Predator Helios 300',15,27990000,'Intel Core i7-12650H','16GB','TW','NVIDIA RTX 3070',NULL,NULL,17.3,'4-cell 90Wh','1TB SSD','Laptop','ACER',1024,38000000,NULL),(10,'Laptop A',10,15000000,'Intel i5','8GB','US','NVIDIA GTX',NULL,NULL,15.6,'5000Wh','512GB','Laptop','DELL',512,25000000,NULL),(11,'Laptop B',5,20000000,'AMD Ryzen 7','16GB','JP','Radeon RX',NULL,NULL,14,'6000Wh','1TB','Laptop','ASUS',1,32000000,NULL),(12,'PC Gaming MSI Aegis',5,40990000,'Intel Core i9-13900K','32GB','US','NVIDIA RTX 4090','MSI Z690',850,NULL,NULL,'2TB SSD','PC','MSI',2048,55000000,NULL),(13,'PC Workstation Dell Precision',3,52990000,'Intel Xeon W-2235','64GB','US','NVIDIA Quadro RTX 5000','Dell Precision T7920',1000,NULL,NULL,'4TB SSD','PC','DELL',4096,70000000,NULL),(14,'PC VÄƒn phÃ²ng HP ProDesk',11,15990000,'Intel Core i5-12400','8GB','JP','Intel UHD 730','HP ProDesk 400 G7',300,NULL,NULL,'512GB SSD','PC','HP',512,20000000,NULL),(15,'PC Gaming Razer Tomahawk',7,37990000,'Intel Core i7-13700KF','32GB','US','NVIDIA RTX 3080 Ti','ASUS ROG Strix Z690',750,NULL,NULL,'1TB SSD','PC','ASUS',1024,50000000,NULL),(16,'PC Äá»“ há»a Mac Studio',4,65990000,'Apple M1 Ultra','128GB','US','Apple M1 Ultra GPU','Mac Studio Board',350,NULL,NULL,'8TB SSD','PC','APPLE',8192,85000000,NULL),(17,'PC Gaming',7,25000000,'Intel i7','32GB','CN','NVIDIA RTX','ASUS ROG',750,NULL,NULL,'1TB','PC','MSI',1,35000000,NULL),(18,'PC VÄƒn phÃ²ng',13,10000000,'Intel i3','8GB','VN','Intel UHD','Gigabyte',500,NULL,NULL,'256GB','PC','HP',256,15000000,NULL),(19,'MSI V3',0,12000000,'a','a','AR','a',NULL,NULL,12,'12a','a','Laptop','MSI',12,15000000,_binary 'ÿ\Øÿ\à\0JFIF\0\0\0\0\0\0ÿ\Û\0„\0	( \Z&!1!%)+...383,7*/.+\n\n\n\r-% %/5-./----/-2---/-75---/----0--./---5/----+--/-----ÿÀ\0\0\á\0\á\0ÿ\Ä\0\0\0\0\0\0\0\0\0\0\0\0\0ÿ\Ä\0N\0\n\n\0\0\0\0\0!1Qa\"2Aq‘¡BRT•±\Ñ\ÓDSbr‚’“Á3t„¢²³\Ò#$dƒ%4s£\Â\Ãÿ\Ä\0\Z\0\0\0\0\0\0\0\0\0\0\0\0ÿ\Ä\02\0\0\0\0\0!1AQ‘¡±Á\Ñ\ðaq\á\"2\ñB’R#ÿ\Ú\0\0\0?\0¼PDú–7K\Ø:\\\ryr\Å;9SÀÞ™X=eœ›¬ o*¶ˆt\Ô\Åý\È5Ÿ»¬˜>]G\ÕP\Ã\ê(!~ø™,|²\õIw\ò‚\ñ‰’ü\ò\â\ö |a\ä\Ï;‡ø½ˆ=ø\ÂÉžw\ñ{>0rg\Å\Ø\ïb~02o\Å\Ø\ïb\éþM\ó¨»ý¨3f\î\òqùT}aÃ¼„·vy<ü²—®fYA;7QBtVR\Þ#þ\ä1ešg\òg\Ý°úŠ\r†U0\è{CA0()ÿ\0g6Š\"@cŸ;\Í\ôg1±†“\Ô\÷v«QNª¢•©§T\áF’Á\âŽÀ¯6f\rÙ¡„H\ìÖ†‹\ç8€Z\ÑrIK{-u\Î\"a1ng?DB©£˜\÷*\Î\ÏTN3\na³€\ÖEÀ\ç·1\ë]þ>\ä\ÄoŒ\Îüs\ò:µ£Hwwµs×³\ÕD\âL\ñ\êwwµe¦S¦YŒ¤\ÝN\î\ö¦‰N‰f2£5;»Ú§Dš%“2«q\ïºh“D¥n1â¿°{Ti”i”\Ý^L\ö¦‰F™lGº¼‰;\í[Q³UWL¦“/DÖ‡f\ÈA\ç¸¤p*\÷6:èˆ«11(ú\Ùv)˜\Zü\ã¢ù¸Zt•¶J\îN\"c&%­&^‡AŽN¶·Ú²›3	\Ó/hª\âžF\Ä\ÖY\Î6nph\Û\á\ÎNi\n\ö\öj«œD\ÃKv¦º¢˜\æ±wŒž\õ²µ µŽ§~smn4r\ÆV{»V5S¦p¥T\Í3¦Wrª×„VŠ/\Þ}P«Q8ª·ý¡Hº57š]*†p4\ío/\Û#i³[=AuEz-\î\ã>Q\ï>P\è¹Ggj#[\ç\í\ËÝ©E\0\ãH\ìX\Ëa\å8\ò[×¤\ìM9šª\á\"?>YsSo15O/>Lc%\Î2¼›rF“¡£¦\Ý@­º\æº\æ\åS\Ã´|\å\öc£¹Cs›Ÿ`	\'\Ûp5\r\nvÿ\0Z5\ã\Ï%a¦¼º–†m\n†\Ä4\Îw%®w\Õi>¥zbg†\õ·1–\"\Óg¢,{\n‰Ý¸Ü…\ÍP¤±knl´·Fg¬·\ã\rešt9¼¡¶—ÀŽ•\êS¦\Þ(\ë~r\å*\ïy\Æ90iÁ\Û5<tz‰Ö²¢­M»œ\'\ÒyO\ã\Æ>\ë\èþQ”RÀcyiÁ\Í=\ãœ.iÍºþ°½V\æ™Ä·r¤9Á“²F\à\ñ×ƒ¾Ò¢¨ªu\Ç=ÿ\0ž~ÿ\0—M\ëy¦.G>?xù–”.- ƒb \ó‚1cExœ°¦7®\í\è@9E\Òa%#ä¶¢ù .N\Î=¦bnL\Ç=\ëm\Ó^š£œDø.U\Î\äS§‹EûÏªZ™\ÅP¦2m;¦•‘7=\íh\éq\0z\Õk½¦™—n\Ï\Zëˆž\r\Í\Ò\ÌS a¼mvc>¤|Fž°/Ö´\íµp\à\Ûl¯]\ÄyI¦8â‡Ÿ4Jÿ\0­ »GS3~\ñZ\ö\ß\Â#\ó\í\á\ç(\Ú(\ÑM6\ã\ï?y\ö‡“A\Çl³X¥:l\é\Ù\07¤m[\Å\Ì\â\Ìú\÷F\ï\Ç\ÕJ\ìÿ\08·Óœû5\æ“\Ö.¸¾Kü†\Ð\â¯VÑˆ\×Ï„}#\æ\èú\æx¹«§v®¾_=QRRºW0]Ç¸rNÀ%¸®\íqE¾U\Æ#.\å=!\à\ó¹Í½¶5§\Òq\è^\Ý;%‹Wü§\ë\Ã\ñ\í;\Z§‹±’e’¢^\r®qu‰»œpE\ñÀ^À\r½Í€$^\ïùQ\Æ\äMœ7\ÎUtn\àj\\\Û\Ù\ÑL\Ü\á…üWa¯§´³z:²›x\â\æ\å\Ý\Í\Ã3L\Ô7kÀ%\Ô\ä\Þ\àbLD\ã t\ós\ç\í;\Ñ\Z­\ï„F_\Çæ›‹~Dj;«\ÓD\æ0ÝŽ,\î ½ž¢:œ4³®Å½!¥uU^cLp\ãÞŸx‰oE¬\îŽ|>ý=;ž<g\Â\ã0†;kH&3\Ü\æ\õ5a]\ÝT\Ä\ó\Þ\Þßˆ[F«Z¹\Æ\éûOX\îO\\\Âø\"›œ^\'¬\0°ý\Â\ÙY\\½«Ï‡w\ë\Í\îÑª\Í5\Ç\Ý>ž\r¬—IP\Ï\Z0\É\Û\Ð\"“ù\Ø~\Ê\ç¯i\ÓL\õù\ó\è\Ò\Ç\ó³U\÷\Ä{8dØ«Er\ó¦q+—x7\çT\ßý4Ã²hS3<U½Vª³\ô^h\È@@@@@@@@@ALxG\òhú*}P¢aUn*¡‘Õ²ICX .6\Ñ\Æ\ç°t—†´…\ç\í\ô\ÕU©¦žxŽù\ß\à\ï\Ù*ˆªfz~š°\ð²¶1¥\ÎkGKˆmUZ(™\èQ:\î\Æz»u16|¨\ö\áÁ‰Ÿ\Õ\Ã\îF¹\é»U4U<q\óþ\ÝT\Õmž[\Ü\Ø\ãs¢|ž<²¶1´“\Â;¿3µu\È\ÅSL\ÏyÊš§SY\ôie8G\Éo½\âŽ\Û_¤•¿i®\"\\›F&\ä\Äp\Ñø}\ç\ãlq_Ç\\’40;Š\Ñ\ÒZI\èj\÷?\Ç[\ì­M\é\ó\Ã\íû\öi³[¦ª\÷\Î\èXn^†zFI\å3\\Ý\Üb\à\ì\Ç\\·H\ãl\Ö\Þ\×Á|\öÙ·\×Mx™œ\Ì\ðzEq\\\Ä\ÄiãŸž]wp\Þ\à\å	 ¢½9vk‡/`Ã“\ÃI#…Ž 87\î\Æs¹6û(§U^?1\r\ÊY\"1\ó\È\Úy\Ù£ª6/sH..20ˆÁ<’\ÃrÁ6Ã¾\ÄUFþ.[×­U˜\Ý\ãŽÿ\0‘\ö|efRh\æ¶,\óÁŒ\ì\â\ZÏ®þ½\'\Ô\í\ê\Ã\Ìs2\ìwx˜[üK—[\ç/¶\á\Ý.+†ý\Zj\ÏTL\"£\Æ\ër£-•§U\ËX\î\ób\ä®\öœG\×\Ó\ô\ì±·=c|zúw:‘R<±B\é\Z\Õ\n–}›u®J\ö‰Ñª:\â\õ‡^)\íj¦8U{ü\Ø\äÆ‡\ÒUFt·‚˜}‰8#\Ý7r¥\Ú\ê¦\í\'1\áŸF§6ª§\ç_F[‘¨kfs^æµ’C<d¸€8Ð¿6\äý0Þ»*\í”U4D\Ç˜Ÿ\ôSd®\"¼O\Íïž¨8®\ê88«\â¸ü?^\ìOýhVŒy¯d¿„‡\"¢§\Õ\n\n1€ªN\Z\ÆY°n.\çQ8˜Lf\'rhj\Ç4\â	\ç³Ák‡X$uªUE3•é®¨œ\ÂX+\äfe­h\ä\á\Z\Ã<\æÜ|†\ö*\Õjš³žq\í)½]8\Ç&™rÙ„\Õ9Ì¾‰\Òmxý€¾ªm\Õh\Ó´Ç“K7q8}Žã²©fOª \çX¸¹€\ñš\Ò\Æ7<y7 \Î\Ñv¯”¿Fvˆ\Õ\óƒÐ‹š¦\'\ç7F¿.S\ÑD\Ö½\Ç49¼$®d¶p»y,&\Çl\Z4^\÷\Ónjœ¹\îÜ™ªrù¼½N\Ê\ÈEK\ädfÀ0‚\ó\0s\Ç\rk³	>=\ÚI6sAnQ\\\Ä\â!Ž˜š5L\ã\æü¾Bº‰\Ô\ò\ÞZ^-šI\r.\0\æ\ß]Ž6]T\Õ†uS4\Ì\Ó<“e‡Sƒ\Î$h\íc\ïü¡_k˜š\"Q.}%K£\Î\r·…†\âøn\ònQc<·¯EÊ©\Îœ¡.s^Cš\ÐÆ‘`CCs@\ì6Y\öTbcw­7+\ÌKX=\Â\ö$_´i·wr\Ó\Ë50S¹\ÑÈ­\nT¹¼ÿ\0^gŸúÐ«(½\ÐSüš/\Þ}P¤¦8ª\ÝÂµ¦²6>Ö“>,u\Ë£\î\Îÿ\0!ž\Æf9oîœ½\rûL}?~Žu4¼\Í}±kš\ëmi\Ý\Ëj£]¹Ž¨¦\"›Ñž®Ô­lYRFpn–VlÌœ=­=²¹\âš\êÙ£¬Dw\Æ=Q‹úz¹\ô•y‘4Û\rCd\Ñ\Ì\à.;bojÞ«U3\ÒiÇŸ¹F)£3ÿ\0Z¼ÿ\0Ó“_dŽo0q¢ø\Ë.¨¦b7¸/Ó¦\åQ\õv qu;\Ý\0Ý±\Í\Ñ\Ú\Ì\ÞýK\ê\ö;\Ó{eˆŽ1º}<\Ô\Î*M¹\ê\ÃOR×™#³¸K·8=€g\ËloœZŒ	™x;v\ÍTgs²Š\ñ0ûšú\Êiù+)¯GÁ¯sœ\'\Í{&1\áš›\Ên’\Ü9ø,Æ¸\Å3¿›k\Ô\Äb©\á\É\ñ\Ù+%1\ó¤k\ÛF\Òds\Þ\Ì\Òcm\ÜX\0½\ÉÁ¸§©z“U6­\é\ã3\àÂ‹z¿”\ð\ê\å\åº\ÃQRùƒ®\ãš[` ’Eš\Ý\'ÏŠ\Î\Õ!Zê™œ\Ë®\à\Ø\â`#9À\È\ñ\Î1,eÎ¼\ÐO\Ú\nûd\Äb\ßM\ò¤ \É\ò\æ2Wk`g[\Ü\ò±\ËÌ»jj\Ä\ôœùº¶|E\Õ=1\ß\ò]ˆjj¿Á¦s>\Ó`\à‡þG.J\ìW¢i\ëVgÿ\0_!Û¦\"\ì\Çÿ\01\åûk\ä\Ì\Ö\Ò\ÕHmrØ¢oK\ä,.\íK´\Õ7(ˆúÏ„Ç«š\Õ8·UI\÷\Ð&|¦\ÄGC\Í\Æ©{[§é¹«=¶gDS\æ#\Æ=\rŽ˜Õ™|\ì\ã\ßG\r|Wƒ\çýI\é\æþ´+He1‰_3\áÉ¢ý\ç\Õ-O\ö…\'EP\è¤lÁ\Ípp:‹H#Ô©UQ‰uØ¯EqSt­	‘\íd‡…f \Ùx\àu^\ÝK^\ÃLDG\Û]:nna”\ä/lS9‚7O„\à\Ì\ïZ\ö\Â&>\ß?\ñ6‹“TSr>L|†38´G3q\Ô\×w}\Ùú-­tÅ˜\Õ<*\ð\ë\Ý;þ\Ì\î\\\Ís<ª\óýKV®2Z	{,ÇŽŒ\Z\î\Î/PÖ—6iŠxo\Ó\é\í\Ý\Õ\Ïr­Q™\ã\Â}=’dL¢ ykÃNû	Z\Òˆ\Íso†p¹µ\õ‘Î³\Ù6š\ökš¢3Õ„Ã·Uv\á#´Ž\ãä‹è«µoh·®\Ü\æM|¥=6è¥‰\ÍÎ¼\áL.qtŽ\r`Ü°qN#2\ð¯ÿ\0‹\Ñ:©uQ~irr–Wšf\ðr9¥¹Á\âÀµ\Æ67ç¾€²ÿ\04\Ê+»U\\e\ìL\Ä$™\ãE\ãˆ\Â>ú\Ðf·«®¹ª›\Ä\Ìo\åý\í&c.<\ó:G—\\\ã\Í\Ü\0\Õ\Íe\çb«•fx\Ë)–üC2À\â\Øø\ï\Ôd\ñY·@}wv\Zxÿ\0\×|ýú|ú·¢½8Ž›\ç\ï\óÕƒž[\'\Ê\ë\í\Ìi$Ÿ´ÿ\0\ä\\\õZ\ÓDgŒù~\ç\É~\Òb\Ü\Ì\ñª|#\Þ|’\ÕHYO\\\î&g‘›û Ÿ¶²¹gN:\ñ\ï\á\á¿\òÒº\ôÙ¦Žs¾}=\Ó\Ð\ÉÁRL\îyK!U®\É\Þ\ØûV5\ìù¦*ž¿\ïÓ½­™\Ñbªú\î_IQ<þ2º7Š€\ÇYc\ãQ\È\ñ\Ðé¡·v=jf‰§t§hŒWø…â¡€€€€€€€€€€‚›\ðˆi?þg\Õ\n½ªuW½¿\í\n=\Ø.k2\è¸\ð\Ô\ãË‡˜œn>\ë‰ûË¶‹]¥­\Üc\Ë\õ>më¯´µi\Ýøý ¢x!\Ñ8€\×Z\Ä\èk\Ç$\ôbA\éWÙ©¦fm\Õ\ÏÏ“ž+\Ý4\Ï?2&\à\èž-k|—Q\ÑØ··kûZ«\ï\öŸ\ß\å5n\Ó(\ê\å°\Æ\Í\rq\ç hÀuž\Õ\\SLSq‰•s—<¯&D\ôurDs£qi8DjsN*m\×]¹\ÕD\ÌO\Ð\Æ[Re\"\ì]D\ë\Í\îk€\î]S·ÞŸ\í‰ú\ã\Úah¥®jä†´\ë\0“\Ú\âl±ÿ\0‘r\'4\â>\Ñ\ï“J	I¹$“¤“rz\Ög2©¬A\ZA¸\é[ui˜˜(‹d\Ío%·%\Ö\ç;6\ólzW±oE\í4\ðŽ<\òd\Æp¯.xÍ \\jhÁ¬NŽÒ¢-\ö•\ÍuF\">D/ªw\ð\ôA,Ž–Bmw8\à`¸.I¢o\\\Ý\ÆSUÉªr\ØÊ’›qlb\ÛÉ»\ÝÛ‡@\n»M1iŽ»\ß\ÇÑ½Û›¢ˆ\á|\Ð\ä\êS,Œ`\\\à/ªú\\vsÔ³³g]Q\n[UE1\Íp\ï5T%Ê’¹¼M#51’S±½À.M¦bnLÁ¶WÞ<#t~bÁ\Ê          §¼ §\à\ÝA \Ò\×T\Î¶\ÏV›´\Ìu^\Ýz+Šº)Œ­J\ì\æ~­\ã9‡a\æ\é\Z·µ\ì\ñ®ž½\Ø\ÓV\îÁQ‰\á\Ãb‡aš\ïg\\J´\×4\ÎSVSµ¯\âž!\Âú@>)Úº\ïY¦›‘1\Âw«TDN\î§¨.¹\'P\êÁgwhÕ”4¤+Ë»Ve,3ˆz¥\"‹‘Y†*bUO–]\Ö.\éCpÏœ\Ò\Ó{~±…û¡7¢\å3Lü‘51Fe\Ó!»[\ôu¸\í¶…kq-M\Îsº>‹S8\ß\Í\Í\ÒW—?\ÊP\êS·€ˆ\Êyo¬\Øw\ä½·lMSÆ­ßŽ}ü\Z\ÑT\Ñ\Zù\ð…\àú\Ï?\öi­ùû\óš\å„\ñ_« @@@@@@@@@ALxF\òh¿y\õ@­Dâ¨‘RP\Ê†L¥®>+½…}Ë¶Yª\ÜÚ»TDrž\"¬Æ™iE\õm\\¶\îÙ¢½Z£r„q\æQsj¢®b¼’¹j»L\óšGù%aUq&AG\'’U5Br\ÌQ\É\ä•:¡mP|O$¦¨5A\ð)<—&¨3\ržAQ˜Fa\çÀd\òš¡†BŠO%\ËZnDs3\ÛK \ñJÞ›\ñÑ”­‚K[4Ø®švº1‰‘-\r\r\Þ3\î\ÖN\Ûs\r¥i³W³\ë\ÍuDBc;\å\æS2J\ë\æÑƒG0h\Ð6Ý¶›µnÉª¬\Ê\Ê\ð}am{Á?—\÷ ^=s™Ê‹ùTS>z(zj?ø ¦ƒÆ´‡C0\ñ­‘¯\Z\Ñ	ƒZ„ƒZ“h@m2\áF°Âa…\Z\Â\n5„k<2\rh<\ÏAa\ï\ær~\É\'\õ D¯„\Z\õ\õ\ÑS\ÆešFGt½\î\rh\ë(??o»»(2”Ð¶”¼\Å”½™­{¤1\âÀx\ÖšH\ZP|–I«1g86•ù\Ö\â\Ó2`-~H–2§›M†¤LD\Ï@\å\Çü\ÆN\ôm/¹Q˜NŠ˜œ¼ÿ\07\ÉþŽ£\÷I˜OgS\Ïøûü\ß\'ú:\Ý&¨;:ž~?\Í\è=G\î“0vu¤/\ózGQû¤\Ì#³«¡úDÿ\07 \ôuºLÁ\Ù\Ô~‘?\æ(=G\î“0vu¤OùŠGQû¤\Ì@\ÝüÞƒ\Ñ\Ô~\é3[ªAº\'ù¾O\ôm»LÁê—£tO\ó|Ÿ\è\ÚOv™‚-\Õ \Ýžo“½I\î\Ó0EKÑº	<\ß\'z6“û&™\â\ô\åù|\ß\'z2—û(Šfg\rj\ì­$€+\07¼4\Â\ã.‰ ‘°\á{&I¦c‹±½\Î\ë£\É\õ\Ây\ÃøDø˜\ÐH\Îtn#@\Ì\Æ\Øã ©C\ôNF\Ë4\õ‘‰©¥d±\ëi\ÄNn–„ƒ}U»møc¦|”\Ôlk\çcœ\Ç\É)Íi-p¸s\È j%;—2ü\õ\Òp•U+‡$´1ŸQ€†·¨ \Ð¾S>\ó}¨B_„.?¼\ßjŒ/\Ú}„ý8ûZšS&9GsS\ô™\Ú\ßja¤½dÀ\és{B`\í&x\ÂK_œ´Á7&xÇŸ»\ÂÞŽ\Ô\ÒMÙž1:;TiOk=<ý\Þtv©Á7&yyû™©„v“\Ó\ÏÝ‹švv„Á7&y<\ãl\îL¤\Éwl\í	ƒ´žE¼f\öµ0v’\ÈU}&\öµ0v“\ÒUo­LrdM­L¤¡|€›\ç3¨…*L¶2fU––A5<ÎŠQ\ã1\à5¡\Ãa¸AlnO~\Ð-Qh\Õ\ðˆ}oˆz\Ù\÷P]\0\ß      ª7c¼\Ë*\ê_SM8„\ÈK\ä\ñ\ç´\È\ãw9§8‚nH\Çm©\ÌÏ¼mhI\è\Ü~—\ÏSƒJM\å\ò\Ñ\ð7tL\ï\Î0ƒR]\èr¨\Ñ.úµÿ\0\Ú\È5ß½FV$¢x9Dw¯\Ê\Þdÿ\0ÅƒÞ \ö-\ë2³ŽdmtÐýBPm\æ\ò©\à\à8v\áÜ\ñ5•~nŸ\ñÇ±\âk*ùÿ\0Ž=ˆ<;\Í\å_›§üvû¼\ÞUù¸û\í\ö \÷\âk*ùÿ\0Ž=ˆYWÈ§üq\ìA\è\Þk*\ãÄ§\Ñ\ó\ãšjK½VVo\É3¶²xH\ì/zü­\æNüX}\ê	Y½NV?$·L\ðþR ž=\èr©\ÓC\ëT3\ò%\Ü{\Ë\å3¤R™\ÝùFPmA¼ey\å\ÏD\Ñ\ôL\õ° \í\ä=\âƒ%c\ê\êD‘wEE™\ö\Ð\Ó!u\Ãu\Ø_hÒ‚\æ\È=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Aÿ\Ù'),(26,'Laptop Dell XPS 13',6,15000000,'Intel i7','16GB','US','NVIDIA RTX 3060',NULL,NULL,13.3,'52Wh','512GB SSD','Laptop','DELL',512,20000000,NULL),(27,'Laptop Huy',18,25990000,'Intel Core i7-12700H','16GB','VN','NVIDIA RTX 3050',NULL,NULL,15.6,'6-cell 80Wh','512GB SSD','Laptop','ASUS',512,30990000,NULL);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -377,7 +579,7 @@ CREATE TABLE `role` (
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -386,7 +588,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Admin'),(4,'NhÃ¢n viÃªn bÃ¡n hÃ ng'),(2,'Quáº£n lÃ­ chi nhÃ¡nh'),(3,'Quáº£n lÃ­ xuáº¥t nháº­p kho'),(5,'User');
+INSERT INTO `role` VALUES (1,'Admin'),(4,'NhÃ¢n viÃªn bÃ¡n hÃ ng'),(2,'Quáº£n lÃ­ chi nhÃ¡nh'),(3,'Quáº£n lÃ­ xuáº¥t nháº­p kho'),(7,'Váº­n chuyá»ƒn nháº­p kho'),(6,'Váº­n chuyá»ƒn xuáº¥t kho'),(8,'Váº­n chuyá»ƒn Ä‘Æ¡n hÃ ng');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,7 +615,7 @@ CREATE TABLE `role_interfaceuser` (
 
 LOCK TABLES `role_interfaceuser` WRITE;
 /*!40000 ALTER TABLE `role_interfaceuser` DISABLE KEYS */;
-INSERT INTO `role_interfaceuser` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(3,1),(3,3),(3,4),(3,5),(3,6),(2,1),(2,10),(2,11),(2,7);
+INSERT INTO `role_interfaceuser` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(3,1),(3,3),(3,4),(3,5),(3,6),(2,1),(2,10),(2,11),(2,7),(4,12),(1,13),(7,14),(6,15),(1,16),(4,17);
 /*!40000 ALTER TABLE `role_interfaceuser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -456,11 +658,12 @@ CREATE TABLE `user` (
   `status` int(11) NOT NULL,
   `email` varchar(200) DEFAULT NULL,
   `machinhanh` int(11) DEFAULT NULL,
+  `phone` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `machinhanh` (`machinhanh`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`machinhanh`) REFERENCES `branch` (`machinhanh`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -469,7 +672,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','adminpass','Le Huu Huy',1,'lhhuy2005@gmail.com',NULL),(2,'manager01','managerpass','Thanh Thuy',1,'abc@gmail.com',2),(3,'sales01','salespass','Sy Hoc',1,'abcd@gmail.com',2),(4,'warehouse01','whpass','Thanh Vinh',1,'abcde@gmail.com',2);
+INSERT INTO `user` VALUES (1,'admin','adminpass','Le Huu Huy',1,'lhhuy2005@gmail.com',NULL,'1'),(2,'manager01','managerpass','Thanh Thuy',1,'abc@gmail.com',2,'2'),(3,'sales01','salespass','Sy Hoc',1,'abcd@gmail.com',2,'3'),(4,'warehouse01','whpass','Thanh Vinh',1,'abcde@gmail.com',2,'4'),(5,'staff01','staffpass','thui',1,'a@gmail.com',2,'5'),(6,'huy','huy','huy',1,'b@gmail.com',NULL,'6'),(7,'thuy','thuy','thuy',1,'c@gmail.com',NULL,'7');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -496,7 +699,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-INSERT INTO `user_role` VALUES (1,1),(2,2),(3,4),(4,3);
+INSERT INTO `user_role` VALUES (1,1),(2,2),(3,4),(4,3),(5,4),(6,7),(7,6);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -538,4 +741,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-30 10:42:04
+-- Dump completed on 2025-04-10  9:51:47

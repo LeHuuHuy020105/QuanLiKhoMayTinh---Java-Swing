@@ -4,10 +4,8 @@ import database.JDBCUtil;
 import model.Customer;
 import model.ImportProducts;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import javax.swing.*;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class CustomerDAO implements DAOInterface<Customer>{
@@ -150,5 +148,49 @@ public class CustomerDAO implements DAOInterface<Customer>{
             e.printStackTrace();
         }
         return ketQua;
+    }
+    public boolean checkSdt(String sdt){
+        String regex = sdt.replaceAll("[^0-9]", "");
+        if (!regex.matches("^0[0-9]{9}$")) {
+            System.out.println("Số điện thoại không đúng định dạng!");
+            return false;
+        }
+        Connection c = JDBCUtil.getConnection();
+        String sql = "select count(*) from customer where phone = ?";
+        try (
+            PreparedStatement ps = c.prepareStatement(sql);
+            ) {
+            ps.setString(1, regex);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkDataAccount(String account){
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM customer WHERE username = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+                ){
+            ps.setString(1, account);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

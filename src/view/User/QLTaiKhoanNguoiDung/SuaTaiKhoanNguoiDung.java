@@ -1,21 +1,16 @@
 package view.User.QLTaiKhoanNguoiDung;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import DAO.CustomerDAO;
-import DAO.ProducersDAO;
 import DAO.UserDAO;
-import controller.ValueAddress;
 import model.Customer;
-import model.Producer;
 import model.User;
 
-import java.awt.Color;
-import java.awt.Font;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.*;
 
-public class ThemTaiKhoanNguoiDung extends JFrame {
+public class SuaTaiKhoanNguoiDung extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JComboBox cbx_LoaiTK;
@@ -36,12 +31,12 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
     /**
      * Create the frame.
      */
-    public ThemTaiKhoanNguoiDung() {
+    public SuaTaiKhoanNguoiDung() {
         init();
         lockoffline();
     }
 
-    public ThemTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm) {
+    public SuaTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm) {
         this.currentUser = qlTaiKhoanNguoiDungForm.getCurrentUser();
         this.qlTaiKhoanNguoiDungForm = qlTaiKhoanNguoiDungForm;
         init();

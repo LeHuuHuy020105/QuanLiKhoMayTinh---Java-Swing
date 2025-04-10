@@ -4,6 +4,7 @@ import DAO.UserDAO;
 import model.User;
 import view.Icon;
 import view.User.Dashboard;
+import view.User.QLTaiKhoanNguoiDung.ThemTaiKhoanNguoiDung;
 
 import java.awt.EventQueue;
 
@@ -42,7 +43,7 @@ public class Login extends JFrame {
      * Create the frame.
      */
     public Login() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1000, 532);
         setLocationRelativeTo(null);
         contentPane = new JPanel();
@@ -113,7 +114,7 @@ public class Login extends JFrame {
         lblNewLabel_5.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-
+                new ThemTaiKhoanNguoiDung();
             }
         });
         lblNewLabel_5.setForeground(new Color(255, 0, 0));
