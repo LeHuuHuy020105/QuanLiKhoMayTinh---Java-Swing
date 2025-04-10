@@ -149,18 +149,19 @@ public class CustomerDAO implements DAOInterface<Customer>{
         }
         return ketQua;
     }
-    public boolean checkSdt(String sdt){
+    public boolean checkSdt(String sdt,String loaiTaiKhoan){
         String regex = sdt.replaceAll("[^0-9]", "");
         if (!regex.matches("^0[0-9]{9}$")) {
             System.out.println("Số điện thoại không đúng định dạng!");
             return false;
         }
         Connection c = JDBCUtil.getConnection();
-        String sql = "select count(*) from customer where phone = ?";
+        String sql = "select count(*) from customer where phone = ? and loaitaikhoan = ?";
         try (
             PreparedStatement ps = c.prepareStatement(sql);
             ) {
             ps.setString(1, regex);
+            ps.setString(2, loaiTaiKhoan);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -192,5 +193,23 @@ public class CustomerDAO implements DAOInterface<Customer>{
             e.printStackTrace();
         }
         return false;
+    }
+    public Customer findByPhone(String phone){
+        Connection c = JDBCUtil.getConnection();
+        String sql = "select * from customer where phone = ? loaitaikhoan = ?";
+        Customer customer = null;
+        try {
+            PreparedStatement pst = c.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            pst.setString(1, "phone");
+            pst.setString(2, "loaitaikhoan");
+            if (rs.next()) {
+                String sdt = rs.getString("phone");
+                String taikhoan = rs.getString("loaitaikhoan");
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

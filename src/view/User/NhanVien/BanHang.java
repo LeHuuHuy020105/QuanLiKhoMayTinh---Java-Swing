@@ -30,9 +30,9 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private User currentUser ;
     private ArrayList<DetailBill> detailBills;
     private JLabel label_TotalPrice;
-	private JLabel lbl_infoCustomer;
     private Customer customer;
     private JTextField textField_InfoCustomer;
+    private JTextField textField_InfoVoucher;
 
     /**
      * Create the panel.
@@ -101,7 +101,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         add(input_NguoiTaoPhieu);
 
         JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(676, 202, 559, 346);
+        scrollPane_1.setBounds(676, 236, 559, 312);
         add(scrollPane_1);
 
         table_nhapHang = new JTable();
@@ -141,10 +141,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         add(btnSaSLng);
 
         JButton btn_XoaSanPham = new JButton("Xoá sản phẩm");
-        btn_XoaSanPham.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
         btn_XoaSanPham.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -199,8 +195,9 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
         JButton btn_NhapHang = new JButton("Thanh toán");
         btn_NhapHang.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+                BanHangMouseClicked();
+            }
         });
         btn_NhapHang.addMouseListener(new MouseAdapter() {
             @Override
@@ -220,45 +217,65 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel_1_1.setBounds(676, 43, 123, 27);
         add(lblNewLabel_1_1);
-        
+
         JLabel lblNewLabel_1_1_1 = new JLabel("Khách hàng");
         lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel_1_1_1.setBounds(676, 114, 123, 27);
+        lblNewLabel_1_1_1.setBounds(676, 105, 123, 27);
         add(lblNewLabel_1_1_1);
-        
+
         JButton btnNewButton_3 = new JButton("New button");
         btnNewButton_3.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		SearchCustomer();
-        	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SearchCustomer();
+            }
         });
         btnNewButton_3.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+            public void actionPerformed(ActionEvent e) {
+            }
         });
-        btnNewButton_3.setBounds(1188, 119, 47, 21);
+        btnNewButton_3.setBounds(1174, 110, 47, 21);
         add(btnNewButton_3);
-        
-        lbl_infoCustomer = new JLabel("");
-        lbl_infoCustomer.setBounds(676, 167, 374, 27);
-        add(lbl_infoCustomer);
-        
+
         textField_InfoCustomer = new JTextField();
         textField_InfoCustomer.setText((String) null);
         textField_InfoCustomer.setEditable(false);
         textField_InfoCustomer.setColumns(10);
-        textField_InfoCustomer.setBounds(772, 116, 397, 27);
+        textField_InfoCustomer.setBounds(824, 107, 340, 27);
         add(textField_InfoCustomer);
-        
+
+        textField_InfoVoucher = new JTextField();
+        textField_InfoVoucher.setText((String) null);
+        textField_InfoVoucher.setEditable(false);
+        textField_InfoVoucher.setColumns(10);
+        textField_InfoVoucher.setBounds(676, 156, 493, 27);
+        add(textField_InfoVoucher);
+
+        JButton btnNewButton_3_1 = new JButton("Voucher");
+        btnNewButton_3_1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                VoucherMouseClicked();
+
+            }
+        });
+        btnNewButton_3_1.setBounds(1174, 159, 47, 21);
+        add(btnNewButton_3_1);
+
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
         ArrayList<String> items = dataCustomer(customers);
         fillData();
         setVisible(true);
     }
+
+    private void VoucherMouseClicked() {
+        RadioButtonScrollExample radioButtonScrollExample = new RadioButtonScrollExample(this);
+    }
+
+
     private void SearchCustomer() {
         QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(this);
-	}
+    }
     public void fillInfoCustomer(Customer customer){
         String s = customer.getSoDienThoai()+" - "+customer.getFullName();
         textField_InfoCustomer.setText(s);
@@ -428,8 +445,15 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     }
     public void SuaSoLuongMouseClicked() {
         boolean hasError = false;
+        Computer computer_selected = getComputerSelectedTableBanHang();
+        if (computer_selected == null) {
+            return;
+        }
         String newSL = JOptionPane.showInputDialog(this, "Nhập số lượng cần thay đổi", "Thay đổi số lượng", JOptionPane.QUESTION_MESSAGE);
         int soLuong =0;
+        if (newSL == null) {
+            return;
+        }
         try {
             soLuong = Integer.parseInt(newSL);
         } catch (Exception e) {
@@ -437,17 +461,20 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelectedTableBanHang();
+
         DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
         detailBill.setSoLuong(soLuong);
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
     }
     public void XoaMouseClicked() {
+        Computer computer_selected = getComputerSelectedTableBanHang();
+        if (computer_selected == null) {
+            return;
+        }
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
-            Computer computer_Selected = getComputerSelectedTableBanHang();
-            DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_Selected);
+            DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
             this.detailBills.remove(detailBill);
         }
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
@@ -471,14 +498,18 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     public void BanHangMouseClicked() {
         if(detailBills.size()==0){
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để nhập hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-        }else {
-            int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
-            if(check == JOptionPane.YES_OPTION){
-                Bill bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,0,"offline");
-                int maPhieu = BillDAO.getInstance().insertBill(bill);
-                updateDatabaseDetailBill(maPhieu);
-            }
+            return;
         }
+        Bill bill = null;
+        if(customer==null){
+            bill = new Bill();
+
+        }else {
+            bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,0,"offline");
+        }
+
+        int maPhieu = BillDAO.getInstance().insertBill(bill);
+        updateDatabaseDetailBill(maPhieu);
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
         resetNhapHang();
     }
@@ -496,6 +527,9 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         detailBills.clear();
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         label_TotalPrice.setText("");
+    }
+    public void fillInfoVoucher(Voucher voucher){
+        textField_InfoVoucher.setText(voucher.getDescription());
     }
     public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
 //        try {
@@ -570,7 +604,12 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 //        }
         System.out.println("abc");
     }
-
+    public Customer getCustomer() {
+        String text = textField_InfoCustomer.getText();
+        String[] split = text.split(" - ");
+        Customer customer = CustomerDAO.getInstance()
+        return customer;
+    }
     public User getCurrentUser() {
         return currentUser;
     }

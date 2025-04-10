@@ -219,7 +219,8 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             String phone = input_SDT.getText();
             String repass = new String(Re_passwordField.getPassword());
             String username = input_HoTen.getText();
-            if (checkConfirmPassword(pass, repass) && checkEmail(email) && checkValidAccount(taikhoan) && kiemTraNameUser(username) && checkValidPhone(phone)) {
+            String loaiTaiKhoan = cbx_LoaiTK.getSelectedItem() + "";
+            if (checkConfirmPassword(pass, repass) && checkEmail(email) && checkValidAccount(taikhoan) && kiemTraNameUser(username) && checkValidPhone(phone,loaiTaiKhoan)) {
                 ThemTaiKhoanOnline();
                 this.dispose();
             }
@@ -316,12 +317,12 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         }
         return true;
     }
-	public boolean checkValidPhone(String phoneNumber) {
+	public boolean checkValidPhone(String phoneNumber , String loaiTaiKhoan) {
         if (phoneNumber == null || phoneNumber.equals("null")) {
             JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!");
             return false;
         }
-        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber);
+        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaiTaiKhoan);
         if (flag == true) {
             JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
             return false;
