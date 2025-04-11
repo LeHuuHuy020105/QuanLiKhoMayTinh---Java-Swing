@@ -53,9 +53,13 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     private JComboBox cbx_luaChon;
     private User currentUser;
 
+    public SanPhamForm() {
+    }
+
     /**
      * Create the panel.
      */
+
     public SanPhamForm(User currentUser) {
         this.currentUser = currentUser;
         setLayout(null);
@@ -558,5 +562,17 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                             loaiMay
                     });
         }
+    }
+
+    public void setCbx_luaChon(JComboBox cbx_luaChon) {
+        this.cbx_luaChon = cbx_luaChon;
+    }
+
+    public void setInput_Search(JTextField input_Search) {
+        this.input_Search = input_Search;
+    }
+
+    public void setTable_product(JTable table_product) {
+        this.table_product = table_product;
     }
 }

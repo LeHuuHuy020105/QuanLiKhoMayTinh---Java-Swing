@@ -42,4 +42,6 @@ public class DetailBillDAO implements DAOInterface<DetailBill> {
     public ArrayList<DetailBill> selectAll() {
         return null;
     }
+
+
 }
