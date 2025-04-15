@@ -133,12 +133,12 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Stat
 		endDate.setBounds(369, 11, 165, 30);
 		startDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				filterByTime();
+//				filterByTime();
 			}
 		});
 		endDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				filterByTime();
+//				filterByTime();
 			}
 		});
 		panel_5_1_1_1.add(startDate);

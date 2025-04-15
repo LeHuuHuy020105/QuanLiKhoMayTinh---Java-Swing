@@ -36,6 +36,7 @@ public class Customer {
         this.password = password;
         this.soDienThoai = soDienThoai;
         this.userName = userName;
+        this.loaiTaiKhoan = loaiTaiKhoan;
     }
 
     public String getLoaiTaiKhoan() {
@@ -100,5 +101,19 @@ public class Customer {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "diaChi='" + diaChi + '\'' +
+                ", maKhachHang=" + maKhachHang +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", soDienThoai='" + soDienThoai + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", loaiTaiKhoan='" + loaiTaiKhoan + '\'' +
+                '}';
     }
 }

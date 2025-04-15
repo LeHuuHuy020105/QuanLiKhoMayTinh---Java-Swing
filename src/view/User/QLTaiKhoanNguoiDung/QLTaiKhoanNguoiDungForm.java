@@ -33,6 +33,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable<Customer>, ExcelIntrerface {
 
@@ -318,8 +320,18 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     }
 
     @Override
-    public void updateTableDataFormDAO() {
+    public void updateTableDataFormDAO(){
+        System.out.println("role");
+        System.out.println(role);
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
+        System.out.println(customers);
+        if(role.equals("Nhân viên bán hàng")){
+            System.out.println("abcd");
+            customers= customers.stream()
+                    .filter(item -> Objects.equals(item.getLoaiTaiKhoan(), "offline"))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+        System.out.println(customers);
         updateTableData(customers);
     }
 

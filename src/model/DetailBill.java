@@ -10,6 +10,10 @@ public class DetailBill {
         this.maPhieu = maPhieu;
         this.soLuong = soLuong;
     }
+    public DetailBill(int maMay, int soLuong) {
+        this.maMay = maMay;
+        this.soLuong = soLuong;
+    }
 
     public int getMaMay() {
         return maMay;

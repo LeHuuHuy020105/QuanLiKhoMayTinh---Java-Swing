@@ -5,6 +5,10 @@ import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
 import model.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import view.Icon;
 import view.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
 
@@ -14,8 +18,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
@@ -33,11 +41,12 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 	private JLabel lbl_infoCustomer;
     private Customer customer;
     private JTextField textField_InfoCustomer;
-
+    private  JFileChooser jFileChooser;
     /**
      * Create the panel.
      */
     public BanHang(User user) {
+        jFileChooser = new JFileChooser();
         this.detailBills = new ArrayList<>();
         this.currentUser = user;
         setLayout(null);
@@ -117,6 +126,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                NhapExcelMouseClicked();
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -198,10 +208,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         add(label_TotalPrice);
 
         JButton btn_NhapHang = new JButton("Thanh toán");
-        btn_NhapHang.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
-        });
         btn_NhapHang.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -256,6 +262,50 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         fillData();
         setVisible(true);
     }
+
+    public void NhapExcelMouseClicked(){
+        jFileChooser.showOpenDialog(null);
+        File file = jFileChooser.getSelectedFile();
+        if(!file.getName().endsWith("xlsx")){
+            JOptionPane.showMessageDialog(null,"Vui lòng chọn file Excel.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            fillData(file);
+        }
+    }
+    public void fillData(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int maMay = (int) row.getCell(0).getNumericCellValue();
+                int soLuong =  (int) row.getCell(1).getNumericCellValue();
+                DetailBill detailBill = new DetailBill(maMay,soLuong);
+                DetailBill detailBill1_exist = isValidProduct(detailBill,detailBills);
+                if(detailBill1_exist==null){
+                    detailBills.add(detailBill);
+                }else {
+                    detailBill1_exist.setSoLuong(detailBill1_exist.getSoLuong()+soLuong);
+                }
+                updateDataToTableBanHangForm(detailBills,table_nhapHang);
+            }
+            setTotalPrice();
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
+    }
+
     private void SearchCustomer() {
         QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(this);
 	}
@@ -427,6 +477,10 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         return null;
     }
     public void SuaSoLuongMouseClicked() {
+        Computer computer_selected = getComputerSelectedTableBanHang();
+        if(computer_selected==null){
+            return;
+        }
         boolean hasError = false;
         String newSL = JOptionPane.showInputDialog(this, "Nhập số lượng cần thay đổi", "Thay đổi số lượng", JOptionPane.QUESTION_MESSAGE);
         int soLuong =0;
@@ -437,16 +491,18 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelectedTableBanHang();
         DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
         detailBill.setSoLuong(soLuong);
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
     }
     public void XoaMouseClicked() {
+        Computer computer_Selected = getComputerSelectedTableBanHang();
+        if(computer_Selected==null){
+            return;
+        }
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
-            Computer computer_Selected = getComputerSelectedTableBanHang();
             DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_Selected);
             this.detailBills.remove(detailBill);
         }
@@ -472,6 +528,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         if(detailBills.size()==0){
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để nhập hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }else {
+            getCustomer();
             int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
             if(check == JOptionPane.YES_OPTION){
                 Bill bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,0,"offline");
@@ -497,6 +554,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         label_TotalPrice.setText("");
     }
+
     public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
 //        try {
 //            com.itextpdf.text.Document document = new Document();
@@ -569,6 +627,16 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 //            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 //        }
         System.out.println("abc");
+    }
+
+    public void getCustomer() {
+        String text_info = textField_InfoCustomer.getText();
+        String[] line = text_info.split(" - ");
+        String sdt = line[0];
+        Customer customerCurrent = CustomerDAO.getInstance().findByPhone(sdt);
+        if(customerCurrent != null){
+            customer = customerCurrent;
+        }
     }
 
     public User getCurrentUser() {
