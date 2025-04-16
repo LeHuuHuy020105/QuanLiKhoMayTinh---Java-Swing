@@ -21,11 +21,13 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
     private static final long serialVersionUID = 1L;
     private JTextField textField;
     private JTable table_user;
+    private User currentUser;
 
     /**
      * Create the panel.
      */
-    public QLTaiKhoanForm() {
+    public QLTaiKhoanForm(User currentUser) {
+        this.currentUser = currentUser;
         setLayout(null);
         setSize(1257, 911);
         Box verticalBox = Box.createVerticalBox();
@@ -175,7 +177,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<User>users = UserDAO.getInstance().selectAll();
+        ArrayList<User>users = UserDAO.getInstance().selectAllNotAdmin(currentUser);
         updateTableData(users);
     }
 
@@ -187,7 +189,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
             model.addRow(new Object[]{
                     user.getIdUser(),
-                    user.getPassword(),
+                    user.getFullName(),
                     user.getUserName(),
                     user.getEmail(),
                     role,
@@ -213,5 +215,13 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         int idUser = Integer.parseInt(model.getValueAt(i_row,0)+"");
         User user_Selected = UserDAO.getInstance().getUsetById(idUser);
         return user_Selected;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

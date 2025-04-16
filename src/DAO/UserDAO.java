@@ -37,7 +37,24 @@ public class UserDAO implements DAOInterface<User>{
 
     @Override
     public int update(User user) {
-        return 0;
+        int ketQua=0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "UPDATE user u join user_role ur on u.id = ur.user_id SET password=?,fullname=?,status=?,email=?,machinhanh=?,phone=?, role_id=? WHERE id =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, user.getPassword());
+            pst.setString(2, user.getUserName());
+            pst.setInt(3, user.getStatus());
+            pst.setString(4, user.getEmail());
+            pst.setInt(5, user.getMaChiNhanh());
+            pst.setString(6, user.getPhone());
+            pst.setInt(7, user.getIdUser());
+            ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
     }
 
     @Override
@@ -52,6 +69,31 @@ public class UserDAO implements DAOInterface<User>{
             Connection connection = JDBCUtil.getConnection();
             String sql = "select * from user";
             PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                int idUser = rs.getInt("id");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String fullname = rs.getString("fullname");
+                int status = rs.getInt("status");
+                int machinhanh = rs.getInt("machinhanh");
+                String phone = rs.getString("phone");
+                User user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
+                ketQua.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
+    public ArrayList<User> selectAllNotAdmin(User currentUser) {
+        ArrayList<User> ketQua = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "select * from user where id >? ";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1,currentUser.getIdUser() );
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
                 int idUser = rs.getInt("id");
