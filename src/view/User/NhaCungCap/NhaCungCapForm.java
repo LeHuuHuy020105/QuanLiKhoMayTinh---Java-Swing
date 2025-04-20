@@ -436,7 +436,17 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            ProducersDAO.getInstance().delete(getProducerSelected());
+            int ketQua = ProducersDAO.getInstance().delete(getProducerSelected());
+            if (ketQua == -1) {
+                JOptionPane.showMessageDialog(this, "Không thể xóa nhà cung cấp này vì đã có đơn nhập liên quan!");
+            } else if (ketQua > 0) {
+                updateTableDataFormDAO();
+                JOptionPane.showMessageDialog(this, "Xóa nhà cung cấp thành công!");
+            } else if (ketQua == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp để xóa!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định khi xóa nhà cung cấp!");
+            }
             updateTableDataFormDAO();
         }
     }

@@ -1,5 +1,6 @@
 package view.User.QLTaiKhoanAdmin;
 
+import DAO.BrandDAO;
 import DAO.UserDAO;
 import controller.updateDataToTable;
 import model.User;
@@ -21,11 +22,13 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
     private static final long serialVersionUID = 1L;
     private JTextField textField;
     private JTable table_user;
+    private User currentUser;
 
     /**
      * Create the panel.
      */
-    public QLTaiKhoanForm() {
+    public QLTaiKhoanForm(User currentUser) {
+        this.currentUser = currentUser;
         setLayout(null);
         setSize(1257, 911);
         Box verticalBox = Box.createVerticalBox();
@@ -117,6 +120,12 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnSua);
 
         JButton btnXoa = new JButton("Xoá");
+        btnXoa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                XoaMouseClicked();
+            }
+        });
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -173,9 +182,28 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         updateTableDataFormDAO();
     }
 
+    public void XoaMouseClicked(){
+        int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
+        if(luaChon == JOptionPane.YES_OPTION){
+            int ketQua = UserDAO.getInstance().delete(getCurrentUser());
+            if (ketQua == -1) {
+                JOptionPane.showMessageDialog(this, "Không thể xóa đã có tham chiếu liên quan!");
+            } else if (ketQua > 0) {
+                updateTableDataFormDAO();
+                JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
+            } else if (ketQua == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản để xóa!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định khi xóa tài khoản!");
+            }
+            updateTableDataFormDAO();
+        }
+
+    }
+
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<User>users = UserDAO.getInstance().selectAll();
+        ArrayList<User>users = UserDAO.getInstance().selectAllNotAdmin(currentUser);
         updateTableData(users);
     }
 
@@ -187,7 +215,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
             model.addRow(new Object[]{
                     user.getIdUser(),
-                    user.getPassword(),
+                    user.getFullName(),
                     user.getUserName(),
                     user.getEmail(),
                     role,
@@ -196,7 +224,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         }
     }
     public void ThemTaiKhoanMouseClicked() {
-        ThemTaiKhoanForm themTaiKhoanForm = new ThemTaiKhoanForm();
+        ThemTaiKhoanForm themTaiKhoanForm = new ThemTaiKhoanForm(this);
         themTaiKhoanForm.setVisible(true);
     }
     public void SuaTaiKhoanMouseClicked() {
@@ -213,5 +241,13 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         int idUser = Integer.parseInt(model.getValueAt(i_row,0)+"");
         User user_Selected = UserDAO.getInstance().getUsetById(idUser);
         return user_Selected;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

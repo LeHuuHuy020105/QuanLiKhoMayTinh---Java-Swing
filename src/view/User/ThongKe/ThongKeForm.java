@@ -1,5 +1,7 @@
 package view.User.ThongKe;
 
+import model.User;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -30,11 +32,12 @@ public class ThongKeForm extends JPanel {
     private JPanel side_ThongKe_Phieu;
     private JPanel side_ThongKe_TaiKhoan;
     private CardLayout cardLayout;
-
+    private User currentUser;
     /**
      * Create the panel.
      */
-    public ThongKeForm() {
+    public ThongKeForm(User currentUser) {
+        this.currentUser = currentUser;
         setLayout(null);
         setSize(1257, 911);
 
@@ -50,12 +53,10 @@ public class ThongKeForm extends JPanel {
         cardLayout = new CardLayout(0, 0);
         cardPanel.setLayout(cardLayout);
 
-        ThongKeSanPhamForm thongKeSanPhamForm = new ThongKeSanPhamForm();
-        ThongKePhieuForm thongKePhieuForm = new ThongKePhieuForm();
-        ThongKeTaiKhoanForm thongKeTaiKhoanForm = new ThongKeTaiKhoanForm();
+        ThongKeSanPhamForm thongKeSanPhamForm = new ThongKeSanPhamForm(currentUser);
+        ThongKePhieuForm thongKePhieuForm = new ThongKePhieuForm(currentUser);
 
         cardPanel.add(thongKeSanPhamForm, "Thống kê sản phẩm");
-        cardPanel.add(thongKeTaiKhoanForm, "Thống kê tài khoản");
         cardPanel.add(thongKePhieuForm, "Thống kê phiếu");
 
         JLabel lblNewLabel = new JLabel("26");
@@ -240,7 +241,4 @@ public class ThongKeForm extends JPanel {
         cardLayout.show(cardPanel,"Thống kê tài khoản");
     }
 
-    public static void main(String[] args) {
-        new ThongKeForm().setVisible(true);
-    }
 }

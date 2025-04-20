@@ -3,9 +3,7 @@ package DAO;
 import database.JDBCUtil;
 import model.Branch;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class BrandDAO implements DAOInterface<Branch>{
@@ -38,14 +36,21 @@ public class BrandDAO implements DAOInterface<Branch>{
         int ketQua =0 ;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "update set tenchinhanh =?, diachi =?, tenquan =?, thanhpho =?, sodienthoai =?, mota=? from branch where machinhanh=?";
+            String sql = "update branch  set tenchinhanh =?, diachi =?, tenquan =?, thanhpho =?, sodienthoai =?, mota=? where machinhanh=?";
             PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,branch.getTenChiNhanh());
+            pst.setString(2,branch.getDiaChi());
+            pst.setString(3,branch.getTenQuan());
+            pst.setString(4,branch.getThanhPho());
+            pst.setString(5,branch.getSoDienThoai());
+            pst.setString(6,branch.getMoTa());
+            pst.setInt(7,branch.getMaChiNhanh());
             ketQua=pst.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return 0;
+        return ketQua;
     }
 
     @Override
@@ -57,8 +62,11 @@ public class BrandDAO implements DAOInterface<Branch>{
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,branch.getMaChiNhanh());
             ketQua=pst.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (Exception e) {
             e.printStackTrace();
+            ketQua = -2;
         }
         return ketQua;
     }
@@ -134,4 +142,43 @@ public class BrandDAO implements DAOInterface<Branch>{
         }
         return branch;
     }
+    public boolean checkSdt(String sdt){
+        Connection c = JDBCUtil.getConnection();
+        String sql = "select count(*) from branch where sodienthoai = ? ";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setString(1, sdt);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean checkName(String name){
+        Connection c = JDBCUtil.getConnection();
+        String sql = "select count(*) from branch where tenchinhanh = ? ";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

@@ -176,6 +176,7 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
         label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
         label_vaiTroNguoiTaoPhieu.setText(role);
         label_thoiDiemTaoPhieu.setText(importProducts_selected.getTimestamp()+"");
+        label_thoiDiemHuyPhieu.setText(importProducts_selected.getThoiGianHuy()+"");
         String tongTien = df.format(importProducts_selected.getTongTien())+" VND";
         label_TongTien.setText(tongTien);
         ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());

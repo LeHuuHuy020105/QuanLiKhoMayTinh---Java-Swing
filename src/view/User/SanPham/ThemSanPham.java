@@ -353,14 +353,31 @@ public class ThemSanPham extends JFrame {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sản phẩm!");
 			hasError = true;
 		}
-
 		// Kiểm tra giá (double)
 		try {
 			gia = Double.parseDouble(input_gia.getText().trim());
 			giaBan = Double.parseDouble(textField_giaBan.getText().trim());
-			if (gia <= 0 || giaBan<=0) throw new NumberFormatException();
+
+			// Kiểm tra giá trị là số dương
+			if (gia <= 0 || giaBan <= 0) {
+				throw new NumberFormatException("Giá nhập và giá bán phải là số dương!");
+			}
+
+			// Kiểm tra giá bán phải lớn hơn giá nhập
+			if (giaBan <= gia) {
+				throw new NumberFormatException("Giá bán phải lớn hơn giá nhập!");
+			}
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(this, "Vui lòng nhập đơn giá hợp lệ (số dương)!");
+			// Kiểm tra nguyên nhân lỗi để hiển thị thông báo phù hợp
+			String errorMessage;
+			if (e.getMessage() != null && e.getMessage().contains("must be positive")) {
+				errorMessage = "Vui lòng nhập đơn giá hợp lệ (số dương)!";
+			} else if (e.getMessage() != null && e.getMessage().contains("must be greater")) {
+				errorMessage = "Giá bán phải lớn hơn giá nhập!";
+			} else {
+				errorMessage = "Vui lòng nhập số hợp lệ cho giá nhập và giá bán!";
+			}
+			JOptionPane.showMessageDialog(this, errorMessage);
 			hasError = true;
 		}
 

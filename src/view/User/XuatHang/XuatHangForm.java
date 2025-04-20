@@ -143,6 +143,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         JButton btnSaSLng = new JButton("Sửa số lượng");
         btnSaSLng.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                SuaSoLuongMouseClicked();
             }
         });
         btnSaSLng.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
@@ -153,6 +154,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         JButton btnXoSnPhm = new JButton("Xoá sản phẩm");
         btnXoSnPhm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                XoaMouseClicked();
             }
         });
         btnXoSnPhm.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
@@ -221,6 +223,48 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         updateTableDataFormDAO();
         fillDataInterface();
     }
+    public void XoaMouseClicked(){
+        Computer computer_Selected = getComputerSelectedTableXuatHang();
+        if(computer_Selected==null){
+            return;
+        }
+        int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
+                JOptionPane.YES_NO_OPTION);
+        if(luaChon==JOptionPane.YES_OPTION){
+            DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_Selected);
+            this.detailExportProducts.remove(detailExportProducts1);
+        }
+        updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
+    }
+    public DetailExportProducts EntryFormByProductID(ArrayList<DetailExportProducts> detailExportProducts, Computer computer){
+        for(DetailExportProducts detailExportProducts1 : detailExportProducts){
+            if(detailExportProducts1.getMaMay() == computer.getMaMay()){
+                return detailExportProducts1;
+            }
+        }
+        return null;
+    }
+
+    public void SuaSoLuongMouseClicked() {
+        Computer computer_selected = getComputerSelectedTableXuatHang();
+        if (computer_selected==null){
+            return;
+        }
+        boolean hasError = false;
+        String newSL = JOptionPane.showInputDialog(this, "Nhập số lượng cần thay đổi", "Thay đổi số lượng", JOptionPane.QUESTION_MESSAGE);
+        int soLuong =0;
+        try {
+            soLuong = Integer.parseInt(newSL);
+        } catch (Exception e) {
+            hasError=true;
+            JOptionPane.showMessageDialog(this,Notification.isValidNumber);
+        }
+        if(hasError)return;
+        DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_selected);
+        detailExportProducts1.setSoLuong(soLuong);
+        updateDataToTableXuatHangForm(this.detailExportProducts,table_XuatHang);
+    }
+
     public void NhapExcelMouseClicked(){
         jFileChooser.showOpenDialog(null);
         File file = jFileChooser.getSelectedFile();
@@ -247,8 +291,13 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
                 Row row = rowIterator.next();
                 int maMay = (int) row.getCell(0).getNumericCellValue();
                 int soLuong =  (int) row.getCell(1).getNumericCellValue();
-                DetailExportProducts detailImportProducts1 = new DetailExportProducts(maMay,soLuong);
-                detailExportProducts.add(detailImportProducts1);
+                DetailExportProducts detailExportProducts1 = new DetailExportProducts(maMay,soLuong);
+                DetailExportProducts detailExportProducts_isValid = isValidProduct(detailExportProducts1,detailExportProducts);
+                if(detailExportProducts_isValid==null){
+                    detailExportProducts.add(detailExportProducts1);
+                }else {
+                    detailExportProducts_isValid.setSoLuong(detailExportProducts_isValid.getSoLuong() + soLuong);
+                }
                 updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
             }
             JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
@@ -294,11 +343,23 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         DefaultTableModel model = (DefaultTableModel) table_Product.getModel();
         int i_row = table_Product.getSelectedRow();
         if (i_row == -1) {
-            JOptionPane.showConfirmDialog(this, "Vui lòng chọn sản phẩm");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm");
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 1) + "");
         Computer computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        return computer;
+    }
+    public Computer getComputerSelectedTableXuatHang() {
+        Computer computer = null;
+        DefaultTableModel model = (DefaultTableModel) table_XuatHang.getModel();
+        int i_row = table_XuatHang.getSelectedRow();
+        if (i_row == -1) {
+            JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
+            return null;
+        }
+        int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
+        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
         return computer;
     }
 
@@ -354,7 +415,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         if(detailExportProducts.size()==0) {
             JOptionPane.showMessageDialog(this, "Bạn chưa chọn sản phẩm để xuất hàng !", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
         }else {
-            int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
+            int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn xuất hàng ?", "Xác nhận xuất hàng", JOptionPane.YES_NO_OPTION);
             if(check==JOptionPane.YES_OPTION) {
                 String diaChi = cbx_ChiNhanh.getSelectedItem()+"";
                 Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);

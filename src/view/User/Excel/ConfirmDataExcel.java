@@ -8,6 +8,7 @@ import model.Branch;
 import model.Computer;
 import model.Laptop;
 import model.Producer;
+import view.User.SanPham.SanPhamForm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +34,7 @@ public class ConfirmDataExcel extends JFrame {
     /**
      * Create the frame.
      */
-    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title) {
+    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title ) {
         this.data = new ArrayList<>(data);
         setTitle(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,6 +102,7 @@ public class ConfirmDataExcel extends JFrame {
         if (obj instanceof Computer){
             Computer computer = (Computer) obj;
             ProductsDAO.getInstance().insert(computer);
+
         }else {
             if(obj instanceof Branch){
                 Branch branch = (Branch)obj;
@@ -117,17 +119,16 @@ public class ConfirmDataExcel extends JFrame {
             JOptionPane.showMessageDialog(this, "Không có sản phẩm nào để thêm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc thêm những sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc thêm ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
             for (Object obj : data) {
                insertObject(obj);
             }
+
             JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
             this.dispose();
         } else {
             this.dispose();
         }
-
     }
-
 }

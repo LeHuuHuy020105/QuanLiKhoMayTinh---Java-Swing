@@ -214,16 +214,19 @@ public class writePDF {
             setTitle("THÔNG TIN PHIẾU XUẤT");
 
             ExportProducts px = ExportProductsDAO.getInstance().ExportProductsByID(mapx);
-
+            Branch px_brand =  BrandDAO.getInstance().BranchByID(px.getMaChiNhanh());
             Paragraph para1 = new Paragraph(new Phrase("Mã phiếu: " + mapx, fontData));
             Paragraph para2 = new Paragraph(new Phrase("Thời gian tạo: " + formatDate.format(px.getNgayLenDonXuat()), fontData));
             Paragraph para3 = new Paragraph(new Phrase("Người tạo: " + UserDAO.getInstance().getUsetById(px.getManguoidung()).getFullName(), fontData));
+            Paragraph para4 = new Paragraph(new Phrase("Chi nhánh: " +px_brand.getTenChiNhanh()+ " - " + px_brand.getDiaChi() , fontData));
             para1.setIndentationLeft(40);
             para2.setIndentationLeft(40);
             para3.setIndentationLeft(40);
+            para4.setIndentationLeft(40);
             document.add(para1);
             document.add(para2);
             document.add(para3);
+            document.add(para4);
             document.add(Chunk.NEWLINE);//add hang trong de tao khoang cach
 
             //Tao table cho cac chi tiet cua hoa don

@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Struct;
 
 public class SuaTaiKhoanNguoiDung extends JFrame {
 
@@ -23,6 +24,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
     private JPasswordField passwordField;
     private JPasswordField Re_passwordField;
     private QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm;
+    private Customer customer_Selected;
 
     /**
      * Launch the application.
@@ -33,14 +35,18 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
      */
     public SuaTaiKhoanNguoiDung() {
         init();
-        lockoffline();
+//        lockoffline();
     }
 
-    public SuaTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm) {
-        this.currentUser = qlTaiKhoanNguoiDungForm.getCurrentUser();
+//    public SuaTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm) {
+//        this.currentUser = qlTaiKhoanNguoiDungForm.getCurrentUser();
+//        this.qlTaiKhoanNguoiDungForm = qlTaiKhoanNguoiDungForm;
+//        init();
+//        Permission();
+//    }
+    public SuaTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm){
         this.qlTaiKhoanNguoiDungForm = qlTaiKhoanNguoiDungForm;
         init();
-        Permission();
     }
 
     public void init() {
@@ -85,11 +91,11 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         input_SDT.setBounds(10, 224, 328, 28);
         contentPane.add(input_SDT);
 
-        JButton btn_ThemSanPham = new JButton("Thêm");
+        JButton btn_ThemSanPham = new JButton("Luu");
         btn_ThemSanPham.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                ThemNhaCungCapMouseClicked();
+                LuuMouseClicked();
             }
         });
         btn_ThemSanPham.setIcon(null);
@@ -165,16 +171,17 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         });
         cbx_LoaiTK.setBounds(10, 636, 328, 28);
         contentPane.add(cbx_LoaiTK);
+        fillData();
         setVisible(true);
     }
 
-    private void Permission() {
-        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
-        if (role.equals("Nhân viên bán hàng")) {
-            PerrmissionStaff();
-            cbx_LoaiTK.setEnabled(false);
-        }
-    }
+//    private void Permission() {
+//        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+//        if (role.equals("Nhân viên bán hàng")) {
+//            PerrmissionStaff();
+//            cbx_LoaiTK.setEnabled(false);
+//        }
+//    }
 
     public void PerrmissionStaff() {
         textField_TK.setEditable(false);
@@ -199,67 +206,105 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         }
     }
 
-    public void lockoffline() {
-        if (this.currentUser == null) {
-            cbx_LoaiTK.setSelectedItem("online");
-            cbx_LoaiTK.setEnabled(false);
-        }
-    }
+//    public void lockoffline() {
+//        if (this.currentUser == null) {
+//            cbx_LoaiTK.setSelectedItem("online");
+//            cbx_LoaiTK.setEnabled(false);
+//        }
+//    }
 
-    private void ThemNhaCungCapMouseClicked() {
-        if (currentUser == null) {
-            String email = textField_Email.getText();
-            String taikhoan = textField_TK.getText();
-            String pass = new String(passwordField.getPassword());
-            String phone = input_SDT.getText();
-            String repass = new String(Re_passwordField.getPassword());
-            String username = input_HoTen.getText();
-            if (checkConfirmPassword(pass, repass) && checkEmail(email) && checkValidAccount(taikhoan) && kiemTraNameUser(username) && checkValidPhone(phone)) {
-                ThemTaiKhoanOnline();
-                this.dispose();
-            }
+//    private void ThemNhaCungCapMouseClicked() {
+//        if (currentUser == null) {
+//            String email = textField_Email.getText();
+//            String taikhoan = textField_TK.getText();
+//            String pass = new String(passwordField.getPassword());
+//            String phone = input_SDT.getText();
+//            String repass = new String(Re_passwordField.getPassword());
+//            String username = input_HoTen.getText();
+//            String loaiTaiKhoan = cbx_LoaiTK.getSelectedItem() + "";
+//            if (checkConfirmPassword(pass, repass) && checkEmail(email) && checkValidAccount(taikhoan) && kiemTraNameUser(username) && checkValidPhone(phone,loaiTaiKhoan)) {
+//                ThemTaiKhoanOnline();
+//                this.dispose();
+//            }
+//            return;
+//        } else {
+//            String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+//            if (role.equals("Nhân viên bán hàng")) {
+//                ThemTaiKhoanOffline();
+//            } else {
+//                ThemTaiKhoanOnline();
+//            }
+//        }
+//        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
+//        this.dispose();
+//    }
+//
+//    private void ThemTaiKhoanOnline() {
+//        String hoTen = input_HoTen.getText();
+//        String soDienThoai = input_SDT.getText();
+//        String taiKhoan = textField_TK.getText();
+//        String matKhau = new String(passwordField.getPassword());
+//        String nhapLaiMatKhau = new String(Re_passwordField.getPassword());
+//        String email = textField_Email.getText();
+//        if (hoTen.isEmpty() || soDienThoai.isEmpty() || taiKhoan.isEmpty() || matKhau.isEmpty() || email.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
+//            return;
+//        }
+//        if (!checkConfirmPassword(matKhau, nhapLaiMatKhau)) {
+//            return;
+//        }
+//        Customer customer = new Customer(taiKhoan, matKhau, "online", hoTen, email, soDienThoai);
+//        CustomerDAO.getInstance().insert(customer);
+//    }
+//
+//    private void ThemTaiKhoanOffline() {
+//        String hoTen = input_HoTen.getText();
+//        String soDienThoai = input_SDT.getText();
+//        if (hoTen.isEmpty() || soDienThoai.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin họ tên và số điện thoại !");
+//            return;
+//        }
+//        Customer customer = new Customer(soDienThoai, hoTen, "offline");
+//        CustomerDAO.getInstance().insert(customer);
+//    }
+    public void LuuTaiKhoanOffline(){
+        String phone = input_SDT.getText()+"";
+        String hoVaTen = input_HoTen.getText()+"";
+        customer_Selected.setSoDienThoai(phone);
+        customer_Selected.setFullName(hoVaTen);
+        String cbx_LoaiTaiKhoan = cbx_LoaiTK.getSelectedItem()+"";
+        customer_Selected.setLoaiTaiKhoan(cbx_LoaiTaiKhoan);
+        if(checkValidPhone(phone,"offline")==false){
             return;
-        } else {
-            String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
-            if (role.equals("Nhân viên bán hàng")) {
-                ThemTaiKhoanOffline();
-            } else {
-                ThemTaiKhoanOnline();
-            }
         }
-        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
+        CustomerDAO.getInstance().update(customer_Selected);
         this.dispose();
+        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
+    }
+    public void LuuTaiKhoanOnline(){
+        String phone = input_SDT.getText()+"";
+        String hoVaTen = input_HoTen.getText()+"";
+        String password = new String(passwordField.getPassword());
+        String email = textField_Email.getText()+"";
+        String cbx_LoaiTaiKhoan = cbx_LoaiTK.getSelectedItem()+"";
+        customer_Selected.setSoDienThoai(phone);
+        customer_Selected.setFullName(hoVaTen);
+        customer_Selected.setPassword(password);
+        customer_Selected.setEmail(email);
+        customer_Selected.setLoaiTaiKhoan(cbx_LoaiTaiKhoan);
+        CustomerDAO.getInstance().update(customer_Selected);
+        this.dispose();
+        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
     }
 
-    private void ThemTaiKhoanOnline() {
-        String hoTen = input_HoTen.getText();
-        String soDienThoai = input_SDT.getText();
-        String taiKhoan = textField_TK.getText();
-        String matKhau = new String(passwordField.getPassword());
-        String nhapLaiMatKhau = new String(Re_passwordField.getPassword());
-        String email = textField_Email.getText();
-        if (hoTen.isEmpty() || soDienThoai.isEmpty() || taiKhoan.isEmpty() || matKhau.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
-            return;
+    public void LuuMouseClicked(){
+        String cbx_LoaiTaiKhoan = cbx_LoaiTK.getSelectedItem()+"";
+        if(cbx_LoaiTaiKhoan.equals("offline")){
+            LuuTaiKhoanOffline();
+        }else {
+            LuuTaiKhoanOnline();
         }
-        if (!checkConfirmPassword(matKhau, nhapLaiMatKhau)) {
-            return;
-        }
-        Customer customer = new Customer(taiKhoan, matKhau, "online", hoTen, email, soDienThoai);
-        CustomerDAO.getInstance().insert(customer);
     }
-
-    private void ThemTaiKhoanOffline() {
-        String hoTen = input_HoTen.getText();
-        String soDienThoai = input_SDT.getText();
-        if (hoTen.isEmpty() || soDienThoai.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin họ tên và số điện thoại !");
-            return;
-        }
-        Customer customer = new Customer(soDienThoai, hoTen, "offline");
-        CustomerDAO.getInstance().insert(customer);
-    }
-
     public static boolean kiemTraNameUser(String fullname) {
         if (fullname.trim().isEmpty() || fullname.equals("null")) {
             return false;
@@ -311,17 +356,30 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         }
         return true;
     }
-	public boolean checkValidPhone(String phoneNumber) {
+
+	public boolean checkValidPhone(String phoneNumber, String loaitaikhoan) {
         if (phoneNumber == null || phoneNumber.equals("null")) {
             JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!");
             return false;
         }
-        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber);
+        String regex = phoneNumber.replaceAll("[^0-9]", "");
+        if (!regex.matches("^0[0-9]{9}$")) {
+            JOptionPane.showMessageDialog(this,"Số điện thoại không đúng định dạng !");
+            return false;
+        }
+        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaitaikhoan);
         if (flag == true) {
             JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
             return false;
         }
         return true;
     }
-
+    public void fillData(){
+        customer_Selected = qlTaiKhoanNguoiDungForm.getCustomerSelected();
+        String loaiTaiKhoan = CustomerDAO.getInstance().GetTypeCustomer(customer_Selected.getMaKhachHang());
+        System.out.println(loaiTaiKhoan);
+        cbx_LoaiTK.setSelectedItem(loaiTaiKhoan);
+        input_HoTen.setText(customer_Selected.getFullName());
+        input_SDT.setText(customer_Selected.getSoDienThoai());
+    }
 }

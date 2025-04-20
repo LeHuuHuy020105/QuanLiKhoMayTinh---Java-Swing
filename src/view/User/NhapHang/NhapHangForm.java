@@ -262,7 +262,12 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 int maMay = (int) row.getCell(0).getNumericCellValue();
                 int soLuong =  (int) row.getCell(1).getNumericCellValue();
                 DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,soLuong);
-                detailImportProducts.add(detailImportProducts1);
+                DetailImportProducts detailImportProducts_isValid = isValidProduct(detailImportProducts1,detailImportProducts);
+                if(detailImportProducts_isValid==null){
+                    detailImportProducts.add(detailImportProducts1);
+                }else {
+                    detailImportProducts_isValid.setSoluong(detailImportProducts_isValid.getSoluong() + soLuong);
+                }
                 updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
             }
             setTotalPrice();
@@ -406,6 +411,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         return null;
     }
     public void SuaSoLuongMouseClicked() {
+        Computer computer_selected = getComputerSelectedTableNhapHang();
+        if (computer_selected==null){
+            return;
+        }
         boolean hasError = false;
         String newSL = JOptionPane.showInputDialog(this, "Nhập số lượng cần thay đổi", "Thay đổi số lượng", JOptionPane.QUESTION_MESSAGE);
         int soLuong =0;
@@ -416,16 +425,19 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelectedTableNhapHang();
         DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_selected);
         detailImportProducts1.setSoluong(soLuong);
         updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
+        setTotalPrice();
     }
     public void XoaMouseClicked() {
+        Computer computer_Selected = getComputerSelectedTableNhapHang();
+        if(computer_Selected==null){
+            return;
+        }
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá sản phẩm này?", "Xoá sản phẩm",
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
-            Computer computer_Selected = getComputerSelectedTableNhapHang();
             DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_Selected);
             this.detailImportProducts.remove(detailImportProducts1);
         }

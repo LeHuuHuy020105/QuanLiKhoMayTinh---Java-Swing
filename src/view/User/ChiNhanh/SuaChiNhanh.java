@@ -2,6 +2,7 @@ package view.User.ChiNhanh;
 
 import DAO.BrandDAO;
 import DAO.ProducersDAO;
+import controller.CheckValidInput;
 import controller.ValueAddress;
 import model.Branch;
 import model.Producer;
@@ -27,6 +28,7 @@ public class SuaChiNhanh extends JFrame {
 	private JComboBox cbx_Phuong;
 	private JTextField textField_tenChiNhanh;
 	private JTextArea textArea;
+	private CheckValidInput checkValidInput;
 
 	/**
 	 * Launch the application.
@@ -38,7 +40,7 @@ public class SuaChiNhanh extends JFrame {
 	public SuaChiNhanh(ChiNhanhForm chiNhanhForm) {
 		this.chiNhanhForm = chiNhanhForm;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 388, 948);
+		setBounds(100, 100, 716,740);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,16 +51,16 @@ public class SuaChiNhanh extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(new Color(144, 238, 144));
-		panel.setBounds(0, 0, 372, 49);
+		panel.setBounds(0, 0, 702, 49);
 		contentPane.add(panel);
 
 		JLabel lblThmNhCung = new JLabel("SỬA CHI NHÁNH");
 		lblThmNhCung.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThmNhCung.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblThmNhCung.setBounds(0, 0, 372, 49);
+		lblThmNhCung.setBounds(0, 0, 702, 49);
 		panel.add(lblThmNhCung);
 
-		JLabel lblNewLabel_1 = new JLabel("Mã nhà cung cấp");
+		JLabel lblNewLabel_1 = new JLabel("Mã nhà chi nhánh");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(10, 79, 169, 28);
 		contentPane.add(lblNewLabel_1);
@@ -94,7 +96,7 @@ public class SuaChiNhanh extends JFrame {
 		btn_Lưu.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btn_Lưu.setBorderPainted(false);
 		btn_Lưu.setBackground(new Color(60, 179, 113));
-		btn_Lưu.setBounds(10, 857, 131, 41);
+		btn_Lưu.setBounds(151, 652, 131, 41);
 		contentPane.add(btn_Lưu);
 
 		JButton btn_HuyBo = new JButton("Huỷ bỏ");
@@ -108,7 +110,7 @@ public class SuaChiNhanh extends JFrame {
 		btn_HuyBo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btn_HuyBo.setBorderPainted(false);
 		btn_HuyBo.setBackground(Color.RED);
-		btn_HuyBo.setBounds(199, 857, 139, 41);
+		btn_HuyBo.setBounds(346, 652, 139, 41);
 		contentPane.add(btn_HuyBo);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Thành phố");
@@ -151,23 +153,24 @@ public class SuaChiNhanh extends JFrame {
 
 		JLabel lblNewLabel_1_1_2_1 = new JLabel("Tên chi nhánh");
 		lblNewLabel_1_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_2_1.setBounds(10, 618, 116, 28);
+		lblNewLabel_1_1_2_1.setBounds(374, 79, 116, 28);
 		contentPane.add(lblNewLabel_1_1_2_1);
 
 		textField_tenChiNhanh = new JTextField();
 		textField_tenChiNhanh.setColumns(10);
-		textField_tenChiNhanh.setBounds(10, 657, 328, 28);
+		textField_tenChiNhanh.setBounds(374, 118, 328, 28);
 		contentPane.add(textField_tenChiNhanh);
 
 		JLabel lblNewLabel_1_1_2_1_1 = new JLabel("Mô tả");
 		lblNewLabel_1_1_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_1_1_2_1_1.setBounds(10, 704, 116, 28);
+		lblNewLabel_1_1_2_1_1.setBounds(374, 163, 116, 28);
 		contentPane.add(lblNewLabel_1_1_2_1_1);
 
 		textArea = new JTextArea();
-		textArea.setBounds(10, 743, 328, 103);
+		textArea.setBounds(374, 203, 302, 398);
 		contentPane.add(textArea);
 		hienThiThongTinSanPham();
+		checkValidInput = new CheckValidInput(this);
 	}
 	public void hienThiThongTinSanPham(){
 		Branch branch_selected = chiNhanhForm.getChiNhanhSelected();
@@ -187,6 +190,9 @@ public class SuaChiNhanh extends JFrame {
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập số điện thoại!");
 			hasError = true;
 		}
+		if(checkValidInput.checkValidPhoneBranch(SDT)==false){
+			hasError = true;
+		}
 		if(hasError)return;
 		String tenQuan = cbx_Quan.getSelectedItem()+"";
 		String thanhPho = cbx_ThanhPho.getSelectedItem()+"";
@@ -198,6 +204,7 @@ public class SuaChiNhanh extends JFrame {
 			BrandDAO.getInstance().update(branch);
 			this.dispose();
 			JOptionPane.showMessageDialog(this,"Cập nhật chi nhánh thành công !");
+			chiNhanhForm.updateTableDataFormDAO();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

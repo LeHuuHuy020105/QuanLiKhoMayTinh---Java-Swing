@@ -250,7 +250,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 				new Object[][] {
 				},
 				new String[] {
-						"STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo","Thời gian hoàn thành","Địa chỉ","Tình trạng đơn"
+						"STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo","Thời gian hoàn thành","Địa chỉ","Tình trạng đơn","Thời gian huỷ"
 				}
 		));
 		scrollPane.setViewportView(table_PhieuXuatHang);
@@ -285,7 +285,8 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 					exportProducts.getNgayLenDonXuat(),
 					exportProducts.getNgayNhanDonXuat()==null? "Trống":exportProducts.getNgayNhanDonXuat(),
 					diaChi,
-					trangThai
+					trangThai,
+					exportProducts.getThoiDiemHuyPhieu() == null? "Trống":exportProducts.getThoiDiemHuyPhieu()
 			});
 		}
 	}
@@ -317,13 +318,15 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 	}
 	public void XoaMouseClicked() {
 		ExportProducts exportProducts_Selected = getExportProductsSelected();
-		if(exportProducts_Selected.getTrangThai()==1|| exportProducts_Selected.getTrangThai()==2){
-			int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá phiếu xuất này hay không ", "xoá phiếu xuất", JOptionPane.YES_NO_OPTION);
-			if(luaChon==JOptionPane.YES_OPTION){
+		if(exportProducts_Selected.getTrangThai()==1 || exportProducts_Selected.getTrangThai()==2){
+			int choice = JOptionPane.showConfirmDialog(this, "Bạn chắc muốn xoá phiếu nhập này ?", "Xoá phiếu nhập", JOptionPane.YES_NO_OPTION);
+			if (choice == JOptionPane.YES_OPTION) {
 				exportProducts_Selected.setTrangThai(6);
+				exportProducts_Selected.setThoiDiemHuyPhieu(new Timestamp(System.currentTimeMillis()));
 				ExportProductsDAO.getInstance().update(exportProducts_Selected);
-				updateTableDataFormDAO();
+				updateDatabase(exportProducts_Selected.getMaPhieuXuat());
 			}
+			updateTableDataFormDAO();
 		}else {
 			JOptionPane.showMessageDialog(this,"Bạn không thể xoá phiếu nhập khi đã bàn giao cho đơn vị vận chuyển !");
 		}

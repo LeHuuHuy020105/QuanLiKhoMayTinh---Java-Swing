@@ -180,6 +180,12 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1_1.add(input_TimKiem);
 
 		JButton btnNewButton_1 = new JButton("Làm mới");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				LamMoiMouseClicked();
+			}
+		});
 		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_1.setBounds(532, 9, 128, 30);
@@ -295,6 +301,14 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		}
 	}
 
+	public void LamMoiMouseClicked(){
+		input_TimKiem.setText("");
+		cbx_TrangThai.setSelectedItem("Tất cả");
+		date_Start.cleanup();
+		date_End.cleanup();
+		cbx_TimKiem.setSelectedItem("Tất cả");
+		applyFilters();
+	}
 
 	public ImportProducts getImportProductsSelected() {
 		ImportProducts importProducts = null;
@@ -367,7 +381,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		ArrayList<ImportProducts> filteredImportProducts = new ArrayList<>();
 
 		for (ImportProducts importProducts : allImportProducts) {
-			boolean matchStatus = statusFilter.equals("Tất cả") || matchStatus(importProducts, statusFilter);
+			boolean matchStatus = statusFilter.equals("") || statusFilter.equals("Tất cả") || matchStatus(importProducts, statusFilter);
 			boolean matchKeyword = keyword.isEmpty() || matchKeyword(importProducts, keyword, cbxLuaChon);
 			boolean matchTime = (dateStart == null && dateEnd == null) || matchTime(dateStart, dateEnd, importProducts);
 

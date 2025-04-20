@@ -3,9 +3,7 @@ package DAO;
 import database.JDBCUtil;
 import model.Producer;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ProducersDAO implements DAOInterface<Producer>{
@@ -41,6 +39,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
             pst.setString(1,producer.getMaNhaCungCap());
             pst.setString(2,producer.getDiaChi());
             pst.setString(3,producer.getSdt());
+            pst.setString(4,producer.getMaNhaCungCap());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
@@ -58,8 +57,11 @@ public class ProducersDAO implements DAOInterface<Producer>{
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,producer.getMaNhaCungCap());
             ketQua = pst.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (Exception e) {
             e.printStackTrace();
+            ketQua =-2;
         }
         return ketQua;
     }
@@ -128,4 +130,24 @@ public class ProducersDAO implements DAOInterface<Producer>{
         }
         return producer;
     }
+    public boolean checkSdt(String sdt){
+        Connection c = JDBCUtil.getConnection();
+        String sql = "select count(*) from producer where sodienthoai = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setString(1, sdt);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

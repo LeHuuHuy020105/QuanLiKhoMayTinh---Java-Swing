@@ -1,41 +1,44 @@
 package view.User.QLTaiKhoanAdmin;
 
+import DAO.BrandDAO;
+import DAO.RoleDAO;
+import DAO.UserDAO;
+import controller.CheckValidInput;
+import model.Branch;
+import model.Role;
+import model.User;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 public class ThemTaiKhoanForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private JComboBox cbx_DiaChi;
+	private JComboBox cbx_VaiTro;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textField_TK;
+	private JTextField textField_Email;
+	private JTextField textField_HoVaTen;
+	private JTextField textField_SDT;
+	private JPasswordField textField_MK;
+	private QLTaiKhoanForm qlTaiKhoanForm;
+	private CheckValidInput checkValidInput;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ThemTaiKhoanForm frame = new ThemTaiKhoanForm();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public ThemTaiKhoanForm() {
+	public ThemTaiKhoanForm(QLTaiKhoanForm qlTaiKhoanForm) {
+		this.qlTaiKhoanForm = qlTaiKhoanForm;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 388, 548);
+		setBounds(100, 100, 388, 786);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,20 +63,15 @@ public class ThemTaiKhoanForm extends JFrame {
 		lblNewLabel_1.setBounds(10, 112, 169, 28);
 		contentPane.add(lblNewLabel_1);
 
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(10, 140, 328, 28);
-		contentPane.add(textField);
+		textField_TK = new JTextField();
+		textField_TK.setColumns(10);
+		textField_TK.setBounds(10, 140, 328, 28);
+		contentPane.add(textField_TK);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Mật khẩu");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1.setBounds(10, 197, 116, 28);
 		contentPane.add(lblNewLabel_1_1);
-
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(10, 224, 328, 28);
-		contentPane.add(textField_1);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Vai trò");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -81,12 +79,18 @@ public class ThemTaiKhoanForm extends JFrame {
 		contentPane.add(lblNewLabel_1_1_1);
 
 		JButton btnNewButton_2_1 = new JButton("Thêm");
+		btnNewButton_2_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ThemTaiKhoanMouseClicked();
+			}
+		});
 		btnNewButton_2_1.setIcon(null);
 		btnNewButton_2_1.setForeground(Color.WHITE);
 		btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2_1.setBorderPainted(false);
 		btnNewButton_2_1.setBackground(new Color(60, 179, 113));
-		btnNewButton_2_1.setBounds(10, 457, 131, 41);
+		btnNewButton_2_1.setBounds(10, 698, 131, 41);
 		contentPane.add(btnNewButton_2_1);
 
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
@@ -99,22 +103,128 @@ public class ThemTaiKhoanForm extends JFrame {
 		btnNewButton_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2_1_1.setBorderPainted(false);
 		btnNewButton_2_1_1.setBackground(Color.RED);
-		btnNewButton_2_1_1.setBounds(198, 457, 139, 41);
+		btnNewButton_2_1_1.setBounds(192, 698, 139, 41);
 		contentPane.add(btnNewButton_2_1_1);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(10, 381, 328, 28);
-		contentPane.add(comboBox);
+		String [] list_VaiTro = RoleDAO.getInstance().selectAllNameRole().toArray(new String[0]);
+		cbx_VaiTro = new JComboBox(list_VaiTro);
+		cbx_VaiTro.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				setChiNhanh();
+			}
+		});
+		cbx_VaiTro.setBounds(10, 381, 328, 28);
+		contentPane.add(cbx_VaiTro);
 
 		JLabel lblNewLabel_1_1_2 = new JLabel("Email");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1_1_2.setBounds(10, 282, 116, 28);
 		contentPane.add(lblNewLabel_1_1_2);
 
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(10, 310, 328, 28);
-		contentPane.add(textField_2);
+		textField_Email = new JTextField();
+		textField_Email.setColumns(10);
+		textField_Email.setBounds(10, 310, 328, 28);
+		contentPane.add(textField_Email);
+		
+		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Chi nhánh");
+		lblNewLabel_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_1_1_1_1.setBounds(10, 443, 116, 28);
+		contentPane.add(lblNewLabel_1_1_1_1_1);
+
+		cbx_DiaChi = new JComboBox();
+		cbx_DiaChi.setBounds(10, 471, 328, 28);
+		contentPane.add(cbx_DiaChi);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Họ và tên");
+		lblNewLabel_1_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_2.setBounds(10, 525, 169, 28);
+		contentPane.add(lblNewLabel_1_2);
+		
+		textField_HoVaTen = new JTextField();
+		textField_HoVaTen.setText((String) null);
+		textField_HoVaTen.setColumns(10);
+		textField_HoVaTen.setBounds(10, 563, 328, 28);
+		contentPane.add(textField_HoVaTen);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("Số điện thoại");
+		lblNewLabel_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1_2_1.setBounds(10, 601, 169, 28);
+		contentPane.add(lblNewLabel_1_2_1);
+		
+		textField_SDT = new JTextField();
+		textField_SDT.setText((String) null);
+		textField_SDT.setColumns(10);
+		textField_SDT.setBounds(10, 639, 328, 28);
+		contentPane.add(textField_SDT);
+		
+		textField_MK = new JPasswordField();
+		textField_MK.setBounds(10, 235, 328, 28);
+		contentPane.add(textField_MK);
+		checkValidInput = new CheckValidInput(this);
 	}
 
+	public void setChiNhanh(){
+		String role = cbx_VaiTro.getSelectedItem().toString();
+		if(role.equals("Quản lí chi nhánh") || role.equals("Nhân viên bán hàng")){
+			ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+			cbx_DiaChi.setModel(new DefaultComboBoxModel(dataCbxDiaChi(branches)));
+		}
+		else {
+			cbx_DiaChi.removeAllItems();
+			cbx_DiaChi.setSelectedItem(false);
+		}
+	}
+	public String[] dataCbxDiaChi(ArrayList<Branch> branches){
+		String[] data = new String[branches.size()];
+		for(Branch branch : branches){
+			String description = branch.getTenChiNhanh()+" - "+branch.getDiaChi();
+			data[branches.indexOf(branch)] = description;
+		}
+		return data;
+	}
+	public void ThemTaiKhoanMouseClicked(){
+		User user = new User();
+		String username = textField_TK.getText();
+		String password = textField_MK.getText();
+		String email = textField_Email.getText();
+		String cbx_Vaitro = cbx_VaiTro.getSelectedItem()+"";
+		String chiNhanh = cbx_DiaChi.getSelectedItem() != null ? cbx_DiaChi.getSelectedItem().toString() : "";
+		String fullname = textField_HoVaTen.getText();
+		String phone = textField_SDT.getText();
+		Role role = RoleDAO.getInstance().getRoleCBX(cbx_Vaitro);
+		Branch branch = null;
+		System.out.println("chi nhanh "+ chiNhanh);
+		if(password.equals("") || email.equals("") || username.equals("")){
+			JOptionPane.showMessageDialog(this,"Vui lòng nhập đầy đủ thông tin !");
+			return;
+		}
+		if(!checkValidInput.checkValidAccountUser(username) || !checkValidInput.checkValidPhoneUser(phone) || !checkValidInput.checkEmailUser(email)){
+			return;
+		}
+		if(!chiNhanh.isEmpty()){
+			System.out.println("nulll-chinhanh");
+			branch = getBranchSelected(chiNhanh);
+			user.setMaChiNhanh(branch.getMaChiNhanh());
+		}
+		user.setUserName(username);
+		user.setPassword(password);
+		user.setFullName(fullname);
+		user.setPhone(phone);
+		user.setStatus(1);
+		user.setEmail(email);
+		int idUser = UserDAO.getInstance().insert(user);
+		System.out.println("idUSer + "+ idUser);
+		int ketQua = RoleDAO.getInstance().insertRoleUser(idUser,role.getId());
+		if(ketQua>0){
+			JOptionPane.showMessageDialog(this,"Thêm tài khoản thành công !");
+			this.dispose();
+			qlTaiKhoanForm.updateTableDataFormDAO();
+		}
+	}
+	public Branch getBranchSelected(String description){
+		System.out.println("description "+description);
+		String [] data = description.split(" - ");
+		System.out.println("diachi "+data[1]);
+		return BrandDAO.getInstance().BranchByDiaChi(data[1]);
+	}
 }

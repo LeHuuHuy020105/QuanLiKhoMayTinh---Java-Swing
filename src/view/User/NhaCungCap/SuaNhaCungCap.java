@@ -1,6 +1,7 @@
 package view.User.NhaCungCap;
 
 import DAO.ProducersDAO;
+import controller.CheckValidInput;
 import controller.ValueAddress;
 import model.Producer;
 
@@ -23,6 +24,7 @@ public class SuaNhaCungCap extends JFrame {
 	private NhaCungCapForm nhaCungCapForm;
 	private JTextField input_SoNha;
 	private JComboBox cbx_Phuong;
+	private CheckValidInput checkValidInput;
 
 	/**
 	 * Launch the application.
@@ -140,9 +142,10 @@ public class SuaNhaCungCap extends JFrame {
 		cbx_Phuong.setBounds(10, 484, 321, 28);
 		contentPane.add(cbx_Phuong);
 		ValueAddress.getInstance().loadQuanHuyen(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
-		hienThiThongTinSanPham();
+		hienThiThongTinNCC();
+		checkValidInput = new CheckValidInput(this);
 	}
-	public void hienThiThongTinSanPham(){
+	public void hienThiThongTinNCC(){
 		Producer producer_selected = nhaCungCapForm.getProducerSelected();
 		input_maNCC.setText(producer_selected.getMaNhaCungCap());
 		input_maNCC.setEditable(false);

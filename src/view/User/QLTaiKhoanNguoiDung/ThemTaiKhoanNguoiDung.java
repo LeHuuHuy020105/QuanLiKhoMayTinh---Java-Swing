@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 import DAO.CustomerDAO;
 import DAO.ProducersDAO;
 import DAO.UserDAO;
+import controller.CheckValidInput;
 import controller.ValueAddress;
 import model.Customer;
 import model.Producer;
@@ -28,6 +29,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
     private JPasswordField passwordField;
     private JPasswordField Re_passwordField;
     private QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm;
+    private CheckValidInput checkValidInput;
 
     /**
      * Launch the application.
@@ -94,7 +96,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         btn_ThemSanPham.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                ThemNhaCungCapMouseClicked();
+                ThemTaiKhoanNguoiDungMouseClicked();
             }
         });
         btn_ThemSanPham.setIcon(null);
@@ -170,6 +172,8 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         });
         cbx_LoaiTK.setBounds(10, 636, 328, 28);
         contentPane.add(cbx_LoaiTK);
+
+        checkValidInput = new CheckValidInput(this);
         setVisible(true);
     }
 
@@ -211,7 +215,8 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         }
     }
 
-    private void ThemNhaCungCapMouseClicked() {
+    private void ThemTaiKhoanNguoiDungMouseClicked() {
+        String loaiTaiKhoan = cbx_LoaiTK.getSelectedItem() + "";
         if (currentUser == null) {
             String email = textField_Email.getText();
             String taikhoan = textField_TK.getText();
@@ -219,8 +224,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             String phone = input_SDT.getText();
             String repass = new String(Re_passwordField.getPassword());
             String username = input_HoTen.getText();
-            String loaiTaiKhoan = cbx_LoaiTK.getSelectedItem() + "";
-            if (checkConfirmPassword(pass, repass) && checkEmail(email) && checkValidAccount(taikhoan) && kiemTraNameUser(username) && checkValidPhone(phone,loaiTaiKhoan)) {
+            if (checkValidInput.checkConfirmPassword(pass, repass) && checkValidInput.checkEmail(email) && checkValidInput.checkValidAccount(taikhoan) && checkValidInput.kiemTraNameUser(username) && checkValidInput.checkValidPhone(phone,loaiTaiKhoan)) {
                 ThemTaiKhoanOnline();
                 this.dispose();
             }
@@ -230,7 +234,11 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             if (role.equals("Nhân viên bán hàng")) {
                 ThemTaiKhoanOffline();
             } else {
-                ThemTaiKhoanOnline();
+                if(loaiTaiKhoan.equals("online")){
+                    ThemTaiKhoanOnline();
+                }else {
+                    ThemTaiKhoanOffline();
+                }
             }
         }
         qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
@@ -248,7 +256,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
             return;
         }
-        if (!checkConfirmPassword(matKhau, nhapLaiMatKhau)) {
+        if (!checkValidInput.checkConfirmPassword(matKhau, nhapLaiMatKhau)) {
             return;
         }
         Customer customer = new Customer(taiKhoan, matKhau, "online", hoTen, email, soDienThoai);
@@ -266,68 +274,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         CustomerDAO.getInstance().insert(customer);
     }
 
-    public static boolean kiemTraNameUser(String fullname) {
-        if (fullname.trim().isEmpty() || fullname.equals("null")) {
-            return false;
-        }
-        String regex = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ\\s]+$";
 
-        return fullname.matches(regex);
-    }
-
-    public boolean checkConfirmPassword(String password, String confirmPassword) {
-        if (password == null || confirmPassword == null) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống!");
-            return false;
-        }
-
-        boolean match = password.equals(confirmPassword);
-
-        if (!match) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu và mật khẩu xác nhận không khớp!");
-        }
-        return match;
-    }
-
-    public boolean checkEmail(String email) {
-        if (email == null || email.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Email không được để trống!");
-            return false;
-        }
-
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
-        boolean match = email.matches(emailRegex);
-        if (!match) {
-            JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
-            return false;
-        }
-        return match;
-    }
-
-    public boolean checkValidAccount(String nameAccount) {
-        if (nameAccount == null || nameAccount.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Tài khoản không được để trống!");
-            return false;
-        }
-        boolean flag = CustomerDAO.getInstance().checkDataAccount(nameAccount);
-        if (flag == true) {
-            JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại!");
-            return false;
-        }
-        return true;
-    }
-	public boolean checkValidPhone(String phoneNumber , String loaiTaiKhoan) {
-        if (phoneNumber == null || phoneNumber.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!");
-            return false;
-        }
-        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaiTaiKhoan);
-        if (flag == true) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
-            return false;
-        }
-        return true;
-    }
 
 }
+

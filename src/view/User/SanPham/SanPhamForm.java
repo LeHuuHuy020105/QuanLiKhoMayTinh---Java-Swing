@@ -53,9 +53,13 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     private JComboBox cbx_luaChon;
     private User currentUser;
 
+    public SanPhamForm() {
+    }
+
     /**
      * Create the panel.
      */
+
     public SanPhamForm(User currentUser) {
         this.currentUser = currentUser;
         setLayout(null);
@@ -558,5 +562,101 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                             loaiMay
                     });
         }
+    }
+
+    public JButton getBtn_Them() {
+        return btn_Them;
+    }
+
+    public void setBtn_Them(JButton btn_Them) {
+        this.btn_Them = btn_Them;
+    }
+
+    public JButton getBtnNhapExcel() {
+        return btnNhapExcel;
+    }
+
+    public void setBtnNhapExcel(JButton btnNhapExcel) {
+        this.btnNhapExcel = btnNhapExcel;
+    }
+
+    public JButton getBtnSua() {
+        return btnSua;
+    }
+
+    public void setBtnSua(JButton btnSua) {
+        this.btnSua = btnSua;
+    }
+
+    public JButton getBtnXemChiTiet() {
+        return btnXemChiTiet;
+    }
+
+    public void setBtnXemChiTiet(JButton btnXemChiTiet) {
+        this.btnXemChiTiet = btnXemChiTiet;
+    }
+
+    public JButton getBtnXoa() {
+        return btnXoa;
+    }
+
+    public void setBtnXoa(JButton btnXoa) {
+        this.btnXoa = btnXoa;
+    }
+
+    public JButton getBtnXuatExcel() {
+        return btnXuatExcel;
+    }
+
+    public void setBtnXuatExcel(JButton btnXuatExcel) {
+        this.btnXuatExcel = btnXuatExcel;
+    }
+
+    public JComboBox getCbx_luaChon() {
+        return cbx_luaChon;
+    }
+
+    public void setCbx_luaChon(JComboBox cbx_luaChon) {
+        this.cbx_luaChon = cbx_luaChon;
+    }
+
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public void setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public JTextField getInput_Search() {
+        return input_Search;
+    }
+
+    public void setInput_Search(JTextField input_Search) {
+        this.input_Search = input_Search;
+    }
+
+    public JFileChooser getjChooser() {
+        return jChooser;
+    }
+
+    public void setjChooser(JFileChooser jChooser) {
+        this.jChooser = jChooser;
+    }
+
+    public JTable getTable_product() {
+        return table_product;
+    }
+
+    public void setTable_product(JTable table_product) {
+        this.table_product = table_product;
     }
 }

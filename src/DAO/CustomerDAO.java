@@ -37,19 +37,64 @@ public class CustomerDAO implements DAOInterface<Customer>{
 
     @Override
     public int update(Customer customer) {
-        return 0;
+        int ketQua =0;
+        if(customer.getLoaiTaiKhoan().equals("offline")){
+            ketQua= updateCustomerOffline(customer);
+        }else {
+            ketQua = updateCustomerOnline(customer);
+        }
+        return ketQua;
     }
 
-    @Override
-    public int delete(Customer customer) {
-        int ketQua = 0;
+    public int updateCustomerOffline(Customer customer){
+        int ketQua =0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "Delete from customer where makhachhang=?";
+            String sql = "update customer set fullname =?, phone =? , username=?, password=? ,email=? , diachi=? where makhachhang =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,customer.getFullName());
+            pst.setString(2,customer.getSoDienThoai());
+            pst.setString(3,customer.getUserName());
+            pst.setString(4,customer.getPassword());
+            pst.setString(5,customer.getEmail());
+            pst.setString(6,customer.getDiaChi());
+            pst.setInt(7,customer.getMaKhachHang());
+            ketQua = pst.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return ketQua;
+    }
+
+    public int updateCustomerOnline(Customer customer){
+        int ketQua =0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "update customer set fullname =?, phone =? where makhachhang =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,customer.getFullName());
+            pst.setString(2,customer.getSoDienThoai());
+            pst.setInt(3,customer.getMaKhachHang());
+            ketQua = pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
+    @Override
+    public int delete(Customer customer) {
+        int ketQua = 0;
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement pst = connection.prepareStatement("DELETE FROM customer WHERE makhachhang = ?")) {
+            pst.setInt(1, customer.getMaKhachHang());
+            ketQua = pst.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
+        } catch (SQLException e) {
+            e.printStackTrace(); // Vẫn in lỗi khác để debug, nhưng không ném
+            ketQua = -2; // Giá trị đặc biệt cho các lỗi khác (nếu cần phân biệt)
+        }
+        return ketQua;
     }
 
     @Override
@@ -150,17 +195,12 @@ public class CustomerDAO implements DAOInterface<Customer>{
         return ketQua;
     }
     public boolean checkSdt(String sdt,String loaiTaiKhoan){
-        String regex = sdt.replaceAll("[^0-9]", "");
-        if (!regex.matches("^0[0-9]{9}$")) {
-            System.out.println("Số điện thoại không đúng định dạng!");
-            return false;
-        }
         Connection c = JDBCUtil.getConnection();
         String sql = "select count(*) from customer where phone = ? and loaitaikhoan = ?";
         try (
             PreparedStatement ps = c.prepareStatement(sql);
             ) {
-            ps.setString(1, regex);
+            ps.setString(1, sdt);
             ps.setString(2, loaiTaiKhoan);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -195,21 +235,39 @@ public class CustomerDAO implements DAOInterface<Customer>{
         return false;
     }
     public Customer findByPhone(String phone){
+//        Connection c = JDBCUtil.getConnection();
+//        String sql = "select * from customer where phone = ? loaitaikhoan = ?";
+//        Customer customer = null;
+//        try {
+//            PreparedStatement pst = c.prepareStatement(sql);
+//            ResultSet rs = pst.executeQuery();
+//            pst.setString(1, "phone");
+//            pst.setString(2, "loaitaikhoan");
+//            if (rs.next()) {
+//                String sdt = rs.getString("phone");
+//                String taikhoan = rs.getString("loaitaikhoan");
+//
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        return null;
+    }
+    public String GetTypeCustomer(int idCustomer){
         Connection c = JDBCUtil.getConnection();
-        String sql = "select * from customer where phone = ? loaitaikhoan = ?";
-        Customer customer = null;
+        String sql = "select * from customer where makhachhang = ? ";
+        String typeCustomer = null;
         try {
             PreparedStatement pst = c.prepareStatement(sql);
+            pst.setInt(1, idCustomer);
             ResultSet rs = pst.executeQuery();
-            pst.setString(1, "phone");
-            pst.setString(2, "loaitaikhoan");
-            if (rs.next()) {
-                String sdt = rs.getString("phone");
-                String taikhoan = rs.getString("loaitaikhoan");
-
+            while (rs.next()){
+                typeCustomer = rs.getString("loaitaikhoan");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return typeCustomer;
     }
 }

@@ -21,9 +21,9 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql ="update exportproducts set ngaylendon=?,trangthai=?,machinhanh=?,id=? where maphieuxuat =?";
+            String sql ="update exportproducts set ngaylendon=?,trangthai=?,machinhanh=?,id=?, thoidiemhuyphieu=? where maphieuxuat =?";
             if (exportProducts.getTrangThai()==5){
-                sql ="update exportproducts set ngaylendon=?,trangthai=?,ngaynhandonxuat=CURRENT_TIMESTAMP,machinhanh=?,id=? where maphieuxuat =?";
+                sql ="update exportproducts set ngaylendon=?,trangthai=?,ngaynhandonxuat=CURRENT_TIMESTAMP,machinhanh=?,id=?, thoidiemhuyphieu=? where maphieuxuat =?";
             }
             System.out.println(sql);
             PreparedStatement pst = connection.prepareStatement(sql);
@@ -31,7 +31,8 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             pst.setInt(2,exportProducts.getTrangThai());
             pst.setInt(3,exportProducts.getMaChiNhanh());
             pst.setInt(4,exportProducts.getManguoidung());
-            pst.setInt(5,exportProducts.getMaPhieuXuat());
+            pst.setTimestamp(5,exportProducts.getThoiDiemHuyPhieu());
+            pst.setInt(6,exportProducts.getMaPhieuXuat());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {

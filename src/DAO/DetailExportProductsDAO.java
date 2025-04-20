@@ -44,6 +44,7 @@ public class DetailExportProductsDAO implements DAOInterface<DetailExportProduct
     public ArrayList<DetailExportProducts> selectAll() {
         return null;
     }
+
     public ArrayList<DetailExportProducts>selectAllByMaPhieuXuat(int maphieuxuat){
         ArrayList<DetailExportProducts>ketQua = new ArrayList<>();
         try {

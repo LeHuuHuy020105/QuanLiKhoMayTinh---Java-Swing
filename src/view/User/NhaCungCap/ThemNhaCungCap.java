@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import DAO.Address.ProvinceDAO;
 import DAO.CountryDAO;
 import DAO.ProducersDAO;
+import controller.CheckValidInput;
 import controller.ValueAddress;
 import controller.updateDataToTable;
 import model.Address.Province;
@@ -32,6 +33,7 @@ public class ThemNhaCungCap extends JFrame  {
 	private JTextField input_SoNha;
 	private JComboBox cbx_Quan;
 	private NhaCungCapForm nhaCungCapForm;
+	private CheckValidInput checkValidInput;
 	/**
 	 * Launch the application.
 	 */
@@ -159,7 +161,9 @@ public class ThemNhaCungCap extends JFrame  {
 				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
 				return;
 			}
-
+			if(!checkValidInput.checkValidPhoneProducer(SDT)){
+				return;
+			}
 			String maNCC = tenNCC.toUpperCase();
 			Producer producer = new Producer(diaChi, maNCC, SDT, tenNCC);
 			ProducersDAO.getInstance().insert(producer);

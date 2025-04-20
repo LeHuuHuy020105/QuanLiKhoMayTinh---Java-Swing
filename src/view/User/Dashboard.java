@@ -232,12 +232,12 @@ public void ThongTinTaiKhoanMouseClicked() {
                 cardLayout.show(cardPanel, "Tồn kho");
                 break;
             case "Tài khoản user":
-                QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm();
+                QLTaiKhoanForm qlTaiKhoanForm = new QLTaiKhoanForm(currentUser);
                 cardPanel.add(qlTaiKhoanForm, "Quản lí tài khoản");
                 cardLayout.show(cardPanel, "Quản lí tài khoản");
                 break;
             case "Thống kê":
-                ThongKeForm thongKeForm = new ThongKeForm();
+                ThongKeForm thongKeForm = new ThongKeForm(currentUser);
                 cardPanel.add(thongKeForm, "Thống kê");
                 cardLayout.show(cardPanel, "Thống kê");
                 break;

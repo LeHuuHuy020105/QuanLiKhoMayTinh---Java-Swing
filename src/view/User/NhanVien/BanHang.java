@@ -269,7 +269,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     }
 
     private void VoucherMouseClicked() {
-        RadioButtonScrollExample radioButtonScrollExample = new RadioButtonScrollExample(this);
+//        RadioButtonScrollExample radioButtonScrollExample = new RadioButtonScrollExample(this);
     }
 
 
@@ -607,7 +607,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     public Customer getCustomer() {
         String text = textField_InfoCustomer.getText();
         String[] split = text.split(" - ");
-        Customer customer = CustomerDAO.getInstance()
+        Customer customer = CustomerDAO.getInstance().findByPhone(split[0]);
         return customer;
     }
     public User getCurrentUser() {

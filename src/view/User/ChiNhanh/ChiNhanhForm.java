@@ -433,7 +433,17 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            BrandDAO.getInstance().delete(getChiNhanhSelected());
+            int ketQua = BrandDAO.getInstance().delete(getChiNhanhSelected());
+            if (ketQua == -1) {
+                JOptionPane.showMessageDialog(this, "Không thể xóa chi nhánh này vì đã có tham chiếu liên quan!");
+            } else if (ketQua > 0) {
+                updateTableDataFormDAO();
+                JOptionPane.showMessageDialog(this, "Xóa chi nhánh thành công!");
+            } else if (ketQua == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy chi nhánh để xóa!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định khi xóa chi nhánh!");
+            }
             updateTableDataFormDAO();
         }
     }

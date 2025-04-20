@@ -41,7 +41,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
 
     private JTextField input_Search;
     private JTable table_NCC;
-    private JFileChooser jChooser ;
+    private JFileChooser jChooser;
     private JComboBox cbx_Search;
     private User currentUser;
     private String role;
@@ -58,23 +58,26 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     public QLTaiKhoanNguoiDungForm(BanHang banHang) {
         this.banHang = banHang;
         this.currentUser = banHang.getCurrentUser();
-        this.jChooser  = new JFileChooser();
+        this.jChooser = new JFileChooser();
         role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
         Component();
         Permission();
     }
+
     public QLTaiKhoanNguoiDungForm(User currentUser) {
         this.currentUser = currentUser;
-        this.jChooser  = new JFileChooser();
+        this.jChooser = new JFileChooser();
         role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
         Component();
         Permission();
     }
-    public void Permission(){
+
+    public void Permission() {
         int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
-        PermissionsDAO.applyPermissions(roleUser,"Tài khoản khách hàng",btn_ThemNCC,btnXoa,btnSua,null,btnXuatExcel,btnNhapExcel);
+        PermissionsDAO.applyPermissions(roleUser, "Tài khoản khách hàng", btn_ThemNCC, btnXoa, btnSua, null, btnXuatExcel, btnNhapExcel);
     }
-    public void Component(){
+
+    public void Component() {
         getContentPane().setLayout(null);
         setSize(1257, 764);
         setLocationRelativeTo(null);
@@ -233,11 +236,11 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         JPanel panel_5_1_1 = new JPanel();
         panel_5_1_1.setLayout(null);
         verticalBox_1.add(panel_5_1_1);
-        String [] cbx_SearchValue = null;
-        if(role.equals("Nhân viên bán hàng")){
-            cbx_SearchValue= new String[]{"Tất cả","Tên khách hàng","Số điện thoại"};
-        }else {
-            cbx_SearchValue= new String[]{"Tất cả","Tài khoản","Tên khách hàng","Số điện thoại"};
+        String[] cbx_SearchValue = null;
+        if (role.equals("Nhân viên bán hàng")) {
+            cbx_SearchValue = new String[]{"Tất cả", "Tên khách hàng", "Số điện thoại"};
+        } else {
+            cbx_SearchValue = new String[]{"Tất cả", "Tài khoản", "Tên khách hàng", "Số điện thoại"};
         }
 
         cbx_Search = new JComboBox(cbx_SearchValue);
@@ -269,13 +272,13 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
-        if(role.equals("Nhân viên bán hàng")){
+        if (role.equals("Nhân viên bán hàng")) {
             columnNames = new String[]{
-                    "STT", "Mã khách hàng","Tên khách hàng", "Địa chỉ", "SDT"
+                    "STT", "Mã khách hàng", "Tên khách hàng", "Địa chỉ", "SDT"
             };
-        }else {
+        } else {
             columnNames = new String[]{
-                    "STT", "Mã khách hàng","Tên tài khoản","Tên khách hàng", "Địa chỉ", "SDT"
+                    "STT", "Mã khách hàng", "Tên tài khoản", "Tên khách hàng", "Địa chỉ", "SDT"
             };
         }
         table_NCC = new JTable();
@@ -289,7 +292,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         scrollPane.setBounds(10, 127, 1237, 529);
         getContentPane().add(scrollPane);
 
-        if(role.equals("Nhân viên bán hàng")){
+        if (role.equals("Nhân viên bán hàng")) {
             JButton btnNewButton_2_1 = new JButton("Xác nhận");
             btnNewButton_2_1.addMouseListener(new MouseAdapter() {
                 @Override
@@ -308,18 +311,26 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         updateTableDataFormDAO();
         setVisible(true);
     }
+
     public void XacNhanKHMouseClicked() {
-		Customer customer = getCustomerSelected();
+        Customer customer = getCustomerSelected();
         banHang.fillInfoCustomer(customer);
         this.dispose();
-	}
+    }
+
     public void ThemNhaCungCapMouseClicked() {
         ThemTaiKhoanNguoiDung themTaiKhoanNguoiDung = new ThemTaiKhoanNguoiDung(this);
     }
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
+        ArrayList<Customer> customers = null;
+        if (role.equals("Nhân viên bán hàng")) {
+            customers = CustomerDAO.getInstance().selectAllOffline();
+        } else {
+            customers = CustomerDAO.getInstance().selectAll();
+        }
+
         updateTableData(customers);
     }
 
@@ -331,21 +342,21 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         boolean isStaff = role.equals("Nhân viên bán hàng");
         for (Customer customer : t) {
             i++;
-            if(isStaff){
+            if (isStaff) {
                 model.addRow(new Object[]{
                         i,
                         customer.getMaKhachHang(),
                         customer.getFullName(),
-                        customer.getDiaChi()==null? "N/a" : customer.getDiaChi(),
+                        customer.getDiaChi() == null ? "N/a" : customer.getDiaChi(),
                         customer.getSoDienThoai()
                 });
-            }else {
+            } else {
                 model.addRow(new Object[]{
                         i,
                         customer.getMaKhachHang(),
                         customer.getUserName(),
                         customer.getFullName(),
-                        customer.getDiaChi()==null? "N/a" : customer.getDiaChi(),
+                        customer.getDiaChi() == null ? "N/a" : customer.getDiaChi(),
                         customer.getSoDienThoai()
                 });
             }
@@ -366,10 +377,10 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     }
 
     @Override
-    public void XuatExcelMouseClicked(){
+    public void XuatExcelMouseClicked() {
         jChooser.setDialogTitle("Chọn nơi lưu file Excel");
         jChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
-        exportTableToExcel(table_NCC,jChooser);
+        exportTableToExcel(table_NCC, jChooser);
     }
 
     public void exportTableToExcel(JTable jTable, JFileChooser jFileChooser) {
@@ -439,7 +450,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
                 String tenNCC = row.getCell(2).getStringCellValue();
                 String diaChi = row.getCell(3).getStringCellValue();
                 String sdt = row.getCell(4).getStringCellValue();
-                Producer producer = new Producer(diaChi,maNCC,sdt,tenNCC);
+                Producer producer = new Producer(diaChi, maNCC, sdt, tenNCC);
                 producers.add(producer);
             }
             ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(producers, columnNames, "Chi nhánh");
@@ -448,6 +459,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         }
         updateTableDataFormDAO();
     }
+
     private String getCellValue(Cell cell) {
         if (cell == null) {
             return "";
@@ -479,20 +491,22 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         style.setFont(font);
         return style;
     }
-    public void jTextFieldSearchKeyReleased(){
+
+    public void jTextFieldSearchKeyReleased() {
         String luachon = (String) cbx_Search.getSelectedItem();
         String content_Search = input_Search.getText();
-        ArrayList<Customer> result = SearchFn(luachon,content_Search);
+        ArrayList<Customer> result = SearchFn(luachon, content_Search);
         updateTableData(result);
     }
-    public ArrayList<Customer> SearchFn(String luachon , String content_Search){
-        ArrayList<Customer>result = new ArrayList<>();
+
+    public ArrayList<Customer> SearchFn(String luachon, String content_Search) {
+        ArrayList<Customer> result = new ArrayList<>();
         SearchCustomer searchCustomer = new SearchCustomer();
-        switch (luachon){
+        switch (luachon) {
             case "Tất cả":
-                if(role.equals("Nhân viên bán hàng")){
+                if (role.equals("Nhân viên bán hàng")) {
                     result = searchCustomer.searchAllForStaff(content_Search);
-                }else {
+                } else {
                     result = searchCustomer.searchAll(content_Search);
                 }
                 break;
@@ -508,26 +522,38 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         }
         return result;
     }
-    public void XoaMouseClicked(){
-        int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá tài khoản người dùng", JOptionPane.YES_NO_OPTION);
-        if(luaChon == JOptionPane.YES_OPTION){
-            CustomerDAO.getInstance().delete(getCustomerSelected());
-            updateTableDataFormDAO();
+
+    public void XoaMouseClicked() {
+        int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa tài khoản này hay không?", "Xóa tài khoản người dùng", JOptionPane.YES_NO_OPTION);
+        if (luaChon == JOptionPane.YES_OPTION) {
+            int ketQua = CustomerDAO.getInstance().delete(getCustomerSelected());
+            if (ketQua == -1) {
+                JOptionPane.showMessageDialog(this, "Không thể xóa tài khoản vì khách hàng đã có hóa đơn liên quan!");
+            } else if (ketQua > 0) {
+                updateTableDataFormDAO();
+                JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
+            } else if (ketQua == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy tài khoản để xóa!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định khi xóa tài khoản!");
+            }
         }
     }
-    public void SuaMouseClick(){
 
+    public void SuaMouseClick() {
+        SuaTaiKhoanNguoiDung suaTaiKhoanNguoiDung = new SuaTaiKhoanNguoiDung(this);
     }
-    public Customer getCustomerSelected(){
+
+    public Customer getCustomerSelected() {
         Customer customer = null;
         try {
             DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
             int i_row = table_NCC.getSelectedRow();
-            if(i_row == -1){
-                JOptionPane.showMessageDialog(this,"Vui lòng chọn 1 nhà cung cấp !");
+            if (i_row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 nhà cung cấp !");
                 return null;
             }
-            int maKH = Integer.parseInt(model.getValueAt(i_row,1)+"");
+            int maKH = Integer.parseInt(model.getValueAt(i_row, 1) + "");
             customer = CustomerDAO.getInstance().findByID(maKH);
         } catch (Exception e) {
             e.printStackTrace();
