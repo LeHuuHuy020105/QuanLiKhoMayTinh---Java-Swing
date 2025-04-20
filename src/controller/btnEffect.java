@@ -21,4 +21,7 @@ public class btnEffect {
             }
         });
     }
+    public static void setIcon(JButton jButton , String path){
+        jButton.setIcon(new ImageIcon(path));
+    }
 }

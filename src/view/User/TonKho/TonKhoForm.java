@@ -3,8 +3,10 @@ package view.User.TonKho;
 import DAO.*;
 import controller.Notification;
 import controller.SearchProduct;
+import controller.btnEffect;
 import controller.updateDataToTable;
 import model.*;
+import view.Icon;
 import view.User.SanPham.ChiTietSanPham;
 
 import javax.swing.*;
@@ -63,7 +65,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
         btnNewButton = new JButton("Thêm");
         btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
+        btnEffect.setIcon(btnNewButton, Icon.add);
         btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnNewButton.setFocusPainted(false);
@@ -85,7 +87,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
             }
         });
         btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
+        btnEffect.setIcon(btnXemChiTiet,Icon.eye);
         btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXemChiTiet.setFocusPainted(false);
@@ -101,7 +103,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
         btnXuatExcel = new JButton("Xuất Excel");
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
+        btnEffect.setIcon(btnXuatExcel,Icon.xuatExcel);
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXuatExcel.setFocusPainted(false);
@@ -113,7 +115,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
         btnSua = new JButton("Sửa");
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
+        btnEffect.setIcon(btnSua,Icon.edit);
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSua.setFocusPainted(false);
@@ -129,7 +131,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
         btnXoa = new JButton("Xoá");
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
+        btnEffect.setIcon(btnXoa,Icon.delete);
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXoa.setFocusPainted(false);
@@ -174,7 +176,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
             public void actionPerformed(ActionEvent arg0) {
             }
         });
-        btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
+        btnEffect.setIcon(btnNewButton_1,Icon.refesh);
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(491, 9, 114, 30);
         panel_5_1_1.add(btnNewButton_1);

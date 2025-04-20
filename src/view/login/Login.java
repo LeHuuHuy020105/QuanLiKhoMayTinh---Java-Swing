@@ -22,6 +22,7 @@ public class Login extends JFrame {
     private JPanel contentPane;
     private JTextField input_username;
     private JPasswordField input_password;
+    private boolean isPasswordVisible=false;
 
     /**
      * Launch the application.
@@ -86,11 +87,24 @@ public class Login extends JFrame {
         input_password.setBounds(527, 263, 402, 32);
         contentPane.add(input_password);
 
-        JLabel lblNewLabel_3 = new JLabel("");
-        lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_3.setIcon(new ImageIcon(Icon.hiddenpassword));
-        lblNewLabel_3.setBounds(937, 270, 44, 22);
-        contentPane.add(lblNewLabel_3);
+        JLabel showPass = new JLabel("");
+        showPass.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                isPasswordVisible = !isPasswordVisible;
+                if (isPasswordVisible) {
+                    input_password.setEchoChar((char) 0); // Show password
+                    showPass.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\open_view.png"));
+                } else {
+                    input_password.setEchoChar('•'); // Hide password
+                    showPass.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\hide_view.png"));
+                }
+            }
+        });
+        showPass.setHorizontalAlignment(SwingConstants.CENTER);
+        showPass.setIcon(new ImageIcon(Icon.hiddenpassword));
+        showPass.setBounds(937, 270, 44, 22);
+        contentPane.add(showPass);
 
         JButton btnNewButton = new JButton("Login");
         btnNewButton.addMouseListener(new MouseAdapter() {
@@ -103,32 +117,6 @@ public class Login extends JFrame {
         btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 20));
         btnNewButton.setBounds(535, 347, 394, 41);
         contentPane.add(btnNewButton);
-
-        JLabel lblNewLabel_4 = new JLabel("Don't have account?");
-        lblNewLabel_4.setForeground(new Color(0, 0, 0));
-        lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblNewLabel_4.setBounds(610, 418, 176, 32);
-        contentPane.add(lblNewLabel_4);
-
-        JLabel lblNewLabel_5 = new JLabel("Sign Up");
-        lblNewLabel_5.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-                new ThemTaiKhoanNguoiDung();
-            }
-        });
-        lblNewLabel_5.setForeground(new Color(255, 0, 0));
-        lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblNewLabel_5.setBounds(796, 423, 76, 22);
-        contentPane.add(lblNewLabel_5);
-
-        JLabel lblNewLabel_6 = new JLabel("Forgot Password ?");
-        lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_6.setForeground(new Color(255, 0, 0));
-        lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblNewLabel_6.setBounds(671, 460, 171, 25);
-        contentPane.add(lblNewLabel_6);
 
         JLabel lblNewLabel_2_1 = new JLabel("X");
         lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);

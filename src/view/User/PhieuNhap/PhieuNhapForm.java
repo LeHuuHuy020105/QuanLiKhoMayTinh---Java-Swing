@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
 import controller.SearchImportProducts;
+import controller.btnEffect;
 import controller.updateDataToTable;
 import model.*;
+import view.Icon;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
@@ -46,7 +48,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 	 * Create the panel.
 	 */
 	public PhieuNhapForm(User currentUser) {
-		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		this.currentUser = currentUser;
 		setLayout(null);
 		setSize(1257, 718);
@@ -75,6 +76,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		verticalBox.add(panel_5_1);
 
 		btn_Xoa = new JButton("Xoá");
+		btnEffect.setIcon(btn_Xoa,Icon.delete);
 		btn_Xoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -83,7 +85,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		});
 
 		btn_Xoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btn_Xoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
 		btn_Xoa.setHorizontalTextPosition(SwingConstants.CENTER);
 		btn_Xoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btn_Xoa.setFocusPainted(false);
@@ -94,6 +95,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1.add(btn_Xoa);
 
 		btnXemChiTiet = new JButton("Xem chi tiết");
+		btnEffect.setIcon(btnXemChiTiet, Icon.eye);
 		btnXemChiTiet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -101,7 +103,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			}
 		});
 		btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
 		btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnXemChiTiet.setFocusPainted(false);
@@ -112,8 +113,8 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1.add(btnXemChiTiet);
 
 		btnXuatExcel = new JButton("Xuất Excel");
+		btnEffect.setIcon(btnXuatExcel,Icon.xuatExcel);
 		btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
 		btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnXuatExcel.setFocusPainted(false);
@@ -124,8 +125,8 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1.add(btnXuatExcel);
 
 		btnNhapExcel = new JButton("Nhập Excel");
+		btnEffect.setIcon(btnNhapExcel,Icon.nhapExcel);
 		btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
 		btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnNhapExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnNhapExcel.setFocusPainted(false);
@@ -136,6 +137,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		panel_5_1.add(btnNhapExcel);
 
 		btnSua = new JButton("Sửa");
+		btnEffect.setIcon(btnSua,Icon.edit);
 		btnSua.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -143,7 +145,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			}
 		});
 		btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
 		btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnSua.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnSua.setFocusPainted(false);
@@ -186,7 +187,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 				LamMoiMouseClicked();
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
+		btnEffect.setIcon(btnNewButton_1,Icon.refesh);
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_1.setBounds(532, 9, 128, 30);
 		panel_5_1_1.add(btnNewButton_1);

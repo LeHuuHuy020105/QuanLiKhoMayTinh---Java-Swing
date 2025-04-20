@@ -81,8 +81,8 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
             }
         });
         btnEffect.effectBtnHover(btn_ThemNCC);
+        btnEffect.setIcon(btn_ThemNCC,Icon.add);
         btn_ThemNCC.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btn_ThemNCC.setIcon(new ImageIcon(Icon.add));
         btn_ThemNCC.setHorizontalTextPosition(SwingConstants.CENTER);
         btn_ThemNCC.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btn_ThemNCC.setFocusPainted(false);
@@ -100,8 +100,8 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
             }
         });
         btnEffect.effectBtnHover(btnXuatExcel);
+        btnEffect.setIcon(btnXuatExcel,Icon.xuatExcel);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon(Icon.xuatExcel));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXuatExcel.setFocusPainted(false);

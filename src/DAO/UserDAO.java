@@ -36,7 +36,30 @@ public class UserDAO implements DAOInterface<User>{
 
     @Override
     public int update(User user) {
-        return 0;
+        int ketQua =0;
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "update user set password =? , fullname =? , status =? , email =?, machinhanh=?, phone=? where id =?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,user.getPassword());
+            pst.setString(2,user.getFullName());
+            pst.setInt(3,user.getStatus());
+            pst.setString(4,user.getEmail());
+            if (user.getMaChiNhanh() == 0) {
+                pst.setNull(5, Types.INTEGER);
+            } else {
+                pst.setInt(5,user.getMaChiNhanh());
+            }
+            pst.setString(6,user.getPhone());
+            pst.setInt(7,user.getIdUser());
+            ketQua = pst.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
+        } catch (Exception e) {
+            e.printStackTrace();
+            ketQua = -2;
+        }
+        return ketQua;
     }
 
     @Override
@@ -98,7 +121,7 @@ public class UserDAO implements DAOInterface<User>{
                 String password = rs.getString("password");
                 String fullname = rs.getString("fullname");
                 int status = rs.getInt("status");
-                int machinhanh = rs.getInt("machinhanh");
+                Integer machinhanh = rs.getInt("machinhanh");
                 String phone = rs.getString("phone");
                 user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
             }

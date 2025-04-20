@@ -2,8 +2,10 @@ package view.User.QLTaiKhoanAdmin;
 
 import DAO.BrandDAO;
 import DAO.UserDAO;
+import controller.btnEffect;
 import controller.updateDataToTable;
 import model.User;
+import view.Icon;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -48,6 +50,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         verticalBox.add(panel_5_1);
 
         JButton btnNewButton = new JButton("Thêm");
+        btnEffect.setIcon(btnNewButton, Icon.add);
         btnNewButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -55,7 +58,6 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             }
         });
         btnNewButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\add.png"));
         btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnNewButton.setFocusPainted(false);
@@ -66,8 +68,8 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnNewButton);
 
         JButton btnXemChiTiet = new JButton("Xem chi tiết");
+        btnEffect.setIcon(btnXemChiTiet,Icon.edit);
         btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
         btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXemChiTiet.setFocusPainted(false);
@@ -78,8 +80,8 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnXemChiTiet);
 
         JButton btnXuatExcel = new JButton("Xuất Excel");
+        btnEffect.setIcon(btnXuatExcel,Icon.xuatExcel);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXuatExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
         btnXuatExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXuatExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXuatExcel.setFocusPainted(false);
@@ -90,8 +92,8 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnXuatExcel);
 
         JButton btnNhapExcel = new JButton("Nhập Excel");
+        btnEffect.setIcon(btnNhapExcel,Icon.nhapExcel);
         btnNhapExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnNhapExcel.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhapexcel.png"));
         btnNhapExcel.setHorizontalTextPosition(SwingConstants.CENTER);
         btnNhapExcel.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnNhapExcel.setFocusPainted(false);
@@ -102,6 +104,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnNhapExcel);
 
         JButton btnSua = new JButton("Sửa");
+        btnEffect.setIcon(btnSua,Icon.edit);
         btnSua.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -109,7 +112,6 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             }
         });
         btnSua.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnSua.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
         btnSua.setHorizontalTextPosition(SwingConstants.CENTER);
         btnSua.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSua.setFocusPainted(false);
@@ -120,6 +122,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1.add(btnSua);
 
         JButton btnXoa = new JButton("Xoá");
+        btnEffect.setIcon(btnXoa,Icon.delete);
         btnXoa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -127,7 +130,6 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             }
         });
         btnXoa.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXoa.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
         btnXoa.setHorizontalTextPosition(SwingConstants.CENTER);
         btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnXoa.setFocusPainted(false);
@@ -157,11 +159,11 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         panel_5_1_1.add(textField);
 
         JButton btnNewButton_1 = new JButton("Làm mới");
+        btnEffect.setIcon(btnNewButton_1,Icon.refesh);
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             }
         });
-        btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(491, 9, 114, 30);
         panel_5_1_1.add(btnNewButton_1);

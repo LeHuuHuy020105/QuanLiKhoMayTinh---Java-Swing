@@ -27,10 +27,8 @@ public class ThongKeForm extends JPanel {
     private Color default_sideColor = new Color(240, 240, 240);
     private JPanel panel_ThongKe_SanPham;
     private Container panel_ThongKe_Phieu;
-    private JPanel panel_ThongKe_TaiKhoan;
     private JComponent side_ThongKe_SanPham;
     private JPanel side_ThongKe_Phieu;
-    private JPanel side_ThongKe_TaiKhoan;
     private CardLayout cardLayout;
     private User currentUser;
     /**
@@ -170,7 +168,7 @@ public class ThongKeForm extends JPanel {
         panel_ThongKe_Phieu.setBounds(119, 0, 119, 26);
         panel_3.add(panel_ThongKe_Phieu);
 
-        JLabel btn_ThongKe_Phieu = new JLabel("Phiếu");
+        JLabel btn_ThongKe_Phieu = new JLabel("Hoá đơn");
         btn_ThongKe_Phieu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -186,38 +184,16 @@ public class ThongKeForm extends JPanel {
         side_ThongKe_Phieu.setBounds(0, 0, 10, 26);
         panel_ThongKe_Phieu.add(side_ThongKe_Phieu);
 
-        panel_ThongKe_TaiKhoan = new JPanel();
-        panel_ThongKe_TaiKhoan.setLayout(null);
-        panel_ThongKe_TaiKhoan.setBackground(new Color(240, 240, 240));
-        panel_ThongKe_TaiKhoan.setBounds(237, 0, 119, 26);
-        panel_3.add(panel_ThongKe_TaiKhoan);
-
-        JLabel btn_ThongKe_TaiKhoan = new JLabel("Tài khoản");
-        btn_ThongKe_TaiKhoan.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                ThongKeTaiKhoanMouseClicked();
-            }
-        });
-        btn_ThongKe_TaiKhoan.setHorizontalAlignment(SwingConstants.CENTER);
-        btn_ThongKe_TaiKhoan.setBounds(0, 0, 119, 26);
-        panel_ThongKe_TaiKhoan.add(btn_ThongKe_TaiKhoan);
-
-        side_ThongKe_TaiKhoan = new JPanel();
-        side_ThongKe_TaiKhoan.setBackground(new Color(240, 240, 240));
-        side_ThongKe_TaiKhoan.setBounds(0, 0, 10, 26);
-        panel_ThongKe_TaiKhoan.add(side_ThongKe_TaiKhoan);
-
 
     }
     public void resetMenu() {
         side_ThongKe_SanPham.setBackground(default_sideColor);
         side_ThongKe_Phieu.setBackground(default_sideColor);
-        side_ThongKe_TaiKhoan.setBackground(default_sideColor);
+
 
         panel_ThongKe_SanPham.setBackground(default_selectionColor);
         panel_ThongKe_Phieu.setBackground(default_selectionColor);
-        panel_ThongKe_TaiKhoan.setBackground(default_selectionColor);
+
     }
 
     public void ThongKeSanPhamMouseClicked() {
@@ -232,13 +208,6 @@ public class ThongKeForm extends JPanel {
         side_ThongKe_Phieu.setBackground(sideColor);
         panel_ThongKe_Phieu.setBackground(selectionColor);
         cardLayout.show(cardPanel,"Thống kê phiếu");
-    }
-
-    public void ThongKeTaiKhoanMouseClicked() {
-        resetMenu();
-        side_ThongKe_TaiKhoan.setBackground(sideColor);
-        panel_ThongKe_TaiKhoan.setBackground(selectionColor);
-        cardLayout.show(cardPanel,"Thống kê tài khoản");
     }
 
 }
