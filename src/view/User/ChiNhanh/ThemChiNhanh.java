@@ -159,7 +159,9 @@ public class ThemChiNhanh extends JFrame {
         contentPane.add(textArea);
         checkValidInput = new CheckValidInput(this);
     }
-
+    public void HuyBoMouseClicked(){
+        this.dispose();
+    }
     private void ThemChiNhanhMouseClicked() {
         try {
             String SDT = input_SDT.getText().trim();
@@ -195,10 +197,5 @@ public class ThemChiNhanh extends JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm chi nhánh!");
         }
-
-        public void HuyBoMouseClicked(){
-            this.dispose();
-        }
-
     }
 }

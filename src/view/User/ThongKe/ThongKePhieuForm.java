@@ -1,15 +1,11 @@
 package view.User.ThongKe;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
@@ -18,27 +14,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
 
-import DAO.BillStatisticsDAO;
-import DAO.ProductStatisticsDAO;
-import DAO.RoleDAO;
-import DAO.UserDAO;
+import DAO.*;
 import com.toedter.calendar.JDateChooser;
+import controller.Notification;
 import controller.updateDataToTable;
-import model.BillStatistics;
-import model.ProductStatistics;
-import model.User;
+import model.*;
 import view.User.SanPham.SanPhamForm;
 
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillStatistics> {
@@ -82,8 +65,14 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		verticalBox.add(panel_5_1);
 
 		JButton btnXemChiTiet = new JButton("Xem chi tiết");
+		btnXemChiTiet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				XemChiTietHoaDonMouseClicked();
+			}
+		});
 		btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\eye.png"));
+		btnXemChiTiet.setIcon(new ImageIcon("D:\\WEB\\FontEndAndBackEnd\\BackEnd\\Java Core\\Swing\\Project\\huy\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\eye.png"));
 		btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnXemChiTiet.setFocusPainted(false);
@@ -407,5 +396,28 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 			System.out.println(statistics);
 		}
 		return result;
+	}
+	public Bill getBillSelected() {
+		Bill bill_Selected = null;
+		try {
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			int i_row = table.getSelectedRow();
+
+			if (i_row == -1) {
+				JOptionPane.showMessageDialog(this, Notification.not_SelectedProduct);
+				return null;
+			}
+
+			int maHD = Integer.parseInt(model.getValueAt(i_row, 0)+"");
+
+			bill_Selected = BillDAO.getInstance().getBillByMaPhieu(maHD);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return bill_Selected;
+	}
+	public void XemChiTietHoaDonMouseClicked(){
+		ChiTietBillForm chiTietBillForm = new ChiTietBillForm(this);
 	}
 }
