@@ -94,10 +94,10 @@ public class Login extends JFrame {
                 isPasswordVisible = !isPasswordVisible;
                 if (isPasswordVisible) {
                     input_password.setEchoChar((char) 0); // Show password
-                    showPass.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\open_view.png"));
+                    showPass.setIcon(new ImageIcon("D:\\WEB\\FontEndAndBackEnd\\BackEnd\\Java Core\\Swing\\Project\\huy\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\eye.png"));
                 } else {
                     input_password.setEchoChar('•'); // Hide password
-                    showPass.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\hide_view.png"));
+                    showPass.setIcon(new ImageIcon("D:\\WEB\\FontEndAndBackEnd\\BackEnd\\Java Core\\Swing\\Project\\huy\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\hidden_password.png"));
                 }
             }
         });

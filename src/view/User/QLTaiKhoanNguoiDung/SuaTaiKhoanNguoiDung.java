@@ -111,6 +111,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
         btnNewButton_2_1_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                HuyBoMouseClicked();
             }
         });
         btnNewButton_2_1_1.setIcon(null);
@@ -177,7 +178,9 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         checkValidInput = new CheckValidInput(this);
         setVisible(true);
     }
-
+    public void HuyBoMouseClicked(){
+        this.dispose();
+    }
 //    private void Permission() {
 //        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
 //        if (role.equals("Nhân viên bán hàng")) {

@@ -189,6 +189,11 @@ public class ThemSanPham extends JFrame {
 		contentPane.add(btnNewButton_2_1);
 
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
+		btnNewButton_2_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HuyBoMouseClicked();
+			}
+		});
 		btnNewButton_2_1_1.setIcon(null);
 		btnNewButton_2_1_1.setForeground(Color.WHITE);
 		btnNewButton_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -288,6 +293,9 @@ public class ThemSanPham extends JFrame {
 			}
 		});
 		cbxLoaiSanPhamMouseClicked();
+	}
+	public void HuyBoMouseClicked(){
+		this.dispose();
 	}
 	public void upLoadImage() {
 	    JFileChooser fileChooser = new JFileChooser();

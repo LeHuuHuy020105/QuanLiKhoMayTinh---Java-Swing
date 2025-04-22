@@ -111,6 +111,7 @@ public class SuaTaiKhoanForm extends JFrame {
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				HuyBoMouseClicked();
 			}
 		});
 		btnNewButton_2_1_1.setIcon(null);
@@ -192,16 +193,19 @@ public class SuaTaiKhoanForm extends JFrame {
 				isPasswordVisible = !isPasswordVisible;
 				if (isPasswordVisible) {
 					textField_Password.setEchoChar((char) 0); // Show password
-					lbl_eyePasswordOpen.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\open_view.png"));
+					lbl_eyePasswordOpen.setIcon(new ImageIcon("D:\\WEB\\FontEndAndBackEnd\\BackEnd\\Java Core\\Swing\\Project\\huy\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\eye.png"));
 				} else {
 					textField_Password.setEchoChar('•'); // Hide password
-					lbl_eyePasswordOpen.setIcon(new ImageIcon("C:\\Users\\Hoc\\IdeaProjects\\JAVA\\project\\Java\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\hide_view.png"));
+					lbl_eyePasswordOpen.setIcon(new ImageIcon("D:\\WEB\\FontEndAndBackEnd\\BackEnd\\Java Core\\Swing\\Project\\huy\\QuanLiKhoMayTinh---Java-Swing\\src\\icon\\hidden_password.png"));
 				}
 			}
 		});
 
 		fillData();
 		checkValidInput = new CheckValidInput(this);
+	}
+	public void HuyBoMouseClicked(){
+		this.dispose();
 	}
 	public void fillData(){
 		user_Selected = this.qlTaiKhoanForm.getUserSelected();

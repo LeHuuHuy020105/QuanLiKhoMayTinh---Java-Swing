@@ -98,6 +98,7 @@ public class ThemTaiKhoanForm extends JFrame {
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				HuyBoMouseClicked();
 			}
 		});
 		btnNewButton_2_1_1.setIcon(null);
@@ -164,7 +165,9 @@ public class ThemTaiKhoanForm extends JFrame {
 		contentPane.add(textField_MK);
 		checkValidInput = new CheckValidInput(this);
 	}
-
+	public void HuyBoMouseClicked(){
+		this.dispose();
+	}
 	public void setChiNhanh(){
 		String role = cbx_VaiTro.getSelectedItem().toString();
 		if(role.equals("Quản lí chi nhánh") || role.equals("Nhân viên bán hàng")){

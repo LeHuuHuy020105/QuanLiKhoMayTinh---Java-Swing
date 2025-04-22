@@ -107,6 +107,7 @@ public class ThemNhaCungCap extends JFrame  {
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
 		btnNewButton_2_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				HuyBoMouseClicked();
 			}
 		});
 		btnNewButton_2_1_1.setIcon(null);
@@ -151,7 +152,9 @@ public class ThemNhaCungCap extends JFrame  {
 
 		ValueAddress.getInstance().loadQuanHuyen(cbx_ThanhPho,cbx_Quan,cbx_Phuong);
 	}
-
+	public void HuyBoMouseClicked(){
+		this.dispose();
+	}
 	private void ThemNhaCungCapMouseClicked() {
 		try {
 			String tenNCC = input_TenNCC.getText().trim();

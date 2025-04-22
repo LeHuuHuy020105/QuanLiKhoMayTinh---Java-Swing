@@ -1,6 +1,7 @@
 package view.User.PhieuXuat;
 
 import DAO.*;
+import controller.writePDF;
 import model.*;
 
 import javax.swing.JFrame;
@@ -19,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ChiTietPhieuXuatForm extends JFrame {
 
@@ -118,6 +121,12 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		scrollPane.setViewportView(table_ChiTietPhieuXuat);
 		
 		JButton btnXut = new JButton("Xuất PDF");
+		btnXut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				XuatPDFPhieuXuat();
+			}
+		});
 		btnXut.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\pdf.png"));
 		btnXut.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnXut.setBounds(738, 480, 139, 41);
@@ -143,6 +152,9 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		label_DiaChi.setBounds(104, 193, 684, 28);
 		contentPane.add(label_DiaChi);
 		hienThiThongTinPhieuNhap();
+	}
+	public void XuatPDFPhieuXuat() {
+		writePDF.getInstance().writePhieuXuat(this.phieuXuatForm.getExportProductsSelected().getMaPhieuXuat());
 	}
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");

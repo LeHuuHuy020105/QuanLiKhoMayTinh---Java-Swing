@@ -94,6 +94,7 @@ public class ThemChiNhanh extends JFrame {
         JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
         btnNewButton_2_1_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                HuyBoMouseClicked();
             }
         });
         btnNewButton_2_1_1.setIcon(null);
@@ -193,6 +194,10 @@ public class ThemChiNhanh extends JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm chi nhánh!");
+        }
+
+        public void HuyBoMouseClicked(){
+            this.dispose();
         }
 
     }

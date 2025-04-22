@@ -19,14 +19,9 @@ import model.Producer;
 
 import java.awt.Font;
 import java.awt.Window;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ItemEvent;
 import java.util.List;
 
 public class SuaSanPhamForm extends JFrame {
@@ -207,6 +202,11 @@ public class SuaSanPhamForm extends JFrame {
 		contentPane.add(btnNewButton_2_1);
 
 		JButton btnNewButton_2_1_1 = new JButton("Huỷ bỏ");
+		btnNewButton_2_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HuyBoMouseClicked();
+			}
+		});
 		btnNewButton_2_1_1.setIcon(null);
 		btnNewButton_2_1_1.setForeground(Color.WHITE);
 		btnNewButton_2_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -310,6 +310,9 @@ public class SuaSanPhamForm extends JFrame {
 		});
 		btnNewButton.setBounds(228, 60, 85, 21);
 		contentPane.add(btnNewButton);
+	}
+	public void HuyBoMouseClicked(){
+		this.dispose();
 	}
 	public void upLoadImage() {
 	    JFileChooser fileChooser = new JFileChooser();
