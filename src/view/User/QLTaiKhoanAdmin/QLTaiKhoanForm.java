@@ -2,8 +2,11 @@ package view.User.QLTaiKhoanAdmin;
 
 import DAO.BrandDAO;
 import DAO.UserDAO;
+import controller.SearchCustomer;
+import controller.SearchUser;
 import controller.btnEffect;
 import controller.updateDataToTable;
+import model.Customer;
 import model.User;
 import view.Icon;
 
@@ -18,10 +21,13 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
 
     private static final long serialVersionUID = 1L;
+    private JComboBox comboBox;
     private JTextField textField;
     private JTable table_user;
     private User currentUser;
@@ -148,12 +154,19 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         verticalBox_1.add(panel_5_1_1);
         panel_5_1_1.setLayout(null);
 
-        JComboBox comboBox = new JComboBox();
+        String[] cbx_Search = new String[]{"Tất cả","Tên đăng nhập","Tên người dùng","Số điện thoại","Email"};
+        comboBox = new JComboBox(cbx_Search);
         comboBox.setBackground(UIManager.getColor("Button.background"));
         comboBox.setBounds(10, 11, 126, 30);
         panel_5_1_1.add(comboBox);
 
         textField = new JTextField();
+        textField.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+                jTextFieldSearchKeyReleased();
+        	}
+        });
         textField.setColumns(10);
         textField.setBounds(156, 11, 325, 30);
         panel_5_1_1.add(textField);
@@ -201,6 +214,34 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             updateTableDataFormDAO();
         }
 
+    }
+    public void jTextFieldSearchKeyReleased() {
+        String luachon = (String) comboBox.getSelectedItem();
+        String content_Search = textField.getText();
+        ArrayList<User> result = SearchFn(luachon, content_Search);
+        updateTableData(result);
+    }
+
+    public ArrayList<User> SearchFn(String luachon, String content_Search) {
+        ArrayList<User> result = new ArrayList<>();
+        SearchUser searchUser = new SearchUser();
+        switch (luachon) {
+            case "Tất cả":
+                result = searchUser.searchTatCa(content_Search);
+                break;
+            case "Tên đăng nhập":
+                result = searchUser.searchUserName(content_Search);
+                break;
+            case "Tên người dùng":
+                result = searchUser.searchFullName(content_Search);
+                break;
+            case "Số điện thoại":
+                result = searchUser.searchSDT(content_Search);
+                break;
+            case "Email":
+                result = searchUser.searchEmail(content_Search);
+        }
+        return result;
     }
 
     @Override

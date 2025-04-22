@@ -4,6 +4,7 @@ import DAO.*;
 import controller.Notification;
 import controller.SearchProduct;
 import controller.updateDataToTable;
+import controller.writePDF;
 import model.*;
 import view.Icon;
 import view.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
@@ -32,7 +33,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private JLabel label_TotalPrice;
     private Customer customer;
     private JTextField textField_InfoCustomer;
-    private JTextField textField_InfoVoucher;
 
     /**
      * Create the panel.
@@ -101,7 +101,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         add(input_NguoiTaoPhieu);
 
         JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(676, 236, 559, 312);
+        scrollPane_1.setBounds(676, 166, 559, 382);
         add(scrollPane_1);
 
         table_nhapHang = new JTable();
@@ -244,40 +244,19 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         textField_InfoCustomer.setBounds(824, 107, 340, 27);
         add(textField_InfoCustomer);
 
-        textField_InfoVoucher = new JTextField();
-        textField_InfoVoucher.setText((String) null);
-        textField_InfoVoucher.setEditable(false);
-        textField_InfoVoucher.setColumns(10);
-        textField_InfoVoucher.setBounds(676, 156, 493, 27);
-        add(textField_InfoVoucher);
-
-        JButton btnNewButton_3_1 = new JButton("Voucher");
-        btnNewButton_3_1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                VoucherMouseClicked();
-
-            }
-        });
-        btnNewButton_3_1.setBounds(1174, 159, 47, 21);
-        add(btnNewButton_3_1);
-
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
         ArrayList<String> items = dataCustomer(customers);
         fillData();
         setVisible(true);
     }
 
-    private void VoucherMouseClicked() {
-//        RadioButtonScrollExample radioButtonScrollExample = new RadioButtonScrollExample(this);
-    }
-
 
     private void SearchCustomer() {
         QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm = new QLTaiKhoanNguoiDungForm(this);
     }
-    public void fillInfoCustomer(Customer customer){
-        String s = customer.getSoDienThoai()+" - "+customer.getFullName();
+    public void fillInfoCustomer(Customer fillCustomer){
+        String s = fillCustomer.getSoDienThoai()+" - "+fillCustomer.getFullName();
+        customer = fillCustomer;
         textField_InfoCustomer.setText(s);
     }
     public ArrayList<String> dataCustomer(ArrayList<Customer> customers){
@@ -345,6 +324,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         ArrayList<Computer> result = new ArrayList<>();
         for(Inventory item : inventories){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
+            computer.setSoLuong(item.getSoLuong());
             result.add(computer);
         }
         return result;
@@ -352,6 +332,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
     @Override
     public void updateTableData(ArrayList<Computer> computers) {
+        System.out.println(computers);
         DecimalFormat df = new DecimalFormat("#,###");
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         model.setRowCount(0);
@@ -502,16 +483,15 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         }
         Bill bill = null;
         if(customer==null){
-            bill = new Bill();
-
-        }else {
-            bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,0,"offline");
+            JOptionPane.showMessageDialog(this,"Vui lòng nhập thông tin khách hàng !");
+            return;
         }
-
+        bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,totalPrice(),"offline");
         int maPhieu = BillDAO.getInstance().insertBill(bill);
         updateDatabaseDetailBill(maPhieu);
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
         resetNhapHang();
+        writePDF.getInstance().writeHoaDonKhachHang(maPhieu);
     }
     public void updateDatabaseDetailBill(int maphieu){
         for(DetailBill detailBill : detailBills){
@@ -523,14 +503,21 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             updateTableDataFormDAO();
         }
     }
+    public double totalPrice(){
+        double tongTien = 0;
+        for(DetailBill detailBill : detailBills){
+            tongTien+=detailBill.getSoLuong()*ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay()).getGiaBan();
+        }
+        return tongTien;
+    }
     public void resetNhapHang(){
         detailBills.clear();
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         label_TotalPrice.setText("");
     }
-    public void fillInfoVoucher(Voucher voucher){
-        textField_InfoVoucher.setText(voucher.getDescription());
-    }
+//    public void fillInfoVoucher(Voucher voucher){
+//        textField_InfoVoucher.setText(voucher.getDescription());
+//    }
     public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
 //        try {
 //            com.itextpdf.text.Document document = new Document();

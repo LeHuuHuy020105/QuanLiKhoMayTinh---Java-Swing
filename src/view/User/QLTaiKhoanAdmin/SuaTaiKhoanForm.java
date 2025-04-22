@@ -3,6 +3,7 @@ package view.User.QLTaiKhoanAdmin;
 import DAO.BrandDAO;
 import DAO.RoleDAO;
 import DAO.UserDAO;
+import controller.CheckValidInput;
 import model.Branch;
 import model.Role;
 import model.User;
@@ -34,6 +35,7 @@ public class SuaTaiKhoanForm extends JFrame {
 	private User user_Selected;
 	private JTextField textField_HoVaTen;
 	private JTextField textField_Sdt;
+	private CheckValidInput checkValidInput;
 
 
 	/**
@@ -199,6 +201,7 @@ public class SuaTaiKhoanForm extends JFrame {
 		});
 
 		fillData();
+		checkValidInput = new CheckValidInput(this);
 	}
 	public void fillData(){
 		user_Selected = this.qlTaiKhoanForm.getUserSelected();
@@ -236,7 +239,6 @@ public class SuaTaiKhoanForm extends JFrame {
 		String password = new String(textField_Password.getPassword());
 		String email = textField_Email.getText();
 		String chiNhanh = cbx_DiaChi.getSelectedItem() != null ? cbx_DiaChi.getSelectedItem().toString() : "";
-		System.out.println(chiNhanh);
 		int status = (cbx_TrangThai.getSelectedItem()+"").equals("Bình thường")?1:0;
 		String phone = textField_Sdt.getText();
 		String fullName = textField_HoVaTen.getText();
@@ -245,6 +247,9 @@ public class SuaTaiKhoanForm extends JFrame {
 		Branch branch = null;
 		if(password.equals("") || email.equals("")){
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập đầy đủ thông tin !");
+			return;
+		}
+		if(!checkValidInput.checkValidPhoneUser(phone,user_Selected.getIdUser(),true) || !checkValidInput.checkEmailUser(email,user_Selected.getIdUser(),true)){
 			return;
 		}
 		if(!chiNhanh.isEmpty()){

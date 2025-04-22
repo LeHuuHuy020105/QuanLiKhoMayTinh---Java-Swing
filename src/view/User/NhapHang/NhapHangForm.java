@@ -248,7 +248,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);
              Workbook workbook = new XSSFWorkbook(fis)) {
-
+            boolean hasError = false;
             Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
             Iterator<Row> rowIterator = sheet.iterator();
 
@@ -256,19 +256,31 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
-
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 int maMay = (int) row.getCell(0).getNumericCellValue();
                 int soLuong =  (int) row.getCell(1).getNumericCellValue();
                 DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,soLuong);
-                DetailImportProducts detailImportProducts_isValid = isValidProduct(detailImportProducts1,detailImportProducts);
-                if(detailImportProducts_isValid==null){
-                    detailImportProducts.add(detailImportProducts1);
+                Computer computer_Search = ProductsDAO.getInstance().searchByIDProduct(maMay);
+                if(computer_Search == null){
+                    hasError = true;
                 }else {
-                    detailImportProducts_isValid.setSoluong(detailImportProducts_isValid.getSoluong() + soLuong);
+                    if(soLuong>computer_Search.getSoLuong()){
+                        hasError = true;
+                    }
+                }
+                if(hasError==false){
+                    DetailImportProducts detailImportProducts_isValid = isValidProduct(detailImportProducts1,detailImportProducts);
+                    if(detailImportProducts_isValid==null){
+                        detailImportProducts.add(detailImportProducts1);
+                    }else {
+                        detailImportProducts_isValid.setSoluong(detailImportProducts_isValid.getSoluong() + soLuong);
+                    }
                 }
                 updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
+            }
+            if(hasError){
+                JOptionPane.showMessageDialog(this,"Tồn tại máy không có trong kho hoặc số lượng vượt quá kho !");
             }
             setTotalPrice();
             JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
@@ -347,7 +359,6 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
         return computer;
     }
-
     public void ThemMouseClicked() {
         int soLuong = 0;
         boolean hasError = false;
@@ -360,6 +371,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         }
         if(hasError)return;
         Computer computer_selected = getComputerSelectedTableProduct();
+        if(soLuong > computer_selected.getSoLuong()){
+            JOptionPane.showMessageDialog(this,"Quá số lượng trong kho !");
+            return;
+        }
         int maMay =computer_selected.getMaMay();
 
         DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,0,soLuong);
@@ -474,6 +489,9 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 if(check_pdf==JOptionPane.YES_OPTION){
                     writePDF.getInstance().writePhieuNhap(maphieunhap);
                 }
+            }
+            else {
+                return;
             }
         }
         JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");

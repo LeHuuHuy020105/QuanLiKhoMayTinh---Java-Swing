@@ -96,6 +96,22 @@ public class BrandDAO implements DAOInterface<Branch>{
         }
         return ketQua;
     }
+    public String getPhoneByBranchId(int idBranch) {
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT sodienthoai FROM branch WHERE machinhanh = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setInt(1, idBranch);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("sodienthoai");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Branch BranchByID(int idChiNhanh){
         Branch branch = null;
         try {
@@ -142,21 +158,20 @@ public class BrandDAO implements DAOInterface<Branch>{
         }
         return branch;
     }
-    public boolean checkSdt(String sdt){
+    public boolean checkSdt(String sdt, int idBranch) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "select count(*) from branch where sodienthoai = ? ";
+        String sql = "SELECT COUNT(*) FROM branch WHERE sodienthoai = ? AND machinhanh != ?";
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
             ps.setString(1, sdt);
+            ps.setInt(2, idBranch);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
-                if (count > 0) {
-                    return true;
-                }
+                return count > 0;
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;

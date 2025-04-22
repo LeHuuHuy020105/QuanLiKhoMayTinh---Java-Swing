@@ -204,12 +204,6 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
     }
     public void KhoiPhucMouseClicked(){
         ImportProducts importProducts_Selected = phieuNhapForm.getImportProductsSelected();
-        ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_Selected.getMaphieunhap());
-        for(DetailImportProducts item : detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
-            computer.setSoLuong(computer.getSoLuong()+item.getSoluong());
-            ProductsDAO.getInstance().update(computer);
-        }
         importProducts_Selected.setTrangThai(1);
         importProducts_Selected.setThoiGianHuy(null);
         importProducts_Selected.setTimestamp(new Timestamp(System.currentTimeMillis()));

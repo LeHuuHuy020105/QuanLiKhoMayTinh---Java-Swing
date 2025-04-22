@@ -122,6 +122,22 @@ public class CustomerDAO implements DAOInterface<Customer>{
         }
         return ketQua;
     }
+    public String getPhoneByCustomerId(int idCustomer) {
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT phone FROM producer WHERE makhachhang = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setInt(1, idCustomer);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("sodienthoai");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Customer findByID(int maKH) {
         Customer customer = null;
         try {

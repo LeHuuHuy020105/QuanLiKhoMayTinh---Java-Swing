@@ -163,7 +163,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         lblNewLabel_1_1_1_1_1_1.setBounds(10, 598, 116, 28);
         contentPane.add(lblNewLabel_1_1_1_1_1_1);
 
-        String[] loaiTK = new String[]{"online", "offline"};
+        String[] loaiTK = new String[]{"offline"};
         cbx_LoaiTK = new JComboBox(loaiTK);
         cbx_LoaiTK.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent arg0) {
@@ -174,6 +174,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         contentPane.add(cbx_LoaiTK);
 
         checkValidInput = new CheckValidInput(this);
+        PerrmissionStaff();
         setVisible(true);
     }
 
@@ -224,25 +225,20 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             String phone = input_SDT.getText();
             String repass = new String(Re_passwordField.getPassword());
             String username = input_HoTen.getText();
-            if (checkValidInput.checkConfirmPassword(pass, repass) && checkValidInput.checkEmail(email) && checkValidInput.checkValidAccount(taikhoan) && checkValidInput.kiemTraNameUser(username) && checkValidInput.checkValidPhone(phone,loaiTaiKhoan)) {
-                ThemTaiKhoanOnline();
-                this.dispose();
-            }
-            return;
+            ThemTaiKhoanOnline();
         } else {
             String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
             if (role.equals("Nhân viên bán hàng")) {
                 ThemTaiKhoanOffline();
             } else {
-                if(loaiTaiKhoan.equals("online")){
+                if (loaiTaiKhoan.equals("online")) {
                     ThemTaiKhoanOnline();
-                }else {
+                } else {
+                    System.out.println("them tk offf");
                     ThemTaiKhoanOffline();
                 }
             }
         }
-        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
-        this.dispose();
     }
 
     private void ThemTaiKhoanOnline() {
@@ -256,25 +252,30 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin !");
             return;
         }
-        if (!checkValidInput.checkConfirmPassword(matKhau, nhapLaiMatKhau)) {
+        if (!checkValidInput.checkConfirmPassword(matKhau, nhapLaiMatKhau) || checkValidInput.checkEmail(email) || checkValidInput.checkValidAccount(taiKhoan) || checkValidInput.checkValidPhone(soDienThoai, "online", 0, false)) {
             return;
         }
         Customer customer = new Customer(taiKhoan, matKhau, "online", hoTen, email, soDienThoai);
         CustomerDAO.getInstance().insert(customer);
+        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
+        this.dispose();
     }
 
     private void ThemTaiKhoanOffline() {
+        System.out.println("offf");
         String hoTen = input_HoTen.getText();
         String soDienThoai = input_SDT.getText();
         if (hoTen.isEmpty() || soDienThoai.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin họ tên và số điện thoại !");
             return;
         }
+        if (!checkValidInput.checkValidPhone(soDienThoai, "offline", 0, false)) {
+            return;
+        }
         Customer customer = new Customer(soDienThoai, hoTen, "offline");
         CustomerDAO.getInstance().insert(customer);
+        qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
+        this.dispose();
     }
-
-
-
 }
 

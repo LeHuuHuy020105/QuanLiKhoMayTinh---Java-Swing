@@ -174,7 +174,7 @@ public class ThemChiNhanh extends JFrame {
 //				}
 //			}
 
-            if (!checkValidInput.checkValidPhoneBranch(SDT) || !checkValidInput.checkValidNameBranch(tenChiNhanh)) {
+            if (!checkValidInput.checkValidPhoneBranch(SDT,0,false) || !checkValidInput.checkValidNameBranch(tenChiNhanh)) {
                 return;
             } else {
                 if (diaChi.equals("N/A")) {

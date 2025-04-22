@@ -272,15 +272,9 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btn_LamMoi.setBounds(550, 9, 128, 30);
         panel_5_1_1.add(btn_LamMoi);
 
-        if (role.equals("Nhân viên bán hàng")) {
-            columnNames = new String[]{
-                    "STT", "Mã khách hàng", "Tên khách hàng", "Địa chỉ", "SDT"
-            };
-        } else {
-            columnNames = new String[]{
-                    "STT", "Mã khách hàng", "Tên tài khoản", "Tên khách hàng", "Địa chỉ", "SDT"
-            };
-        }
+
+        columnNames = new String[]{
+                "STT", "Mã khách hàng", "Tên khách hàng", "SDT"};
         table_NCC = new JTable();
         table_NCC.setFont(new Font("Tahoma", Font.PLAIN, 14));
         table_NCC.setModel(new DefaultTableModel(
@@ -342,24 +336,12 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         boolean isStaff = role.equals("Nhân viên bán hàng");
         for (Customer customer : t) {
             i++;
-            if (isStaff) {
-                model.addRow(new Object[]{
-                        i,
-                        customer.getMaKhachHang(),
-                        customer.getFullName(),
-                        customer.getDiaChi() == null ? "N/a" : customer.getDiaChi(),
-                        customer.getSoDienThoai()
-                });
-            } else {
-                model.addRow(new Object[]{
-                        i,
-                        customer.getMaKhachHang(),
-                        customer.getUserName(),
-                        customer.getFullName(),
-                        customer.getDiaChi() == null ? "N/a" : customer.getDiaChi(),
-                        customer.getSoDienThoai()
-                });
-            }
+            model.addRow(new Object[]{
+                    i,
+                    customer.getMaKhachHang(),
+                    customer.getFullName(),
+                    customer.getSoDienThoai()
+            });
         }
     }
 

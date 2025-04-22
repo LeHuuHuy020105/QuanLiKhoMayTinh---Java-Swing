@@ -170,6 +170,9 @@ public class SuaNhaCungCap extends JFrame {
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập số điện thoại!");
 			hasError = true;
 		}
+		if(!checkValidInput.checkValidPhoneProducer(SDT,maNCC,true)){
+			hasError = true;
+		}
 		if(hasError)return;
 		String diaChi = ValueAddress.getValueAddressFrame(this,cbx_ThanhPho,cbx_Quan,cbx_Phuong,input_SoNha);
 		Producer producer = new Producer(diaChi,maNCC,SDT,tenNCC);

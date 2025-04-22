@@ -5,6 +5,7 @@ import model.DetailBill;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DetailBillDAO implements DAOInterface<DetailBill> {
@@ -41,5 +42,28 @@ public class DetailBillDAO implements DAOInterface<DetailBill> {
     @Override
     public ArrayList<DetailBill> selectAll() {
         return null;
+    }
+
+    public ArrayList<DetailBill> selectAllByMaPhieu(int maPhieu) {
+        ArrayList<DetailBill> result = new ArrayList<>();
+        Connection conn = JDBCUtil.getConnection();
+        String sql = "SELECT * FROM detailbill WHERE maphieu = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPhieu);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DetailBill detail = new DetailBill(
+                        rs.getInt("mamay"),
+                        rs.getInt("maphieu"),
+                        rs.getInt("soluong")
+                );
+                result.add(detail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(conn);
+        }
+        return result;
     }
 }

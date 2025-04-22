@@ -190,7 +190,7 @@ public class SuaChiNhanh extends JFrame {
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập số điện thoại!");
 			hasError = true;
 		}
-		if(checkValidInput.checkValidPhoneBranch(SDT)==false){
+		if(checkValidInput.checkValidPhoneBranch(SDT,maCN,true)==false){
 			hasError = true;
 		}
 		if(hasError)return;

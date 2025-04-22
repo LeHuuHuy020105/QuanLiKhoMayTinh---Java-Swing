@@ -161,7 +161,7 @@ public class ThemNhaCungCap extends JFrame  {
 				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
 				return;
 			}
-			if(!checkValidInput.checkValidPhoneProducer(SDT)){
+			if(!checkValidInput.checkValidPhoneProducer(SDT,null,false)){
 				return;
 			}
 			String maNCC = tenNCC.toUpperCase();

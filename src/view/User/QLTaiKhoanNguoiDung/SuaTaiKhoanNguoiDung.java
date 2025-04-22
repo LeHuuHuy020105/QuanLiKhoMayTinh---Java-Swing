@@ -2,6 +2,7 @@ package view.User.QLTaiKhoanNguoiDung;
 
 import DAO.CustomerDAO;
 import DAO.UserDAO;
+import controller.CheckValidInput;
 import model.Customer;
 import model.User;
 
@@ -25,6 +26,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
     private JPasswordField Re_passwordField;
     private QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm;
     private Customer customer_Selected;
+    private CheckValidInput checkValidInput;
 
     /**
      * Launch the application.
@@ -172,6 +174,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         cbx_LoaiTK.setBounds(10, 636, 328, 28);
         contentPane.add(cbx_LoaiTK);
         fillData();
+        checkValidInput = new CheckValidInput(this);
         setVisible(true);
     }
 
@@ -274,7 +277,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         customer_Selected.setFullName(hoVaTen);
         String cbx_LoaiTaiKhoan = cbx_LoaiTK.getSelectedItem()+"";
         customer_Selected.setLoaiTaiKhoan(cbx_LoaiTaiKhoan);
-        if(checkValidPhone(phone,"offline")==false){
+        if(checkValidInput.checkValidPhone(phone,"offline",customer_Selected.getMaKhachHang(),true)==false){
             return;
         }
         CustomerDAO.getInstance().update(customer_Selected);
@@ -305,75 +308,75 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
             LuuTaiKhoanOnline();
         }
     }
-    public static boolean kiemTraNameUser(String fullname) {
-        if (fullname.trim().isEmpty() || fullname.equals("null")) {
-            return false;
-        }
-        String regex = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ\\s]+$";
+//    public static boolean kiemTraNameUser(String fullname) {
+//        if (fullname.trim().isEmpty() || fullname.equals("null")) {
+//            return false;
+//        }
+//        String regex = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ\\s]+$";
+//
+//        return fullname.matches(regex);
+//    }
+//
+//    public boolean checkConfirmPassword(String password, String confirmPassword) {
+//        if (password == null || confirmPassword == null) {
+//            JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống!");
+//            return false;
+//        }
+//
+//        boolean match = password.equals(confirmPassword);
+//
+//        if (!match) {
+//            JOptionPane.showMessageDialog(this, "Mật khẩu và mật khẩu xác nhận không khớp!");
+//        }
+//        return match;
+//    }
+//
+//    public boolean checkEmail(String email) {
+//        if (email == null || email.equals("null")) {
+//            JOptionPane.showMessageDialog(this, "Email không được để trống!");
+//            return false;
+//        }
+//
+//        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+//
+//        boolean match = email.matches(emailRegex);
+//        if (!match) {
+//            JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
+//            return false;
+//        }
+//        return match;
+//    }
+//
+//    public boolean checkValidAccount(String nameAccount) {
+//        if (nameAccount == null || nameAccount.equals("null")) {
+//            JOptionPane.showMessageDialog(this, "Tài khoản không được để trống!");
+//            return false;
+//        }
+//        boolean flag = CustomerDAO.getInstance().checkDataAccount(nameAccount);
+//        if (flag == true) {
+//            JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại!");
+//            return false;
+//        }
+//        return true;
+//    }
 
-        return fullname.matches(regex);
-    }
-
-    public boolean checkConfirmPassword(String password, String confirmPassword) {
-        if (password == null || confirmPassword == null) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống!");
-            return false;
-        }
-
-        boolean match = password.equals(confirmPassword);
-
-        if (!match) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu và mật khẩu xác nhận không khớp!");
-        }
-        return match;
-    }
-
-    public boolean checkEmail(String email) {
-        if (email == null || email.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Email không được để trống!");
-            return false;
-        }
-
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
-        boolean match = email.matches(emailRegex);
-        if (!match) {
-            JOptionPane.showMessageDialog(this, "Email không đúng định dạng!");
-            return false;
-        }
-        return match;
-    }
-
-    public boolean checkValidAccount(String nameAccount) {
-        if (nameAccount == null || nameAccount.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Tài khoản không được để trống!");
-            return false;
-        }
-        boolean flag = CustomerDAO.getInstance().checkDataAccount(nameAccount);
-        if (flag == true) {
-            JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại!");
-            return false;
-        }
-        return true;
-    }
-
-	public boolean checkValidPhone(String phoneNumber, String loaitaikhoan) {
-        if (phoneNumber == null || phoneNumber.equals("null")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!");
-            return false;
-        }
-        String regex = phoneNumber.replaceAll("[^0-9]", "");
-        if (!regex.matches("^0[0-9]{9}$")) {
-            JOptionPane.showMessageDialog(this,"Số điện thoại không đúng định dạng !");
-            return false;
-        }
-        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaitaikhoan);
-        if (flag == true) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
-            return false;
-        }
-        return true;
-    }
+//	public boolean checkValidPhone(String phoneNumber, String loaitaikhoan) {
+//        if (phoneNumber == null || phoneNumber.equals("null")) {
+//            JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống!");
+//            return false;
+//        }
+//        String regex = phoneNumber.replaceAll("[^0-9]", "");
+//        if (!regex.matches("^0[0-9]{9}$")) {
+//            JOptionPane.showMessageDialog(this,"Số điện thoại không đúng định dạng !");
+//            return false;
+//        }
+//        boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaitaikhoan);
+//        if (flag == true) {
+//            JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
+//            return false;
+//        }
+//        return true;
+//    }
     public void fillData(){
         customer_Selected = qlTaiKhoanNguoiDungForm.getCustomerSelected();
         String loaiTaiKhoan = CustomerDAO.getInstance().GetTypeCustomer(customer_Selected.getMaKhachHang());

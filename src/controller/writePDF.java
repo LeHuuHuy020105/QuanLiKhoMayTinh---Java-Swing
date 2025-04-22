@@ -264,6 +264,98 @@ public class writePDF {
         } catch (DocumentException | FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Lỗi khi ghi file " + url);
         }
+    }
 
+    public void writeHoaDonKhachHang(int maPhieu) {
+        String url = "";
+        try {
+            fd.setTitle("In hóa đơn khách hàng");
+            fd.setLocationRelativeTo(null);
+            url = getFile(maPhieu + "");
+            if (url == null) {
+                return;
+            }
+            file = new FileOutputStream(url);
+            document = new Document();
+            PdfWriter writer = PdfWriter.getInstance(document, file);
+            document.open();
+
+            setTitle("THÔNG TIN HÓA ĐƠN KHÁCH HÀNG");
+
+            // Lấy thông tin hóa đơn
+            Bill bill = BillDAO.getInstance().getBillByMaPhieu(maPhieu);
+            User nhanVien = UserDAO.getInstance().getUsetById(bill.getMaNhanVien());
+            Customer khachHang = bill.getMaKhachHang() != 0 ? CustomerDAO.getInstance().findByID(bill.getMaKhachHang()) : null;
+            Branch chiNhanh = BrandDAO.getInstance().BranchByID(bill.getMaChiNhanh());
+
+            // Thông tin hóa đơn
+            Paragraph para1 = new Paragraph(new Phrase("Mã hóa đơn: " + bill.getMaPhieu(), fontData));
+            Paragraph para2 = new Paragraph(new Phrase("Thời gian tạo: " + formatDate.format(bill.getThoiDiemTao()), fontData));
+            Paragraph para3 = new Paragraph(new Phrase("Nhân viên: " + nhanVien.getFullName(), fontData));
+            Paragraph para4 = new Paragraph();
+            if (khachHang != null) {
+                para4.add(new Phrase("Khách hàng: " + khachHang.getFullName() + " - " + khachHang.getSoDienThoai(), fontData));
+            } else {
+                para4.add(new Phrase("Khách hàng: Không xác định", fontData));
+            }
+            Paragraph para5 = new Paragraph(new Phrase("Chi nhánh: " + chiNhanh.getTenChiNhanh() + " - " + chiNhanh.getDiaChi(), fontData));
+
+            para1.setIndentationLeft(40);
+            para2.setIndentationLeft(40);
+            para3.setIndentationLeft(40);
+            para4.setIndentationLeft(40);
+            para5.setIndentationLeft(40);
+
+            document.add(para1);
+            document.add(para2);
+            document.add(para3);
+            document.add(para4);
+            document.add(para5);
+            document.add(Chunk.NEWLINE);
+
+            // Tạo bảng cho chi tiết hóa đơn
+            PdfPTable pdfTable = new PdfPTable(5);
+            pdfTable.setWidths(new float[]{10f, 30f, 20f, 10f, 20f});
+            PdfPCell cell;
+
+            // Tiêu đề bảng
+            pdfTable.addCell(new PdfPCell(new Phrase("Mã máy", fontHeader)));
+            pdfTable.addCell(new PdfPCell(new Phrase("Tên máy", fontHeader)));
+            pdfTable.addCell(new PdfPCell(new Phrase("Đơn giá", fontHeader)));
+            pdfTable.addCell(new PdfPCell(new Phrase("Số lượng", fontHeader)));
+            pdfTable.addCell(new PdfPCell(new Phrase("Tổng tiền", fontHeader)));
+
+            // Thêm dòng trống để tạo khoảng cách
+            for (int i = 0; i < 5; i++) {
+                cell = new PdfPCell(new Phrase(""));
+                pdfTable.addCell(cell);
+            }
+
+            // Thêm chi tiết hóa đơn
+            for (DetailBill detail : DetailBillDAO.getInstance().selectAllByMaPhieu(maPhieu)) {
+                Computer computer = ProductsDAO.getInstance().searchByIDProduct(detail.getMaMay());
+                pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(detail.getMaMay()), fontData)));
+                pdfTable.addCell(new PdfPCell(new Phrase(computer.getTenMay(), fontData)));
+                pdfTable.addCell(new PdfPCell(new Phrase(formatter.format(computer.getGia()) + "đ", fontData)));
+                pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(detail.getSoLuong()), fontData)));
+                pdfTable.addCell(new PdfPCell(new Phrase(formatter.format(detail.getSoLuong() * computer.getGia()) + "đ", fontData)));
+            }
+
+            document.add(pdfTable);
+            document.add(Chunk.NEWLINE);
+
+            // Tổng thanh toán
+            Paragraph paraTongThanhToan = new Paragraph(new Phrase("Tổng thanh toán: " + formatter.format(bill.getThanhTien()) + "đ", fontData));
+            paraTongThanhToan.setIndentationLeft(300);
+            document.add(paraTongThanhToan);
+
+            document.close();
+            JOptionPane.showMessageDialog(null, "Ghi file thành công: " + url);
+            openFile(url);
+
+        } catch (DocumentException | FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi ghi file: " + url);
+            ex.printStackTrace();
+        }
     }
 }

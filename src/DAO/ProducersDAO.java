@@ -88,6 +88,23 @@ public class ProducersDAO implements DAOInterface<Producer>{
         }
         return ketQua;
     }
+
+    public String getPhoneByProducerId(String idProducer) {
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT sodienthoai FROM producer WHERE manhacungcap = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setString(1, idProducer);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("sodienthoai");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Producer producerByID(String id){
         Producer producer = null;
         try {

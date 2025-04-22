@@ -131,6 +131,40 @@ public class UserDAO implements DAOInterface<User>{
     	}
         return user;
 	}
+
+    public String getPhoneByUserId(int idUser) {
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT phone FROM user WHERE id = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setInt(1, idUser);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("phone");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String getEmailByUserId(int idUser) {
+        Connection c = JDBCUtil.getConnection();
+        String sql = "SELECT email FROM user WHERE id = ?";
+        try (
+                PreparedStatement ps = c.prepareStatement(sql);
+        ) {
+            ps.setInt(1, idUser);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("email");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public User getUsetById(int idUser){
         User user = null;
         try {

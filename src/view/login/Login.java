@@ -135,6 +135,7 @@ public class Login extends JFrame {
             if(currentUser.getStatus()==1){
                 System.out.println("huyyy");
                 Dashboard dashboard = new Dashboard(currentUser);
+                System.out.println(currentUser);
                 this.dispose();
             }else {
                 JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khoá !");

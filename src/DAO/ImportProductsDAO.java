@@ -50,12 +50,13 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
         int ketQua =0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "update importproducts set trangthai =?,ngaynhandon=?, thoidiemhuyphieu= ?  where maphieunhap =?";
+            String sql = "update importproducts set trangthai =?,ngaynhandon=?, thoidiemhuyphieu= ? , thoidiemtaophieu=?  where maphieunhap =?";
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,importProducts.getTrangThai());
             pst.setTimestamp(2,importProducts.getNgayNhanDon());
             pst.setTimestamp(3,importProducts.getThoiGianHuy());
-            pst.setInt(4,importProducts.getMaphieunhap());
+            pst.setTimestamp(4,importProducts.getTimestamp());
+            pst.setInt(5,importProducts.getMaphieunhap());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
         } catch (Exception e) {

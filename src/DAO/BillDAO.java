@@ -5,6 +5,7 @@ import model.Bill;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -69,5 +70,33 @@ public class BillDAO implements DAOInterface<Bill>{
             e.printStackTrace();
         }
         return ketQua;
+    }
+    public Bill getBillByMaPhieu(int maPhieu) {
+        Connection conn = JDBCUtil.getConnection(); // Giả định JDBCUtil cung cấp kết nối
+        String sql = "SELECT * FROM bills WHERE maphieu = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPhieu);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Bill bill = new Bill();
+                bill.setMaPhieu(rs.getInt("maphieu"));
+                bill.setThoiDiemTao(rs.getTimestamp("thoidiemtao"));
+                bill.setThanhTien(rs.getDouble("thanhtien"));
+                bill.setTongTien(rs.getDouble("tongtien"));
+                bill.setMaNhanVien(rs.getInt("manhanvien"));
+                bill.setMaKhachHang(rs.getInt("makhachhang"));
+                bill.setMaChiNhanh(rs.getInt("machinhanh"));
+                bill.setHinhThuc(rs.getString("hinhthuc"));
+                bill.setThoiDiemHuy(rs.getTimestamp("thoidiemhuy"));
+                bill.setTrangThai(rs.getInt("trangthai"));
+                bill.setMadiachi(rs.getInt("madiachi"));
+                return bill;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(conn);
+        }
+        return null;
     }
 }

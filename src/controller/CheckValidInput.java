@@ -65,7 +65,7 @@ public class CheckValidInput {
         }
         return true;
     }
-    public static boolean checkValidPhone(String phoneNumber , String loaiTaiKhoan) {
+    public static boolean checkValidPhone(String phoneNumber , String loaiTaiKhoan , int idCustomer , boolean isUpdate) {
         if (phoneNumber == null || phoneNumber.equals("null")) {
             JOptionPane.showMessageDialog(jFrame, "Số điện thoại không được để trống!");
             return false;
@@ -74,6 +74,12 @@ public class CheckValidInput {
         if (!regex.matches("^0[0-9]{9}$")) {
             JOptionPane.showMessageDialog(jFrame,"Số điện thoại không đúng định dạng !");
             return false;
+        }
+        if (isUpdate) {
+            String currentPhone = CustomerDAO.getInstance().getPhoneByCustomerId(idCustomer);
+            if (phoneNumber.equals(currentPhone)) {
+                return true; // Phone number unchanged, no need to check for duplicates
+            }
         }
         boolean flag = CustomerDAO.getInstance().checkSdt(phoneNumber,loaiTaiKhoan);
         if (flag == true) {
@@ -83,19 +89,27 @@ public class CheckValidInput {
         return true;
     }
 
-    public static boolean checkValidPhoneBranch(String phoneNumber ) {
-        if (phoneNumber == null || phoneNumber.equals("null")) {
-            JOptionPane.showMessageDialog(jFrame, "Số điện thoại không được để trống!");
+    public static boolean checkValidPhoneBranch(String phoneNumber, int idBranch, boolean isUpdate) {
+        if (phoneNumber == null || phoneNumber.equals("null") || phoneNumber.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại không được để trống!");
             return false;
         }
         String regex = phoneNumber.replaceAll("[^0-9]", "");
         if (!regex.matches("^0[0-9]{9}$")) {
-            JOptionPane.showMessageDialog(jFrame,"Số điện thoại không đúng định dạng !");
+            JOptionPane.showMessageDialog(null, "Số điện thoại không đúng định dạng!");
             return false;
         }
-        boolean flag = BrandDAO.getInstance().checkSdt(phoneNumber);
-        if (flag == true) {
-            JOptionPane.showMessageDialog(jFrame, "Số điện thoại đã tồn tại!");
+        // Skip duplicate check for update if the phone number is unchanged
+        if (isUpdate) {
+            String currentPhone = BrandDAO.getInstance().getPhoneByBranchId(idBranch);
+            if (phoneNumber.equals(currentPhone)) {
+                return true; // Phone number unchanged, no need to check for duplicates
+            }
+        }
+        // Check for duplicate phone number
+        boolean flag = BrandDAO.getInstance().checkSdt(phoneNumber, idBranch);
+        if (flag) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
             return false;
         }
         return true;
@@ -110,7 +124,7 @@ public class CheckValidInput {
         return true;
     }
 
-    public static boolean checkValidPhoneProducer(String phoneNumber) {
+    public static boolean checkValidPhoneProducer(String phoneNumber , String idProducer , boolean isUpdate) {
         if (phoneNumber == null || phoneNumber.equals("null")) {
             JOptionPane.showMessageDialog(jFrame, "Số điện thoại không được để trống!");
             return false;
@@ -119,6 +133,12 @@ public class CheckValidInput {
         if (!regex.matches("^0[0-9]{9}$")) {
             JOptionPane.showMessageDialog(jFrame,"Số điện thoại không đúng định dạng !");
             return false;
+        }
+        if (isUpdate) {
+            String currentPhone = ProducersDAO.getInstance().getPhoneByProducerId(idProducer);
+            if (phoneNumber.equals(currentPhone)) {
+                return true; // Phone number unchanged, no need to check for duplicates
+            }
         }
         boolean flag = ProducersDAO.getInstance().checkSdt(phoneNumber);
         if (flag == true) {
@@ -127,7 +147,7 @@ public class CheckValidInput {
         }
         return true;
     }
-    public static boolean checkValidPhoneUser(String phoneNumber) {
+    public static boolean checkValidPhoneUser(String phoneNumber , int idUser , boolean isUpdate) {
         if (phoneNumber == null || phoneNumber.equals("null")) {
             JOptionPane.showMessageDialog(jFrame, "Số điện thoại không được để trống!");
             return false;
@@ -136,6 +156,12 @@ public class CheckValidInput {
         if (!regex.matches("^0[0-9]{9}$")) {
             JOptionPane.showMessageDialog(jFrame,"Số điện thoại không đúng định dạng !");
             return false;
+        }
+        if (isUpdate) {
+            String currentPhone = UserDAO.getInstance().getPhoneByUserId(idUser);
+            if (phoneNumber.equals(currentPhone)) {
+                return true; // Phone number unchanged, no need to check for duplicates
+            }
         }
         boolean flag = UserDAO.getInstance().checkSdt(phoneNumber);
         if (flag == true) {
@@ -157,7 +183,7 @@ public class CheckValidInput {
         }
         return true;
     }
-    public static boolean checkEmailUser(String email) {
+    public static boolean checkEmailUser(String email,int idUser , boolean isUpdate) {
         if (email == null || email.equals("null")) {
             JOptionPane.showMessageDialog(jFrame, "Email không được để trống!");
             return false;
@@ -170,6 +196,12 @@ public class CheckValidInput {
             JOptionPane.showMessageDialog(jFrame, "Email không đúng định dạng!");
             return false;
         }
+        if (isUpdate) {
+            String currentEmail = UserDAO.getInstance().getEmailByUserId(idUser);
+            if (email.equals(currentEmail)) {
+                return true; // Phone number unchanged, no need to check for duplicates
+            }
+        }
         boolean flag = UserDAO.getInstance().checkEmail(email);
         if (flag == true) {
             JOptionPane.showMessageDialog(jFrame, "Email đã tồn tại!");
@@ -177,5 +209,4 @@ public class CheckValidInput {
         }
         return match;
     }
-
 }

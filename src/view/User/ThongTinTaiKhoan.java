@@ -1,27 +1,25 @@
 package view.User;
 
 import javax.swing.*;
-
-import DAO.UserDAO;
-import model.User;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.regex.Pattern;
+import DAO.UserDAO;
+import controller.CheckValidInput;
+import model.User;
 
 public class ThongTinTaiKhoan extends JFrame {
-    private JLabel lblTitle, lblHoTen, lblNgaySinh, lblEmail;
-    private JTextField txtHoTen, txtUsername, txtSDT;
-    private JButton btnChinhSua;
-    private JLabel lblSDT_1;
-    private JLabel lblSDT_2;
+    private JLabel lblTitle, lblHoTen, lblUsername, lblPassword, lblEmail, lblSDT;
+    private JTextField txtHoTen, txtUsername, txtSDT, txtEmail;
+    private JPasswordField txtPassword;
+    private JButton btnChinhSua, btnHuy;
     private User currentUser;
     private boolean isEdit = false;
-    private JTextField txtEmail;
-    private JPasswordField txtPassword;
+    private CheckValidInput checkValidInput;
 
     public ThongTinTaiKhoan(User currentUser) {
-    	this.currentUser = currentUser;
+        this.currentUser = currentUser;
         setTitle("Thông Tin Người Dùng");
         setSize(856, 392);
         setLocationRelativeTo(null);
@@ -37,109 +35,157 @@ public class ThongTinTaiKhoan extends JFrame {
         headerPanel.add(lblTitle);
 
         // 🟡 Main Panel (Chứa thông tin người dùng)
-        JPanel mainPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel mainPanel = new JPanel(new GridLayout(6, 2, 10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
         lblHoTen = new JLabel("Họ Tên:");
-        lblNgaySinh = new JLabel("Username");
-        lblEmail = new JLabel("Password");
+        lblUsername = new JLabel("Tên Đăng Nhập:");
+        lblPassword = new JLabel("Mật Khẩu:");
+        lblEmail = new JLabel("Email:");
+        lblSDT = new JLabel("Số Điện Thoại:");
 
         txtHoTen = new JTextField();
         txtUsername = new JTextField();
+        txtUsername.setEditable(false); // Không cho chỉnh sửa tên đăng nhập
+        txtPassword = new JPasswordField();
+        txtEmail = new JTextField();
         txtSDT = new JTextField();
 
-        // 🔹 Vô hiệu hóa chỉnh sửa (Chỉ để hiển thị)
-        txtUsername.setEditable(false);
-
-        // 🔹 Thêm vào Main Panel
+        // Thêm vào Main Panel
         mainPanel.add(lblHoTen);
         mainPanel.add(txtHoTen);
-        mainPanel.add(lblNgaySinh);
+        mainPanel.add(lblUsername);
         mainPanel.add(txtUsername);
-        mainPanel.add(lblEmail);
-        
-        txtPassword = new JPasswordField();
+        mainPanel.add(lblPassword);
         mainPanel.add(txtPassword);
-        
-        lblSDT_1 = new JLabel("Số Điện Thoại:");
-        mainPanel.add(lblSDT_1);
+        mainPanel.add(lblEmail);
+        mainPanel.add(txtEmail);
+        mainPanel.add(lblSDT);
         mainPanel.add(txtSDT);
 
-        // 🟠 Footer Panel (Nút Chỉnh Sửa)
+        // 🟠 Footer Panel (Nút Chỉnh Sửa và Hủy)
         JPanel footerPanel = new JPanel();
         btnChinhSua = new JButton("Chỉnh sửa thông tin");
-        btnChinhSua.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		EditMouseClicked();
-        	}
-        });
         btnChinhSua.setBackground(new Color(0, 153, 76));
         btnChinhSua.setForeground(Color.WHITE);
         btnChinhSua.setFocusPainted(false);
         btnChinhSua.setFont(new Font("Arial", Font.BOLD, 14));
 
+        btnHuy = new JButton("Hủy");
+        btnHuy.setBackground(new Color(255, 69, 0));
+        btnHuy.setForeground(Color.WHITE);
+        btnHuy.setFocusPainted(false);
+        btnHuy.setFont(new Font("Arial", Font.BOLD, 14));
+        btnHuy.setVisible(false); // Ẩn nút Hủy ban đầu
+
+        btnChinhSua.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                editMouseClicked();
+            }
+        });
+
+        btnHuy.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cancelEdit();
+            }
+        });
+
         footerPanel.add(btnChinhSua);
+        footerPanel.add(btnHuy);
 
         // 🏗️ Thêm các phần vào JFrame
         getContentPane().add(headerPanel, BorderLayout.NORTH);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
-        
-        lblSDT_2 = new JLabel("Email");
-        mainPanel.add(lblSDT_2);
-        
-        txtEmail = new JTextField();
-
-        mainPanel.add(txtEmail);
         getContentPane().add(footerPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
-        setEdit();
         fillData();
-    }
-    public void fillData(){
-        txtEmail.setText(currentUser.getEmail());
-        txtHoTen.setText(currentUser.getFullName());
-        txtPassword.setText(currentUser.getPassword());
-        txtSDT.setText(currentUser.getPhone());
-        txtUsername.setText(currentUser.getUserName());
-    }
-    public void setEdit(){
-        if(isEdit){
-            txtEmail.setEditable(true);
-            txtHoTen.setEditable(true);
-            txtPassword.setEditable(true);
-            txtSDT.setEditable(true);
-        }else {
-            txtEmail.setEditable(false);
-            txtHoTen.setEditable(false);
-            txtPassword.setEditable(false);
-            txtSDT.setEditable(false);
-        }
-    }
-    public void EditMouseClicked(){
-        isEdit = !isEdit;
         setEdit();
-        if(isEdit){
-            btnChinhSua.setText("Lưu");
-            String password = new String(txtPassword.getPassword());
-            String email = txtEmail.getText();
-            String phone = txtSDT.getText();
-            String fullnaem = txtHoTen.getText();
-            currentUser.setPassword(password);
-            currentUser.setEmail(email);
-            currentUser.setPhone(phone);
-            currentUser.setFullName(fullnaem);
-            int ketQua = UserDAO.getInstance().update(currentUser);
-            if(ketQua>0){
-                JOptionPane.showMessageDialog(this,"Cập nhật tài khoản cá nhân thành công !");
-            }else {
-                JOptionPane.showMessageDialog(this, "Không thể cập nhật vì đã có dữ liệu tham chiếu tham chiếu liên quan!");
-            }
+        setVisible(true);
+    }
 
-        }else {
-            btnChinhSua.setText("Chỉnh sửa thông tin");
+    private void fillData() {
+        txtHoTen.setText(currentUser.getFullName());
+        txtUsername.setText(currentUser.getUserName());
+        txtPassword.setText(currentUser.getPassword());
+        txtEmail.setText(currentUser.getEmail());
+        txtSDT.setText(currentUser.getPhone());
+    }
+
+    private void setEdit() {
+        txtHoTen.setEditable(isEdit);
+        txtPassword.setEditable(isEdit);
+        txtEmail.setEditable(isEdit);
+        txtSDT.setEditable(isEdit);
+        btnHuy.setVisible(isEdit);
+        btnChinhSua.setText(isEdit ? "Lưu" : "Chỉnh sửa thông tin");
+    }
+
+    private void editMouseClicked() {
+        if (!isEdit) {
+            // Bật chế độ chỉnh sửa
+            isEdit = true;
+            setEdit();
+        } else {
+            // Lưu thông tin
+            if (validateInput()) {
+                try {
+                    String fullName = txtHoTen.getText().trim();
+                    String password = new String(txtPassword.getPassword()).trim();
+                    String email = txtEmail.getText().trim();
+                    String phone = txtSDT.getText().trim();
+
+                    currentUser.setFullName(fullName);
+                    currentUser.setPassword(password);
+                    currentUser.setEmail(email);
+                    currentUser.setPhone(phone);
+
+                    int ketQua = UserDAO.getInstance().update(currentUser);
+                    if (ketQua > 0) {
+                        JOptionPane.showMessageDialog(this, "Cập nhật thông tin cá nhân thành công!");
+                        isEdit = false;
+                        setEdit();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Cập nhật thất bại. Vui lòng thử lại!");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật thông tin: " + ex.getMessage());
+                }
+            }
         }
+    }
+
+    private void cancelEdit() {
+        isEdit = false;
+        setEdit();
+        fillData(); // Khôi phục dữ liệu ban đầu
+    }
+
+    private boolean validateInput() {
+        String fullName = txtHoTen.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+        String email = txtEmail.getText().trim();
+        String phone = txtSDT.getText().trim();
+
+        // Kiểm tra trường rỗng
+        if (fullName.isEmpty() || password.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+            return false;
+        }
+
+
+        if (!checkValidInput.checkEmailUser(email,currentUser.getIdUser(),true)) {
+            return false;
+        }
+
+        // Kiểm tra định dạng số điện thoại (bắt đầu bằng 0, 10 chữ số)
+        if (!checkValidInput.checkValidPhoneUser(phone,currentUser.getIdUser(),true)) {
+            return false;
+        }
+
+        return true;
     }
 
 }

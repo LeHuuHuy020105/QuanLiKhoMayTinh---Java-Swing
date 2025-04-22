@@ -337,26 +337,20 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 
 	public void XoaMouseClicked() {
 		ImportProducts importProducts_Selected = getImportProductsSelected();
+		if(importProducts_Selected.getTrangThai()==6){
+			JOptionPane.showMessageDialog(this,"Bạn không thể xoá phiếu nhập !");
+			return;
+		}
 		if(importProducts_Selected.getTrangThai()==1 || importProducts_Selected.getTrangThai()==2){
 			int choice = JOptionPane.showConfirmDialog(this, "Bạn chắc muốn xoá phiếu nhập này ?", "Xoá phiếu nhập", JOptionPane.YES_NO_OPTION);
 			if (choice == JOptionPane.YES_OPTION) {
 				importProducts_Selected.setTrangThai(6);
 				importProducts_Selected.setThoiGianHuy(new Timestamp(System.currentTimeMillis()));
 				ImportProductsDAO.getInstance().update(importProducts_Selected);
-				updateDatabaseProducts(importProducts_Selected.getMaphieunhap());
 			}
 			updateTableDataFormDAO();
 		}else {
 			JOptionPane.showMessageDialog(this,"Bạn không thể xoá phiếu nhập khi đã bàn giao cho đơn vị vận chuyển !");
-		}
-	}
-
-	public void updateDatabaseProducts(int maphieunhap) {
-		ArrayList<DetailImportProducts> detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(maphieunhap);
-		for (DetailImportProducts item : detailImportProducts) {
-			Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
-			computer.setSoLuong(computer.getSoLuong() - item.getSoluong());
-			ProductsDAO.getInstance().update(computer);
 		}
 	}
 
