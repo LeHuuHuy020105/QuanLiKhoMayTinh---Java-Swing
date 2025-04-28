@@ -48,7 +48,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
                 new Font("Tahoma", Font.BOLD, 12),  // Đã sửa null thành Font.BOLD
                 new Color(0, 0, 0)  // Màu chữ đen
         ));
-        verticalBox.setBounds(10, 11, 600, 75);
+        verticalBox.setBounds(10, 11, 574, 75);
         add(verticalBox);
 
         JPanel panel_5_1 = new JPanel();
@@ -73,18 +73,6 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         btnNewButton.setBounds(10, 0, 70, 52);
         panel_5_1.add(btnNewButton);
 
-        JButton btnXemChiTiet = new JButton("Xem chi tiết");
-        btnEffect.setIcon(btnXemChiTiet,Icon.edit);
-        btnXemChiTiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnXemChiTiet.setHorizontalTextPosition(SwingConstants.CENTER);
-        btnXemChiTiet.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        btnXemChiTiet.setFocusPainted(false);
-        btnXemChiTiet.setContentAreaFilled(false);
-        btnXemChiTiet.setBorderPainted(false);
-        btnXemChiTiet.setBackground(UIManager.getColor("Button.background"));
-        btnXemChiTiet.setBounds(170, 0, 107, 52);
-        panel_5_1.add(btnXemChiTiet);
-
         JButton btnXuatExcel = new JButton("Xuất Excel");
         btnEffect.setIcon(btnXuatExcel,Icon.xuatExcel);
         btnXuatExcel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -94,7 +82,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         btnXuatExcel.setContentAreaFilled(false);
         btnXuatExcel.setBorderPainted(false);
         btnXuatExcel.setBackground(UIManager.getColor("Button.background"));
-        btnXuatExcel.setBounds(487, 0, 99, 52);
+        btnXuatExcel.setBounds(440, 0, 99, 52);
         panel_5_1.add(btnXuatExcel);
 
         JButton btnNhapExcel = new JButton("Nhập Excel");
@@ -106,7 +94,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         btnNhapExcel.setContentAreaFilled(false);
         btnNhapExcel.setBorderPainted(false);
         btnNhapExcel.setBackground(UIManager.getColor("Button.background"));
-        btnNhapExcel.setBounds(375, 0, 98, 52);
+        btnNhapExcel.setBounds(297, 0, 98, 52);
         panel_5_1.add(btnNhapExcel);
 
         JButton btnSua = new JButton("Sửa");
@@ -142,12 +130,12 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         btnXoa.setContentAreaFilled(false);
         btnXoa.setBorderPainted(false);
         btnXoa.setBackground(UIManager.getColor("Button.background"));
-        btnXoa.setBounds(287, 0, 70, 52);
+        btnXoa.setBounds(184, 0, 70, 52);
         panel_5_1.add(btnXoa);
 
         Box verticalBox_1 = Box.createVerticalBox();
         verticalBox_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, new Font("Tahoma", Font.BOLD, 12), new Color(0, 0, 0)));
-        verticalBox_1.setBounds(620, 11, 627, 75);
+        verticalBox_1.setBounds(594, 11, 653, 75);
         add(verticalBox_1);
 
         JPanel panel_5_1_1 = new JPanel();
