@@ -39,7 +39,7 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua =0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "update user set password =? , fullname =? , status =? , email =?, machinhanh=?, phone=? where id =?";
+            String sql = Query.updateUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,user.getPassword());
             pst.setString(2,user.getFullName());
@@ -67,7 +67,7 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "delete from user where id =?";
+            String sql = Query.deleteUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,user.getIdUser());
             ketQua = pst.executeUpdate();
@@ -85,7 +85,7 @@ public class UserDAO implements DAOInterface<User>{
         ArrayList<User> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user";
+            String sql = Query.selectAllUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -134,7 +134,7 @@ public class UserDAO implements DAOInterface<User>{
 
     public String getPhoneByUserId(int idUser) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT phone FROM user WHERE id = ?";
+        String sql = Query.getPhoneByUserId;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -150,7 +150,7 @@ public class UserDAO implements DAOInterface<User>{
     }
     public String getEmailByUserId(int idUser) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT email FROM user WHERE id = ?";
+        String sql = Query.getEmailByUserId;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -169,7 +169,7 @@ public class UserDAO implements DAOInterface<User>{
         User user = null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user where id =?";
+            String sql = Query.getUsetById;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,idUser);
             ResultSet rs = pst.executeQuery();
@@ -194,7 +194,7 @@ public class UserDAO implements DAOInterface<User>{
         String ketQua = "";
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user_role,role where user_id =? AND user_role.role_id = role.id";
+            String sql = Query.getRoleByIDUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,idUser);
             ResultSet rs = pst.executeQuery();
@@ -211,7 +211,7 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user_role,role where user_id =? AND user_role.role_id = role.id";
+            String sql = Query.getIDRoleByIDUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,idUser);
             ResultSet rs = pst.executeQuery();
@@ -228,7 +228,7 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua=0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user_role,role where user_id =? AND user_role.role_id = role.id";
+            String sql = Query.getMaChiNhanhByIDUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,idUser);
             ResultSet rs = pst.executeQuery();
@@ -245,7 +245,7 @@ public class UserDAO implements DAOInterface<User>{
         ArrayList<String> ketQua=new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from role_interfaceuser,role,interfaceuser where name =? AND role_interfaceuser.id = role.id AND role_interfaceuser.magiaodien=interfaceuser.magiaodien ";
+            String sql = Query.nameBtn_Menu;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,nameRole);
             ResultSet rs = pst.executeQuery();
@@ -263,7 +263,7 @@ public class UserDAO implements DAOInterface<User>{
         ArrayList<User> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from user where id >? ";
+            String sql = Query.selectAllNotAdmin;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,currentUser.getIdUser() );
             ResultSet rs = pst.executeQuery();

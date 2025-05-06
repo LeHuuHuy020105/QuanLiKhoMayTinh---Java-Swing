@@ -36,7 +36,7 @@ public class BrachDAO implements DAOInterface<Branch>{
         int ketQua =0 ;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "update branch  set tenchinhanh =?, diachi =?, tenquan =?, thanhpho =?, sodienthoai =?, mota=? where machinhanh=?";
+            String sql = Query.updateBranch;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,branch.getTenChiNhanh());
             pst.setString(2,branch.getDiaChi());
@@ -58,7 +58,7 @@ public class BrachDAO implements DAOInterface<Branch>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "delete from branch where machinhanh=?";
+            String sql = Query.deleteBranch;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,branch.getMaChiNhanh());
             ketQua=pst.executeUpdate();
@@ -76,7 +76,7 @@ public class BrachDAO implements DAOInterface<Branch>{
         ArrayList<Branch> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from branch";
+            String sql = Query.selectAllBranch;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -98,7 +98,7 @@ public class BrachDAO implements DAOInterface<Branch>{
     }
     public String getPhoneByBranchId(int idBranch) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT sodienthoai FROM branch WHERE machinhanh = ?";
+        String sql = Query.getPhoneByBranchId;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -116,7 +116,7 @@ public class BrachDAO implements DAOInterface<Branch>{
         Branch branch = null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from branch where machinhanh=?";
+            String sql = Query.BranchByID;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,idChiNhanh);
             ResultSet rs = pst.executeQuery();
@@ -139,7 +139,7 @@ public class BrachDAO implements DAOInterface<Branch>{
         Branch branch = null;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from branch where diachi=?";
+            String sql = Query.BranchByDiaChi;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,diaChi);
             ResultSet rs = pst.executeQuery();
@@ -160,7 +160,7 @@ public class BrachDAO implements DAOInterface<Branch>{
     }
     public boolean checkSdt(String sdt, int idBranch) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT COUNT(*) FROM branch WHERE sodienthoai = ? AND machinhanh != ?";
+        String sql = Query.checkSDTBranch;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -178,7 +178,7 @@ public class BrachDAO implements DAOInterface<Branch>{
     }
     public boolean checkName(String name){
         Connection c = JDBCUtil.getConnection();
-        String sql = "select count(*) from branch where tenchinhanh = ? ";
+        String sql = Query.checkNameBranch;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {

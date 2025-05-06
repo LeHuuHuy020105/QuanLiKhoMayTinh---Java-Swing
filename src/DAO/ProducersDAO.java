@@ -91,7 +91,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
 
     public String getPhoneByProducerId(String idProducer) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT sodienthoai FROM producer WHERE manhacungcap = ?";
+        String sql = Query.getPhoneByProducerId ;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -149,7 +149,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
     }
     public boolean checkSdt(String sdt){
         Connection c = JDBCUtil.getConnection();
-        String sql = "select count(*) from producer where sodienthoai = ?";
+        String sql = Query.checkPhoneProducer;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {

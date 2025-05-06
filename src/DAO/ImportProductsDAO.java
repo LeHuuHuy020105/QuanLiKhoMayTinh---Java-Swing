@@ -50,7 +50,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
         int ketQua =0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "update importproducts set trangthai =?,ngaynhandon=?, thoidiemhuyphieu= ? , thoidiemtaophieu=?  where maphieunhap =?";
+            String sql = Query.updateImportProduct;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,importProducts.getTrangThai());
             pst.setTimestamp(2,importProducts.getNgayNhanDon());
@@ -75,7 +75,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
         ArrayList<ImportProducts> ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "select * from importproducts";
+            String sql = Query.selectAllImportProduct;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()){
@@ -98,7 +98,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
          ImportProducts importProducts =null;
          try {
              Connection connection = JDBCUtil.getConnection();
-             String sql = "select * from importproducts where  maphieunhap =?";
+             String sql = Query.getImportProductsByMaPhieuNhap;
              PreparedStatement pst = connection.prepareStatement(sql);
              pst.setInt(1,maphieunhap);
              ResultSet rs = pst.executeQuery();
