@@ -2,7 +2,6 @@ package controller;
 
 import DAO.*;
 import model.ExportProducts;
-import model.ImportProducts;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class SearchExportProducts {
         }
         ArrayList<ExportProducts>ketQua = new ArrayList<>();
         for(ExportProducts exportProducts1 :exportProducts){
-            String diaChi = BrandDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
+            String diaChi = BrachDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
             if(diaChi.toLowerCase().contains(content_search)){
                 ketQua.add(exportProducts1);
             }
@@ -64,7 +63,7 @@ public class SearchExportProducts {
             int maphieuxuat = Integer.parseInt(input);
             System.out.println(maphieuxuat);
             for (ExportProducts exportProducts1 : exportProducts) {
-                String diaChi = BrandDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
+                String diaChi = BrachDAO.getInstance().BranchByID(exportProducts1.getMaChiNhanh()).getDiaChi();
                 if (exportProducts1.getMaPhieuXuat() == maphieuxuat || diaChi.toLowerCase().trim().contains(input)) {
                     result.add(exportProducts1);
                 }

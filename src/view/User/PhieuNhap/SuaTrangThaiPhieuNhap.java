@@ -1,6 +1,10 @@
 package view.User.PhieuNhap;
 
 import DAO.*;
+import controller.DetailImportProductsBLL;
+import controller.ImportProductsBLL;
+import controller.ProductsBLL;
+import controller.StatusDeliveryBLL;
 import model.*;
 import view.User.PhieuXuat.PhieuXuatForm;
 
@@ -18,6 +22,10 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
     private JPanel contentPane;
     private JComboBox cbx_TrangThai;
     private PhieuNhapForm phieuNhapForm;
+    private StatusDeliveryBLL statusDeliveryBLL;
+    private DetailImportProductsBLL detailImportProductsBLL;
+    private ProductsBLL productsBLL;
+    private ImportProductsBLL importProductsBLL;
 
     /**
      * Launch the application.
@@ -27,6 +35,10 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
      */
     public SuaTrangThaiPhieuNhap(PhieuNhapForm phieuNhapForm) {
         this.phieuNhapForm = phieuNhapForm;
+        this.statusDeliveryBLL = new StatusDeliveryBLL();
+        this.importProductsBLL = new ImportProductsBLL();
+        this.detailImportProductsBLL = new DetailImportProductsBLL();
+        this.productsBLL = new ProductsBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 390, 300);
         setLocationRelativeTo(null);
@@ -89,7 +101,7 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
     public void fillData(){
         ImportProducts importProducts = phieuNhapForm.getImportProductsSelected();
         cbx_TrangThai.setSelectedItem(importProducts.getTrangThai());
-        String [] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(importProducts.getTrangThai()).toArray(new String[0]);
+        String [] trangThai = statusDeliveryBLL.selectChangeStatus(importProducts.getTrangThai()).toArray(new String[0]);
         cbx_TrangThai.setModel(new DefaultComboBoxModel<>(trangThai));
     }
     public void HuyBoMouseClicked() {
@@ -98,25 +110,25 @@ public class SuaTrangThaiPhieuNhap extends JFrame {
     public void LuuMouseClicked() {
         String trangThai = cbx_TrangThai.getSelectedItem()+"";
         ImportProducts importProducts = phieuNhapForm.getImportProductsSelected();
-        int idStatus = StatusDeliveryDAO.getInstance().selectByName(trangThai);
+        int idStatus = statusDeliveryBLL.selectByName(trangThai);
         importProducts.setTrangThai(idStatus);
-        ImportProductsDAO.getInstance().update(importProducts);
+        importProductsBLL.update(importProducts);
         HuyBoMouseClicked();
         phieuNhapForm.updateTableDataFormDAO();
-        ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts.getMaphieunhap());
+        ArrayList<DetailImportProducts>detailImportProducts = detailImportProductsBLL.selectAllByMaPhieuNhap(importProducts.getMaphieunhap());
         if(trangThai.equals("Hoàn thành")){
             importProducts.setTrangThai(5);
             importProducts.setNgayNhanDon(new Timestamp(System.currentTimeMillis()));
-            ImportProductsDAO.getInstance().update(importProducts);
+            importProductsBLL.update(importProducts);
             updateDatabaseImportProducts(detailImportProducts);
         }
     }
     public void updateDatabaseImportProducts(ArrayList<DetailImportProducts>detailImportProducts){
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
             int soLuongMay = computer.getSoLuong()+detailImportProducts1.getSoluong();
             computer.setSoLuong(soLuongMay);
-            ProductsDAO.getInstance().update(computer);
+            productsBLL.update(computer);
         }
     }
 }

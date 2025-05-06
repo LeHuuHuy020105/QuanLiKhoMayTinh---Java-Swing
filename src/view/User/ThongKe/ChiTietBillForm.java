@@ -4,6 +4,9 @@ import DAO.DetailBillDAO;
 import DAO.DetailImportProductsDAO;
 import DAO.ProductsDAO;
 import DAO.UserDAO;
+import controller.DetailBillBLL;
+import controller.ProductsBLL;
+import controller.UserBLL;
 import controller.writePDF;
 import model.*;
 import view.User.ThongKe.ThongKePhieuForm;
@@ -28,6 +31,9 @@ public class ChiTietBillForm extends JFrame {
     private JLabel label_vaiTroNguoiTaoPhieu;
     private JLabel label_thoiDiemTaoPhieu;
     private JLabel label_TongTien;
+    private UserBLL userBLL;
+    private ProductsBLL productsBLL;
+    private DetailBillBLL detailBillBLL;
 
     /**
      * Launch the application.
@@ -38,6 +44,9 @@ public class ChiTietBillForm extends JFrame {
      */
     public ChiTietBillForm(ThongKePhieuForm thongKePhieuForm) {
         this.thongKePhieuForm = thongKePhieuForm;
+        this.detailBillBLL = new DetailBillBLL();
+        this.userBLL = new UserBLL();
+        this.productsBLL = new ProductsBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 903, 580);
         setLocationRelativeTo(null);
@@ -147,16 +156,16 @@ public class ChiTietBillForm extends JFrame {
     public void hienThiThongTinPhieuNhap() {
         DecimalFormat df = new DecimalFormat("#,###");
         Bill bill_Selected = thongKePhieuForm.getBillSelected();
-        User user = UserDAO.getInstance().getUsetById(bill_Selected.getMaNhanVien());
+        User user = userBLL.getUsetById(bill_Selected.getMaNhanVien());
         String tenNguoiTaoPhieu = user.getFullName();
-        String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+        String role = userBLL.getRoleByIDUser(user.getIdUser());
         label_maPhieuNhap.setText(bill_Selected.getMaPhieu() + "");
         label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
         label_vaiTroNguoiTaoPhieu.setText(role);
         label_thoiDiemTaoPhieu.setText(bill_Selected.getThoiDiemTao() + "");
         String tongTien = df.format(bill_Selected.getTongTien()) + " VND";
         label_TongTien.setText(tongTien);
-        ArrayList<DetailBill> detailBills = DetailBillDAO.getInstance().selectAllByMaPhieu(bill_Selected.getMaPhieu());
+        ArrayList<DetailBill> detailBills = detailBillBLL.selectAllByMaPhieu(bill_Selected.getMaPhieu());
         updateDataToTable(detailBills);
     }
 
@@ -167,7 +176,7 @@ public class ChiTietBillForm extends JFrame {
         int i = 0;
         for (DetailBill detailBill : detailBills) {
             i++;
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailBill.getMaMay());
             double thanhTien = detailBill.getSoLuong() * computer.getGia();
             model.addRow(new Object[]{
                     i,

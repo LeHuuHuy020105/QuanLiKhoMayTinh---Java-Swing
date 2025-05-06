@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PermissionsDAO {
-    public PermissionsDAO getInstance() {
+    public static PermissionsDAO getInstance() {
         return new PermissionsDAO();
     }
 

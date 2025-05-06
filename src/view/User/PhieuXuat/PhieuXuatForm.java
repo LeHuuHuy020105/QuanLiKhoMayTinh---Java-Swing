@@ -13,13 +13,9 @@ import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
-import controller.SearchExportProducts;
-import controller.btnEffect;
-import controller.updateDataToTable;
+import controller.*;
 import model.*;
 import view.Icon;
-import view.User.PhieuNhap.ChiTietPhieuNhapForm;
-import view.User.PhieuNhap.KhoiPhucPhieuNhapForm;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
@@ -44,12 +40,26 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 	private JComboBox cbx_TimKiem;
 	private JComboBox cbx_TrangThai;
 	private User currentUser;
+	private StatusDeliveryBLL statusDeliveryBLL;
+	private ExportProductsBLL exportProductsBLL;
+	private DetailExportProductsBLL detailExportProductsBLL;
+	private UserBLL userBLL;
+	private PermissionBLL permissionBLL;
+	private ProductsBLL productsBLL;
+	private BranchBLL branchBLL;
 
 	/**
 	 * Create the panel.
 	 */
 	public PhieuXuatForm(User currentUser) {
 		this.currentUser = currentUser;
+		this.statusDeliveryBLL = new StatusDeliveryBLL();
+		this.exportProductsBLL = new ExportProductsBLL();
+		this.detailExportProductsBLL = new DetailExportProductsBLL();
+		this.userBLL = new UserBLL();
+		this.permissionBLL = new PermissionBLL();
+		this.productsBLL = new ProductsBLL();
+		this.branchBLL = new BranchBLL();
 		setLayout(null);
 		setSize(1257,911);
 
@@ -232,7 +242,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		verticalBox_1_2.add(panel_5_1_1_2);
 		panel_5_1_1_2.setLayout(null);
 
-		String[] trangthaiStrings = StatusDeliveryDAO.getInstance().selectAll().toArray(new String[0]);
+		String[] trangthaiStrings = statusDeliveryBLL.selectAll().toArray(new String[0]);
 		cbx_TrangThai = new JComboBox(trangthaiStrings);
 		cbx_TrangThai.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -260,13 +270,13 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		updateTableDataFormDAO();
 	}
 	public void Permission(){
-		int idRole = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
-		PermissionsDAO.applyPermissions(idRole,"Phiếu xuất",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
+		int idRole = userBLL.getIDRoleByIDUser(currentUser.getIdUser());
+		permissionBLL.applyPermissions(idRole,"Phiếu xuất",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
 	}
 
 	@Override
 	public void updateTableDataFormDAO() {
-		ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+		ArrayList<ExportProducts>exportProducts = exportProductsBLL.selectAll();
 		updateTableData(exportProducts);
 	}
 
@@ -277,9 +287,9 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		int i = 0;
 		for(ExportProducts exportProducts : t){
 			i++;
-			String diaChi = BrandDAO.getInstance().BranchByID(exportProducts.getMaChiNhanh()).getDiaChi();
-			String tenNguoiDung = UserDAO.getInstance().getUsetById(exportProducts.getManguoidung()).getFullName();
-			String trangThai = StatusDeliveryDAO.getInstance().selectByID(exportProducts.getTrangThai());
+			String diaChi = branchBLL.BranchByID(exportProducts.getMaChiNhanh()).getDiaChi();
+			String tenNguoiDung = userBLL.getUsetById(exportProducts.getManguoidung()).getFullName();
+			String trangThai = statusDeliveryBLL.selectByID(exportProducts.getTrangThai());
 			model.addRow(new Object[]{
 					i,
 					exportProducts.getMaPhieuXuat(),
@@ -301,7 +311,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 		int maPhieuXuat = Integer.parseInt(model.getValueAt(i_row,1)+"");
 		System.out.println(maPhieuXuat);
-		ExportProducts exportProducts = ExportProductsDAO.getInstance().ExportProductsByID(maPhieuXuat);
+		ExportProducts exportProducts = exportProductsBLL.ExportProductsByID(maPhieuXuat);
 		return exportProducts;
 	}
 	public void SuaMouseClick() {
@@ -325,7 +335,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 			if (choice == JOptionPane.YES_OPTION) {
 				exportProducts_Selected.setTrangThai(6);
 				exportProducts_Selected.setThoiDiemHuyPhieu(new Timestamp(System.currentTimeMillis()));
-				ExportProductsDAO.getInstance().update(exportProducts_Selected);
+				exportProductsBLL.update(exportProducts_Selected);
 				updateDatabase(exportProducts_Selected.getMaPhieuXuat());
 			}
 			updateTableDataFormDAO();
@@ -334,11 +344,11 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 	}
 	public void updateDatabase(int maPhieuXuat){
-		ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(maPhieuXuat);
+		ArrayList<DetailExportProducts>detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(maPhieuXuat);
 		for(DetailExportProducts item : detailExportProducts){
-			Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
+			Computer computer = productsBLL.searchByIdProduct(item.getMaMay());
 			computer.setSoLuong(computer.getSoLuong()+item.getSoLuong());
-			ProductsDAO.getInstance().update(computer);
+			productsBLL.update(computer);
 		}
 	}
 	public void applyFilters() {
@@ -356,7 +366,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 		}
 
 		// Lấy danh sách tất cả sản phẩm
-		ArrayList<ExportProducts> allExportProducts = ExportProductsDAO.getInstance().selectAll();
+		ArrayList<ExportProducts> allExportProducts = exportProductsBLL.selectAll();
 
 		ArrayList<ExportProducts> filteredExportProducts = new ArrayList<>();
 
@@ -440,7 +450,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 
 //	 Kiểm tra tình trạng tồn kho
 	private boolean matchStatus(ExportProducts exportProducts, String statusFilter) {
-		int status = StatusDeliveryDAO.getInstance().selectByName(statusFilter);
+		int status = statusDeliveryBLL.selectByName(statusFilter);
 		return exportProducts.getTrangThai() == status;
 	}
 

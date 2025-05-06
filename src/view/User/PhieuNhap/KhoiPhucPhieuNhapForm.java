@@ -4,6 +4,10 @@ import DAO.DetailImportProductsDAO;
 import DAO.ImportProductsDAO;
 import DAO.ProductsDAO;
 import DAO.UserDAO;
+import controller.DetailImportProductsBLL;
+import controller.ImportProductsBLL;
+import controller.ProductsBLL;
+import controller.UserBLL;
 import model.Computer;
 import model.DetailImportProducts;
 import model.ImportProducts;
@@ -46,6 +50,10 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
     private JLabel label_thoiDiemTaoPhieu;
     private JLabel label_TongTien;
     private JLabel label_thoiDiemHuyPhieu;
+    private DetailImportProductsBLL detailImportProductsBLL;
+    private ProductsBLL productsBLL;
+    private UserBLL userBLL;
+    private ImportProductsBLL importProductsBLL;
 
     /**
      * Launch the application.
@@ -56,6 +64,10 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
      */
     public KhoiPhucPhieuNhapForm(PhieuNhapForm phieuNhapForm) {
         this.phieuNhapForm = phieuNhapForm;
+        this.detailImportProductsBLL = new DetailImportProductsBLL();
+        this.productsBLL = new ProductsBLL();
+        this.userBLL = new UserBLL();
+        this.importProductsBLL = new ImportProductsBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 903, 580);
         setLocationRelativeTo(null);
@@ -169,9 +181,9 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
     public void hienThiThongTinPhieuNhap(){
         DecimalFormat df = new DecimalFormat("#,###");
         ImportProducts importProducts_selected = phieuNhapForm.getImportProductsSelected();
-        User user = UserDAO.getInstance().getUsetById(importProducts_selected.getManguoidung());
+        User user = userBLL.getUsetById(importProducts_selected.getManguoidung());
         String tenNguoiTaoPhieu =user.getFullName();
-        String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+        String role = userBLL.getRoleByIDUser(user.getIdUser());
         label_maPhieuNhap.setText(importProducts_selected.getMaphieunhap()+"");
         label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
         label_vaiTroNguoiTaoPhieu.setText(role);
@@ -179,7 +191,7 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
         label_thoiDiemHuyPhieu.setText(importProducts_selected.getThoiGianHuy()+"");
         String tongTien = df.format(importProducts_selected.getTongTien())+" VND";
         label_TongTien.setText(tongTien);
-        ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());
+        ArrayList<DetailImportProducts>detailImportProducts = detailImportProductsBLL.selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());
         updateDataToTable(detailImportProducts);
     }
     public void updateDataToTable(ArrayList<DetailImportProducts>detailImportProducts){
@@ -189,7 +201,7 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
         int i = 0;
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
             i++;
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
             double thanhTien = detailImportProducts1.getSoluong()*computer.getGia();
             System.out.println(df.format(thanhTien));
             model.addRow(new Object[]{
@@ -207,7 +219,7 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
         importProducts_Selected.setTrangThai(1);
         importProducts_Selected.setThoiGianHuy(null);
         importProducts_Selected.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        ImportProductsDAO.getInstance().update(importProducts_Selected);
+        importProductsBLL.update(importProducts_Selected);
         this.dispose();
         phieuNhapForm.updateTableDataFormDAO();
     }

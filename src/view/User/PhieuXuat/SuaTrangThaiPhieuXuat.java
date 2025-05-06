@@ -1,6 +1,7 @@
 package view.User.PhieuXuat;
 
 import DAO.*;
+import controller.*;
 import model.Branch;
 import model.DetailExportProducts;
 import model.ExportProducts;
@@ -20,7 +21,11 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
     private JPanel contentPane;
     private JComboBox cbx_TrangThai;
     private PhieuXuatForm phieuXuatForm;
-
+    private StatusDeliveryBLL statusDeliveryBLL;
+    private BranchBLL branchBLL;
+    private DetailExportProductsBLL detailExportProductsBLL;
+    private ExportProductsBLL exportProductsBLL;
+    private InventoryBLL inventoryBLL;
     /**
      * Launch the application.
      */
@@ -29,6 +34,10 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
      */
     public SuaTrangThaiPhieuXuat(PhieuXuatForm phieuXuatForm) {
         this.phieuXuatForm = phieuXuatForm;
+        this.statusDeliveryBLL = new StatusDeliveryBLL();
+        this.branchBLL = new BranchBLL();
+        this.exportProductsBLL = new ExportProductsBLL();
+        this.detailExportProductsBLL = new DetailExportProductsBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 390, 300);
         setLocationRelativeTo(null);
@@ -90,7 +99,7 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
     public void fillData() {
         ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
         cbx_TrangThai.setSelectedItem(exportProducts.getTrangThai());
-        String[] trangThai = StatusDeliveryDAO.getInstance().selectChangeStatus(exportProducts.getTrangThai()).toArray(new String[0]);
+        String[] trangThai = statusDeliveryBLL.selectChangeStatus(exportProducts.getTrangThai()).toArray(new String[0]);
         cbx_TrangThai.setModel(new DefaultComboBoxModel<>(trangThai));
     }
 
@@ -101,14 +110,14 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
     public void LuuMouseClicked() {
         String trangThai = cbx_TrangThai.getSelectedItem() + "";
         ExportProducts exportProducts = phieuXuatForm.getExportProductsSelected();
-        int idStatus = StatusDeliveryDAO.getInstance().selectByName(trangThai);
+        int idStatus = statusDeliveryBLL.selectByName(trangThai);
         exportProducts.setTrangThai(idStatus);
-        ExportProductsDAO.getInstance().update(exportProducts);
+        exportProductsBLL.update(exportProducts);
         HuyBoMouseClicked();
         phieuXuatForm.updateTableDataFormDAO();
-        ArrayList<DetailExportProducts> detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts.getMaPhieuXuat());
-        Branch branch = BrandDAO.getInstance().BranchByID(exportProducts.getMaChiNhanh());
-        ArrayList<Inventory> inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        ArrayList<DetailExportProducts> detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(exportProducts.getMaPhieuXuat());
+        Branch branch = branchBLL.BranchByID(exportProducts.getMaChiNhanh());
+        ArrayList<Inventory> inventories = inventoryBLL.InventoryByBranch(branch);
         if (trangThai.equals("Hoàn thành")) {
             for (DetailExportProducts item : detailExportProducts) {
                 Inventory inventory_Valid = isValidProduct(inventories, item);
@@ -117,10 +126,10 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
                     int soLuongKho = inventory_Valid.getSoLuong();
                     int soLuongNhap = item.getSoLuong();
                     inventory_Valid.setSoLuong(soLuongKho + soLuongNhap);
-                    InventoryDAO.getInstance().updateSoLuong(inventory_Valid);
+                    inventoryBLL.updateSoLuong(inventory_Valid);
                 } else {
                     Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(), item.getMaMay(), item.getSoLuong());
-                    InventoryDAO.getInstance().insert(inventory);
+                    inventoryBLL.insert(inventory);
                 }
             }
         }

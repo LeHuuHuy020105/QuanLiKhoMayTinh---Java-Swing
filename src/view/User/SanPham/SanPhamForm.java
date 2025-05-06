@@ -52,6 +52,8 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     private JFileChooser jChooser = new JFileChooser();
     private JComboBox cbx_luaChon;
     private User currentUser;
+    private UserBLL userBLL;
+    private ProductsBLL productsBLL;
 
     public SanPhamForm() {
     }
@@ -62,6 +64,8 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
 
     public SanPhamForm(User currentUser) {
         this.currentUser = currentUser;
+        this.userBLL = new UserBLL();
+        this.productsBLL = new ProductsBLL();
         setLayout(null);
         setSize(1500, 950);
         Box verticalBox = Box.createVerticalBox();
@@ -258,7 +262,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         Permission();
     }
     public void Permission(){
-        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        int roleUser = userBLL.getIDRoleByIDUser(currentUser.getIdUser());
         PermissionsDAO.applyPermissions(roleUser,"Sản phẩm",btn_Them,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
     }
     public void XemChiTietMouseClicked() {
@@ -290,7 +294,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
 
             int maMay = Integer.parseInt(model.getValueAt(i_row, 0)+"");
 
-            computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);
+            computer_Selected = productsBLL.searchByIdProduct(maMay);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
             e.printStackTrace();
@@ -339,7 +343,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
     }
     @Override
     public void XuatExcelMouseClicked(){
-        ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer>computers = productsBLL.selectAll();
         jChooser.setDialogTitle("Chọn nơi lưu file Excel");
         jChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel Files (*.xlsx)", "xlsx"));
         exportListToExcel(computers,jChooser);
@@ -525,14 +529,14 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
             Computer computer_Selected = getComputerSelected();
-            ProductsDAO.getInstance().delete(computer_Selected);
+            productsBLL.delete(computer_Selected);
             updateTableDataFormDAO();
         }
     }
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers = productsBLL.selectAll();
         updateTableData(computers);
     }
 

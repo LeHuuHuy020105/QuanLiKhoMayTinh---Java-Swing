@@ -1,10 +1,7 @@
 package view.User.XuatHang;
 
 import DAO.*;
-import controller.Notification;
-import controller.SearchProduct;
-import controller.updateDataToTable;
-import controller.writePDF;
+import controller.*;
 import model.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -15,7 +12,6 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +43,10 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
     private JComboBox cbx_ChiNhanh;
     private User currentUser;
     private JFileChooser jFileChooser;
+    private ProductsBLL productsBLL;
+    private BranchBLL branchBLL;
+    private ExportProductsBLL exportProductsBLL;
+    private DetailExportProductsBLL detailExportProductsBLL;
 
     /**
      * Create the panel.
@@ -54,6 +54,10 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
     public XuatHangForm(User currentUser) {
         this.currentUser = currentUser;
         this.jFileChooser = new JFileChooser();
+        this.productsBLL = new ProductsBLL();
+        this.branchBLL = new BranchBLL();
+        this.detailExportProductsBLL = new DetailExportProductsBLL();
+        this.exportProductsBLL = new ExportProductsBLL();
         detailExportProducts = new ArrayList<>();
         setLayout(null);
         setSize(1257, 736);
@@ -291,7 +295,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
                 Row row = rowIterator.next();
                 int maMay = (int) row.getCell(0).getNumericCellValue();
                 int soLuong =  (int) row.getCell(1).getNumericCellValue();
-                Computer computer_Search = ProductsDAO.getInstance().searchByIDProduct(maMay);
+                Computer computer_Search = productsBLL.searchByIdProduct(maMay);
                 if(computer_Search == null){
                     hasError = true;
                 }else {
@@ -320,7 +324,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         updateTableDataFormDAO();
     }
     public void fillDataInterface(){
-        ArrayList<Branch>branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch>branches = branchBLL.selectAll();
         for(Branch branch : branches){
             cbx_ChiNhanh.addItem(branch.getDiaChi());
         }
@@ -329,7 +333,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
     }
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers = productsBLL.selectAll();
         updateTableData(computers);
     }
 
@@ -360,7 +364,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 1) + "");
-        Computer computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        Computer computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
     public Computer getComputerSelectedTableXuatHang() {
@@ -372,7 +376,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
-        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
 
@@ -417,7 +421,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         model.setRowCount(0);
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
             String tenMay = computer.getTenMay();
             double donGia = computer.getGia();
             model.addRow(new Object[]{
@@ -435,10 +439,10 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn xuất hàng ?", "Xác nhận xuất hàng", JOptionPane.YES_NO_OPTION);
             if(check==JOptionPane.YES_OPTION) {
                 String diaChi = cbx_ChiNhanh.getSelectedItem()+"";
-                Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);
+                Branch branch = branchBLL.BranchByDiaChi(diaChi);
                 int maChiNhanh = branch.getMaChiNhanh();
                 ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser(),null);
-                int maPhieuXuat = ExportProductsDAO.getInstance().insertExportProduct(exportProducts);
+                int maPhieuXuat = exportProductsBLL.insertExportProduct(exportProducts);
                 updateDatabaseExportProducts(maPhieuXuat);
                 int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
                 if(check_pdf==JOptionPane.YES_OPTION){
@@ -455,10 +459,10 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
     public void updateDatabaseExportProducts(int maphieuxuat){
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
             detailExportProducts1.setMaPhieuXuat(maphieuxuat);
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
             computer.setSoLuong(computer.getSoLuong() - detailExportProducts1.getSoLuong());
-            ProductsDAO.getInstance().update(computer);
-            DetailExportProductsDAO.getInstance().insert(detailExportProducts1);
+            productsBLL.update(computer);
+            detailExportProductsBLL.insert(detailExportProducts1);
         }
 
     }

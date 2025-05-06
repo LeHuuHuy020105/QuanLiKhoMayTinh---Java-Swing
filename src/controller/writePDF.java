@@ -14,7 +14,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
@@ -214,7 +213,7 @@ public class writePDF {
             setTitle("THÔNG TIN PHIẾU XUẤT");
 
             ExportProducts px = ExportProductsDAO.getInstance().ExportProductsByID(mapx);
-            Branch px_brand =  BrandDAO.getInstance().BranchByID(px.getMaChiNhanh());
+            Branch px_brand =  BrachDAO.getInstance().BranchByID(px.getMaChiNhanh());
             Paragraph para1 = new Paragraph(new Phrase("Mã phiếu: " + mapx, fontData));
             Paragraph para2 = new Paragraph(new Phrase("Thời gian tạo: " + formatDate.format(px.getNgayLenDonXuat()), fontData));
             Paragraph para3 = new Paragraph(new Phrase("Người tạo: " + UserDAO.getInstance().getUsetById(px.getManguoidung()).getFullName(), fontData));
@@ -285,8 +284,8 @@ public class writePDF {
             // Lấy thông tin hóa đơn
             Bill bill = BillDAO.getInstance().getBillByMaPhieu(maPhieu);
             User nhanVien = UserDAO.getInstance().getUsetById(bill.getMaNhanVien());
-            Customer khachHang = bill.getMaKhachHang() != 0 ? CustomerDAO.getInstance().findByID(bill.getMaKhachHang()) : null;
-            Branch chiNhanh = BrandDAO.getInstance().BranchByID(bill.getMaChiNhanh());
+            CustomerBLL khachHang = bill.getMaKhachHang() != 0 ? CustomerDAO.getInstance().findByID(bill.getMaKhachHang()) : null;
+            Branch chiNhanh = BrachDAO.getInstance().BranchByID(bill.getMaChiNhanh());
 
             // Thông tin hóa đơn
             Paragraph para1 = new Paragraph(new Phrase("Mã hóa đơn: " + bill.getMaPhieu(), fontData));

@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import DAO.*;
-import controller.ImageHelper;
+import controller.*;
 import model.*;
 
 import java.awt.Font;
@@ -40,6 +40,10 @@ public class ThemSanPham extends JFrame {
 	private JTextField textField_giaBan;
 	private byte[] hinhAnh;
 	private JPanel panel_Image;
+	private ProducerBLL producerBLL;
+	private CountryBLL countryBLL;
+	private PcBLL pcBLL;
+	private LaptopBLL laptopBLL;
 
 	/**
 	 * Launch the application.
@@ -50,6 +54,10 @@ public class ThemSanPham extends JFrame {
 	 */
 	public ThemSanPham(SanPhamForm sanPhamForm) {
 		this.sanPhamForm = sanPhamForm;;
+		this.producerBLL = new ProducerBLL();
+		this.countryBLL = new CountryBLL();
+		this.pcBLL = new PcBLL();
+		this.laptopBLL = new LaptopBLL();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 578);
 		setLocationRelativeTo(null);
@@ -237,7 +245,7 @@ public class ThemSanPham extends JFrame {
 		lblNewLabel_1_2_2_2.setBounds(888, 174, 116, 28);
 		contentPane.add(lblNewLabel_1_2_2_2);
 
-		ArrayList<Producer>producers = ProducersDAO.getInstance().selectAll();
+		ArrayList<Producer>producers = producerBLL.selectAll();
 		comboBox_nhaCungCap = new JComboBox();
 		for(Producer producer : producers){
 			comboBox_nhaCungCap.addItem(producer.getMaNhaCungCap());
@@ -245,7 +253,7 @@ public class ThemSanPham extends JFrame {
 		comboBox_nhaCungCap.setBounds(888, 210, 202, 28);
 		contentPane.add(comboBox_nhaCungCap);
 
-		ArrayList<Country>list_country = CountryDAO.getInstance().selectAll();
+		ArrayList<Country>list_country = countryBLL.selectAll();
 		cbx_xuatXu = new JComboBox();
 		for(Country country : list_country) {
 			cbx_xuatXu.addItem(country.getTenQuocGia());
@@ -349,7 +357,7 @@ public class ThemSanPham extends JFrame {
 		String ROM = input_ROM.getText().trim();
 		String cardManHinh = input_cardDoHoa.getText().trim();
 		String tenQuocGia = (String) cbx_xuatXu.getSelectedItem();
-		Country country = CountryDAO.getInstance().CountryByName(tenQuocGia);
+		Country country = countryBLL.CountryByName(tenQuocGia);
 		String xuatXu = country.getMaQuocGia();
 		String maNhaCungCap = (String) comboBox_nhaCungCap.getSelectedItem();
 
@@ -422,7 +430,7 @@ public class ThemSanPham extends JFrame {
 			// Nếu hợp lệ, thêm Laptop
 			Laptop newLaptop = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
-				LaptopDAO.getInstance().insert(newLaptop);
+				laptopBLL.insert(newLaptop);
 				this.dispose();
 				JOptionPane.showMessageDialog(this, "Thêm sản phẩm Laptop thành công!");
 			} catch (Exception e) {
@@ -453,7 +461,7 @@ public class ThemSanPham extends JFrame {
 			// Nếu hợp lệ, thêm PC
 			PC newPC = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
-				PCDAO.getInstance().insert(newPC);
+				pcBLL.insert(newPC);
 				this.dispose();
 				JOptionPane.showMessageDialog(this, "Thêm sản phẩm PC thành công!");
 			} catch (Exception e) {

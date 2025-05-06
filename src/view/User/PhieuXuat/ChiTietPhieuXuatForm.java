@@ -1,7 +1,7 @@
 package view.User.PhieuXuat;
 
 import DAO.*;
-import controller.writePDF;
+import controller.*;
 import model.*;
 
 import javax.swing.JFrame;
@@ -35,6 +35,11 @@ public class ChiTietPhieuXuatForm extends JFrame {
 	private JLabel label_thoiDiemTaoPhieu;
 	private JLabel label_DiaChi;
 	private JLabel label_TinhTrangDon;
+	private UserBLL userBLL;
+	private StatusDeliveryBLL statusDeliveryBLL;
+	private DetailExportProductsBLL detailExportProductsBLL;
+	private BranchBLL branchBLL;
+	private ProductsBLL productsBLL;
 
 	/**
 	 * Launch the application.
@@ -45,6 +50,11 @@ public class ChiTietPhieuXuatForm extends JFrame {
 	 */
 	public ChiTietPhieuXuatForm(PhieuXuatForm phieuXuatForm) {
 		this.phieuXuatForm = phieuXuatForm;
+		this.userBLL = new UserBLL();
+		this.productsBLL = new ProductsBLL();
+		this.statusDeliveryBLL = new StatusDeliveryBLL();
+		this.detailExportProductsBLL = new DetailExportProductsBLL();
+		this.branchBLL = new BranchBLL();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 903, 580);
 		setLocationRelativeTo(null);
@@ -159,19 +169,19 @@ public class ChiTietPhieuXuatForm extends JFrame {
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");
 		ExportProducts exportProducts_selected = phieuXuatForm.getExportProductsSelected();
-		User user = UserDAO.getInstance().getUsetById(exportProducts_selected.getManguoidung());
+		User user = userBLL.getUsetById(exportProducts_selected.getManguoidung());
 		String tenNguoiTaoPhieu =user.getFullName();
-		String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+		String role = userBLL.getRoleByIDUser(user.getIdUser());
 		label_maPhieuXuat.setText("");
 		label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
 		label_vaiTroNguoiTaoPhieu.setText(role);
 		label_thoiDiemTaoPhieu.setText(exportProducts_selected.getNgayLenDonXuat()+"");
-		String diaChi = BrandDAO.getInstance().BranchByID(exportProducts_selected.getMaChiNhanh()).getDiaChi();
+		String diaChi = branchBLL.BranchByID(exportProducts_selected.getMaChiNhanh()).getDiaChi();
 		label_DiaChi.setText(diaChi);
 		label_maPhieuXuat.setText(exportProducts_selected.getMaPhieuXuat()+"");
-		String status = StatusDeliveryDAO.getInstance().selectByID(exportProducts_selected.getTrangThai());
+		String status = statusDeliveryBLL.selectByID(exportProducts_selected.getTrangThai());
 		label_TinhTrangDon.setText(status);
-		ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
+		ArrayList<DetailExportProducts>detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
 		updateDataToTable(detailExportProducts);
 	}
 	public void updateDataToTable(ArrayList<DetailExportProducts>detailExportProducts){
@@ -181,7 +191,7 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		int i = 0;
 		for(DetailExportProducts detailExportProducts1 : detailExportProducts){
 			i++;
-			Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+			Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
 			model.addRow(new Object[]{
 					i,
 					detailExportProducts1.getMaMay(),

@@ -12,9 +12,7 @@ import java.util.ArrayList;
 
 import DAO.*;
 import com.toedter.calendar.JDateChooser;
-import controller.SearchImportProducts;
-import controller.btnEffect;
-import controller.updateDataToTable;
+import controller.*;
 import model.*;
 import view.Icon;
 
@@ -43,12 +41,20 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 	private JTable table_importProducts;
 	private JComboBox cbx_TrangThai;
 	private User currentUser;
+	private UserBLL userBLL;
+	private ImportProductsBLL importProductsBLL;
+	private StatusDeliveryBLL statusDeliveryBLL;
+	private PermissionBLL permissionBLL;
 
 	/**
 	 * Create the panel.
 	 */
 	public PhieuNhapForm(User currentUser) {
 		this.currentUser = currentUser;
+		this.userBLL = new UserBLL();
+		this.importProductsBLL = new ImportProductsBLL();
+		this.statusDeliveryBLL = new StatusDeliveryBLL();
+		this.permissionBLL = new PermissionBLL();
 		setLayout(null);
 		setSize(1257, 718);
 
@@ -238,7 +244,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		verticalBox_1_2.add(panel_5_1_1_2);
 		panel_5_1_1_2.setLayout(null);
 
-		String[] trangthaiStrings = StatusDeliveryDAO.getInstance().selectAll().toArray(new String[0]);
+		String[] trangthaiStrings = statusDeliveryBLL.selectAll().toArray(new String[0]);
 		cbx_TrangThai = new JComboBox(trangthaiStrings);
 		cbx_TrangThai.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -266,12 +272,12 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		setVisible(true);
 	}
 	public void Permission(){
-		int idRole = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
-		PermissionsDAO.applyPermissions(idRole,"Phiếu nhập",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
+		int idRole = userBLL.getIDRoleByIDUser(currentUser.getIdUser());
+		permissionBLL.applyPermissions(idRole,"Phiếu nhập",null,btn_Xoa,btnSua,btnXemChiTiet,btnXuatExcel,btnNhapExcel);
 	}
 	@Override
 	public void updateTableDataFormDAO() {
-		ArrayList<ImportProducts> importProducts = ImportProductsDAO.getInstance().selectAll();
+		ArrayList<ImportProducts> importProducts = importProductsBLL.selectAll();
 		updateTableData(importProducts);
 	}
 
@@ -282,11 +288,11 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		model.setRowCount(0);
 		int i = 0;
 		for (ImportProducts importProducts : t) {
-			User user = UserDAO.getInstance().getUsetById(importProducts.getManguoidung());
+			User user = userBLL.getUsetById(importProducts.getManguoidung());
 			String tenNguoitao = user.getFullName();
-			String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+			String role = userBLL.getRoleByIDUser(user.getIdUser());
 			i++;
-			String trangThai = StatusDeliveryDAO.getInstance().selectByID(importProducts.getTrangThai());
+			String trangThai = statusDeliveryBLL.selectByID(importProducts.getTrangThai());
 			System.out.println(importProducts.getTrangThai());
 			System.out.println(trangThai);
 			model.addRow(new Object[]{
@@ -320,7 +326,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			return null;
 		}
 		int maPhieuNhap = Integer.parseInt(model.getValueAt(i_row, 1) + "");
-		importProducts = ImportProductsDAO.getInstance().getImportProductsByMaPhieuNhap(maPhieuNhap);
+		importProducts = importProductsBLL.getImportProductsByMaPhieuNhap(maPhieuNhap);
 		return importProducts;
 	}
 
@@ -346,7 +352,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			if (choice == JOptionPane.YES_OPTION) {
 				importProducts_Selected.setTrangThai(6);
 				importProducts_Selected.setThoiGianHuy(new Timestamp(System.currentTimeMillis()));
-				ImportProductsDAO.getInstance().update(importProducts_Selected);
+				importProductsBLL.update(importProducts_Selected);
 			}
 			updateTableDataFormDAO();
 		}else {
@@ -371,7 +377,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		}
 
 		// Lấy danh sách tất cả sản phẩm
-		ArrayList<ImportProducts> allImportProducts = ImportProductsDAO.getInstance().selectAll();
+		ArrayList<ImportProducts> allImportProducts = importProductsBLL.selectAll();
 
 		ArrayList<ImportProducts> filteredImportProducts = new ArrayList<>();
 
@@ -450,7 +456,7 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 
 	// Kiểm tra tình trạng tồn kho
 	private boolean matchStatus(ImportProducts importProducts, String statusFilter) {
-		int status = StatusDeliveryDAO.getInstance().selectByName(statusFilter);
+		int status = statusDeliveryBLL.selectByName(statusFilter);
 		return importProducts.getTrangThai() == status;
 	}
 

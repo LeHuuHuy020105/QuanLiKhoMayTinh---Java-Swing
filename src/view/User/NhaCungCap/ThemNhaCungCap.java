@@ -10,6 +10,7 @@ import DAO.Address.ProvinceDAO;
 import DAO.CountryDAO;
 import DAO.ProducersDAO;
 import controller.CheckValidInput;
+import controller.ProducerBLL;
 import controller.ValueAddress;
 import controller.updateDataToTable;
 import model.Address.Province;
@@ -34,6 +35,7 @@ public class ThemNhaCungCap extends JFrame  {
 	private JComboBox cbx_Quan;
 	private NhaCungCapForm nhaCungCapForm;
 	private CheckValidInput checkValidInput;
+	private ProducerBLL producerBLL;
 	/**
 	 * Launch the application.
 	 */
@@ -169,7 +171,7 @@ public class ThemNhaCungCap extends JFrame  {
 			}
 			String maNCC = tenNCC.toUpperCase();
 			Producer producer = new Producer(diaChi, maNCC, SDT, tenNCC);
-			ProducersDAO.getInstance().insert(producer);
+			producerBLL.insert(producer);
 			JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
 			dispose();
 			nhaCungCapForm.updateTableDataFormDAO();

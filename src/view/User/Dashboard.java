@@ -1,6 +1,7 @@
 package view.User;
 
 import DAO.UserDAO;
+import controller.UserBLL;
 import model.User;
 import view.User.ChiNhanh.ChiNhanhForm;
 import view.User.NhaCungCap.NhaCungCapForm;
@@ -34,6 +35,7 @@ public class Dashboard extends JFrame {
     private JPanel cardPanel;
     private CardLayout cardLayout;
     private User currentUser;
+    private UserBLL userBLL;
 
 
     private Color selectionColor = new Color(245, 255, 250);
@@ -127,8 +129,8 @@ public void ThongTinTaiKhoanMouseClicked() {
 		thongTinTaiKhoan.setVisible(true);
 	}
     public void getRole(){
-        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
-        ArrayList<String> menuItems = UserDAO.getInstance().nameBtn_Menu(role);
+        String role = userBLL.getRoleByIDUser(currentUser.getIdUser());
+        ArrayList<String> menuItems = userBLL.nameBtn_Menu(role);
         renderMenuBar(menuItems,panel_2);
     }
     public void renderMenuBar(ArrayList<String> menuItems , JPanel jPanel){

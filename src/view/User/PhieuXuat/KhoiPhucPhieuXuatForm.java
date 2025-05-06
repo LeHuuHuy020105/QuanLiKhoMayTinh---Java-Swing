@@ -1,6 +1,10 @@
 package view.User.PhieuXuat;
 
 import DAO.*;
+import controller.DetailExportProductsBLL;
+import controller.ExportProductsBLL;
+import controller.ProductsBLL;
+import controller.UserBLL;
 import model.*;
 import view.User.PhieuNhap.PhieuNhapForm;
 
@@ -26,6 +30,10 @@ public class KhoiPhucPhieuXuatForm extends JFrame {
     private JLabel label_thoiDiemTaoPhieu;
     private JLabel label_TongTien;
     private JLabel label_thoiDiemHuyPhieu;
+    private UserBLL userBLL;
+    private DetailExportProductsBLL detailExportProductsBLL;
+    private ExportProductsBLL exportProductsBLL;
+    private ProductsBLL productsBLL;
 
     /**
      * Launch the application.
@@ -36,6 +44,10 @@ public class KhoiPhucPhieuXuatForm extends JFrame {
      */
     public KhoiPhucPhieuXuatForm(PhieuXuatForm phieuXuatForm) {
         this.phieuXuatForm = phieuXuatForm;
+        this.userBLL = new UserBLL();
+        this.detailExportProductsBLL = new DetailExportProductsBLL();
+        this.exportProductsBLL = new ExportProductsBLL();
+        this.productsBLL = new ProductsBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 903, 580);
         setLocationRelativeTo(null);
@@ -149,14 +161,14 @@ public class KhoiPhucPhieuXuatForm extends JFrame {
     public void hienThiThongTinPhieuNhap(){
         DecimalFormat df = new DecimalFormat("#,###");
         ExportProducts exportProduct_selected = phieuXuatForm.getExportProductsSelected();
-        User user = UserDAO.getInstance().getUsetById(exportProduct_selected.getManguoidung());
+        User user = userBLL.getUsetById(exportProduct_selected.getManguoidung());
         String tenNguoiTaoPhieu =user.getFullName();
-        String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+        String role = userBLL.getRoleByIDUser(user.getIdUser());
         label_maPhieuNhap.setText(exportProduct_selected.getMaPhieuXuat()+"");
         label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
         label_vaiTroNguoiTaoPhieu.setText(role);
         label_thoiDiemTaoPhieu.setText(exportProduct_selected.getNgayLenDonXuat()+"");
-        ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProduct_selected.getMaPhieuXuat());
+        ArrayList<DetailExportProducts>detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(exportProduct_selected.getMaPhieuXuat());
         updateDataToTable(detailExportProducts);
     }
     public void updateDataToTable(ArrayList<DetailExportProducts>detailExportProducts){
@@ -166,7 +178,7 @@ public class KhoiPhucPhieuXuatForm extends JFrame {
         int i = 0;
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
             i++;
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
             double thanhTien = detailExportProducts1.getSoLuong()*computer.getGia();
             model.addRow(new Object[]{
                     i,
@@ -180,16 +192,16 @@ public class KhoiPhucPhieuXuatForm extends JFrame {
     }
     public void KhoiPhucMouseClicked(){
         ExportProducts exportProducts_selected = phieuXuatForm.getExportProductsSelected();
-        ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
+        ArrayList<DetailExportProducts>detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
         for(DetailExportProducts item : detailExportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(item.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(item.getMaMay());
             computer.setSoLuong(computer.getSoLuong()-item.getSoLuong());
-            ProductsDAO.getInstance().update(computer);
+            productsBLL.update(computer);
         }
         exportProducts_selected.setTrangThai(1);
         exportProducts_selected.setNgayLenDonXuat(new Timestamp(System.currentTimeMillis()));
         exportProducts_selected.setThoiDiemHuyPhieu(null);
-        ExportProductsDAO.getInstance().update(exportProducts_selected);
+        exportProductsBLL.update(exportProducts_selected);
         this.dispose();
         phieuXuatForm.updateTableDataFormDAO();
     }

@@ -1,6 +1,6 @@
 package controller;
 
-import DAO.BrandDAO;
+import DAO.BrachDAO;
 import DAO.CustomerDAO;
 import DAO.ProducersDAO;
 import DAO.UserDAO;
@@ -101,13 +101,13 @@ public class CheckValidInput {
         }
         // Skip duplicate check for update if the phone number is unchanged
         if (isUpdate) {
-            String currentPhone = BrandDAO.getInstance().getPhoneByBranchId(idBranch);
+            String currentPhone = BrachDAO.getInstance().getPhoneByBranchId(idBranch);
             if (phoneNumber.equals(currentPhone)) {
                 return true; // Phone number unchanged, no need to check for duplicates
             }
         }
         // Check for duplicate phone number
-        boolean flag = BrandDAO.getInstance().checkSdt(phoneNumber, idBranch);
+        boolean flag = BrachDAO.getInstance().checkSdt(phoneNumber, idBranch);
         if (flag) {
             JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
             return false;
@@ -116,7 +116,7 @@ public class CheckValidInput {
     }
 
     public static boolean checkValidNameBranch(String name) {
-        boolean flag = BrandDAO.getInstance().checkName(name);
+        boolean flag = BrachDAO.getInstance().checkName(name);
         if (flag == true) {
             JOptionPane.showMessageDialog(jFrame, "Tên chi nhánh đã tồn tại!");
             return false;

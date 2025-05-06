@@ -2,6 +2,7 @@ package view.User.NhaCungCap;
 
 import DAO.ProducersDAO;
 import controller.CheckValidInput;
+import controller.ProducerBLL;
 import controller.ValueAddress;
 import model.Producer;
 
@@ -25,6 +26,7 @@ public class SuaNhaCungCap extends JFrame {
 	private JTextField input_SoNha;
 	private JComboBox cbx_Phuong;
 	private CheckValidInput checkValidInput;
+	private ProducerBLL producerBLL;
 
 	/**
 	 * Launch the application.
@@ -177,7 +179,7 @@ public class SuaNhaCungCap extends JFrame {
 		String diaChi = ValueAddress.getValueAddressFrame(this,cbx_ThanhPho,cbx_Quan,cbx_Phuong,input_SoNha);
 		Producer producer = new Producer(diaChi,maNCC,SDT,tenNCC);
 		try {
-			ProducersDAO.getInstance().update(producer);
+			producerBLL.update(producer);
 			this.dispose();
 			JOptionPane.showMessageDialog(this,"Cập nhật nhà cung cấp thành công !");
 		} catch (Exception e) {

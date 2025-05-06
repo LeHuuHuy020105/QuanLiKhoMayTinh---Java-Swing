@@ -1,15 +1,13 @@
 package controller;
 
-import DAO.BrandDAO;
-import DAO.ProducersDAO;
+import DAO.BrachDAO;
 import model.Branch;
-import model.Producer;
 
 import java.util.ArrayList;
 
 public class SearchBranch {
     public ArrayList<Branch> searchTatCa(String content_Search) {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = BrachDAO.getInstance().selectAll();
         if(content_Search.equals("")){
             return branches;
         }
@@ -24,7 +22,7 @@ public class SearchBranch {
         return  ketQua;
     }
     public ArrayList<Branch> searchMaChiNhanh(String content_Search) {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = BrachDAO.getInstance().selectAll();
         if(content_Search.equals("")){
             return branches;
         }
@@ -38,7 +36,7 @@ public class SearchBranch {
         return  ketQua;
     }
     public ArrayList<Branch> searchDiaChi(String content_Search) {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = BrachDAO.getInstance().selectAll();
         if(content_Search.equals("")){
             return branches;
         }
@@ -52,7 +50,7 @@ public class SearchBranch {
         return  ketQua;
     }
     public ArrayList<Branch> searchSDT(String content_Search) {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = BrachDAO.getInstance().selectAll();
         if(content_Search.equals("")){
             return branches;
         }

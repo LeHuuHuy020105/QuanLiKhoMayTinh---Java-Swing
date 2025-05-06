@@ -1,12 +1,10 @@
 package view.User.QLTaiKhoanAdmin;
 
-import DAO.BrandDAO;
 import DAO.UserDAO;
-import controller.SearchCustomer;
 import controller.SearchUser;
+import controller.UserBLL;
 import controller.btnEffect;
 import controller.updateDataToTable;
-import model.Customer;
 import model.User;
 import view.Icon;
 
@@ -31,12 +29,14 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
     private JTextField textField;
     private JTable table_user;
     private User currentUser;
+    private UserBLL userBLL;
 
     /**
      * Create the panel.
      */
     public QLTaiKhoanForm(User currentUser) {
         this.currentUser = currentUser;
+        this.userBLL = new UserBLL();
         setLayout(null);
         setSize(1257, 911);
         Box verticalBox = Box.createVerticalBox();
@@ -188,7 +188,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            int ketQua = UserDAO.getInstance().delete(getCurrentUser());
+            int ketQua = userBLL.delete(getCurrentUser());
             if (ketQua == -1) {
                 JOptionPane.showMessageDialog(this, "Không thể xóa đã có tham chiếu liên quan!");
             } else if (ketQua > 0) {
@@ -234,7 +234,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<User>users = UserDAO.getInstance().selectAllNotAdmin(currentUser);
+        ArrayList<User>users = userBLL.selectAllNotAdmin(currentUser);
         updateTableData(users);
     }
 
@@ -243,7 +243,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         DefaultTableModel model = (DefaultTableModel)table_user.getModel();
         model.setRowCount(0);
         for(User user : t){
-            String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+            String role = userBLL.getRoleByIDUser(user.getIdUser());
             model.addRow(new Object[]{
                     user.getIdUser(),
                     user.getFullName(),
@@ -270,7 +270,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
             return null;
         }
         int idUser = Integer.parseInt(model.getValueAt(i_row,0)+"");
-        User user_Selected = UserDAO.getInstance().getUsetById(idUser);
+        User user_Selected = userBLL.getUsetById(idUser);
         return user_Selected;
     }
 

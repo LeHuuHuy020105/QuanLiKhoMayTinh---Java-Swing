@@ -1,11 +1,11 @@
 package view.User.QuanLiChiNhanh;
 
 import DAO.*;
+import controller.*;
 import model.Computer;
 import model.DetailExportProducts;
 import model.ExportProducts;
 import model.User;
-import view.User.PhieuXuat.PhieuXuatForm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +26,11 @@ public class ChiTietPhieuNhapBranchForm extends JFrame {
 	private JLabel label_thoiDiemTaoPhieu;
 	private JLabel label_DiaChi;
 	private JLabel label_TinhTrangDon;
+	private UserBLL userBLL;
+	private BranchBLL branchBLL;
+	private StatusDeliveryBLL statusDeliveryBLL;
+	private DetailExportProductsBLL detailExportProductsBLL;
+	private ProductsBLL productsBLL;
 
 	/**
 	 * Launch the application.
@@ -36,6 +41,10 @@ public class ChiTietPhieuNhapBranchForm extends JFrame {
 	 */
 	public ChiTietPhieuNhapBranchForm(PhieuNhapBranchForm phieuNhapBranchForm) {
 		this.phieuNhapBranchForm = phieuNhapBranchForm;
+		this.userBLL = new UserBLL();
+		this.branchBLL = new BranchBLL();
+		this.statusDeliveryBLL = new StatusDeliveryBLL();
+		this.detailExportProductsBLL = new DetailExportProductsBLL();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 903, 580);
 		setLocationRelativeTo(null);
@@ -141,19 +150,19 @@ public class ChiTietPhieuNhapBranchForm extends JFrame {
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");
 		ExportProducts exportProducts_selected = phieuNhapBranchForm.getExportProductsSelected();
-		User user = UserDAO.getInstance().getUsetById(exportProducts_selected.getManguoidung());
+		User user = userBLL.getUsetById(exportProducts_selected.getManguoidung());
 		String tenNguoiTaoPhieu =user.getFullName();
-		String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+		String role = userBLL.getRoleByIDUser(user.getIdUser());
 		label_maPhieuXuat.setText("");
 		label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
 		label_vaiTroNguoiTaoPhieu.setText(role);
 		label_thoiDiemTaoPhieu.setText(exportProducts_selected.getNgayLenDonXuat()+"");
-		String diaChi = BrandDAO.getInstance().BranchByID(exportProducts_selected.getMaChiNhanh()).getDiaChi();
+		String diaChi = branchBLL.BranchByID(exportProducts_selected.getMaChiNhanh()).getDiaChi();
 		label_DiaChi.setText(diaChi);
 		label_maPhieuXuat.setText(exportProducts_selected.getMaPhieuXuat()+"");
-		String trangThai = StatusDeliveryDAO.getInstance().selectByID(exportProducts_selected.getTrangThai());
+		String trangThai = statusDeliveryBLL.selectByID(exportProducts_selected.getTrangThai());
 		label_TinhTrangDon.setText(trangThai);
-		ArrayList<DetailExportProducts>detailExportProducts = DetailExportProductsDAO.getInstance().selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
+		ArrayList<DetailExportProducts>detailExportProducts = detailExportProductsBLL.selectAllByMaPhieuXuat(exportProducts_selected.getMaPhieuXuat());
 		updateDataToTable(detailExportProducts);
 	}
 	public void updateDataToTable(ArrayList<DetailExportProducts>detailExportProducts){
@@ -163,7 +172,7 @@ public class ChiTietPhieuNhapBranchForm extends JFrame {
 		int i = 0;
 		for(DetailExportProducts detailExportProducts1 : detailExportProducts){
 			i++;
-			Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+			Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
 			model.addRow(new Object[]{
 					i,
 					detailExportProducts1.getMaMay(),

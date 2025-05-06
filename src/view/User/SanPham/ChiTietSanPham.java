@@ -11,7 +11,9 @@ import DAO.CountryDAO;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProducersDAO;
+import controller.CountryBLL;
 import controller.ImageHelper;
+import controller.ProducerBLL;
 import model.*;
 
 import java.awt.Font;
@@ -47,6 +49,8 @@ public class ChiTietSanPham extends JFrame {
 	private byte[] hinhAnh;
 	private JTextField textField_giaBan;
 	private Computer computer_Selected;
+	private ProducerBLL producerBLL;
+	private CountryBLL countryBLL;
 
 	/**
 	 * Launch the application.
@@ -57,6 +61,8 @@ public class ChiTietSanPham extends JFrame {
 	 */
 	public ChiTietSanPham(Computer computer_Selected) {
 		this.computer_Selected = computer_Selected;
+		this.producerBLL = new ProducerBLL();
+		this.countryBLL = new CountryBLL();
 		this.hinhAnh = computer_Selected.getHinhAnh();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 489);
@@ -227,7 +233,7 @@ public class ChiTietSanPham extends JFrame {
 		lblNewLabel_1_2_2_2.setBounds(888, 174, 116, 28);
 		contentPane.add(lblNewLabel_1_2_2_2);
 
-		ArrayList<Producer>producers = ProducersDAO.getInstance().selectAll();
+		ArrayList<Producer>producers = producerBLL.selectAll();
 		comboBox_nhaCungCap = new JComboBox();
 		for(Producer producer : producers){
 			comboBox_nhaCungCap.addItem(producer.getMaNhaCungCap());
@@ -275,7 +281,7 @@ public class ChiTietSanPham extends JFrame {
 		input_tenSanPham.setText(computer_Selected.getTenMay());
 		input_gia.setText(df.format(computer_Selected.getGia()));
 		textField_giaBan.setText(df.format(computer_Selected.getGiaBan()));
-		Country country_selected = CountryDAO.getInstance().CountryByID(computer_Selected.getXuatXu());
+		Country country_selected = countryBLL.CountryByID(computer_Selected.getXuatXu());
 		input_xuatXu.setText(country_selected.getTenQuocGia());
 		input_CPU.setText(computer_Selected.getTenCpu());
 		input_RAM.setText(computer_Selected.getRam());

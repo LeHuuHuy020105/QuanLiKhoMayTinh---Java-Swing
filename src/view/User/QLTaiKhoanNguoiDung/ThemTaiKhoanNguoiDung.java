@@ -7,6 +7,8 @@ import DAO.CustomerDAO;
 import DAO.ProducersDAO;
 import DAO.UserDAO;
 import controller.CheckValidInput;
+import controller.CustomerBLL;
+import controller.UserBLL;
 import controller.ValueAddress;
 import model.Customer;
 import model.Producer;
@@ -30,7 +32,8 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
     private JPasswordField Re_passwordField;
     private QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm;
     private CheckValidInput checkValidInput;
-
+    private UserBLL userBLL;
+    private CustomerBLL customerBLL;
     /**
      * Launch the application.
      */
@@ -51,6 +54,8 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
     }
 
     public void init() {
+        this.userBLL = new UserBLL();
+        this.customerBLL = new CustomerBLL();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 388, 780);
         setLocationRelativeTo(null);
@@ -182,7 +187,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
         this.dispose();
     }
     private void Permission() {
-        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        String role = userBLL.getRoleByIDUser(currentUser.getIdUser());
         if (role.equals("Nhân viên bán hàng")) {
             PerrmissionStaff();
             cbx_LoaiTK.setEnabled(false);
@@ -230,7 +235,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             String username = input_HoTen.getText();
             ThemTaiKhoanOnline();
         } else {
-            String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+            String role = userBLL.getRoleByIDUser(currentUser.getIdUser());
             if (role.equals("Nhân viên bán hàng")) {
                 ThemTaiKhoanOffline();
             } else {
@@ -259,7 +264,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             return;
         }
         Customer customer = new Customer(taiKhoan, matKhau, "online", hoTen, email, soDienThoai);
-        CustomerDAO.getInstance().insert(customer);
+        customerBLL.insert(customer);
         qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
         this.dispose();
     }
@@ -276,7 +281,7 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
             return;
         }
         Customer customer = new Customer(soDienThoai, hoTen, "offline");
-        CustomerDAO.getInstance().insert(customer);
+        customerBLL.insert(customer);
         qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
         this.dispose();
     }

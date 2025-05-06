@@ -1,14 +1,12 @@
 package view.User.QuanLiChiNhanh;
 
-import DAO.BrandDAO;
+import DAO.BrachDAO;
 import DAO.ExportProductsDAO;
 import DAO.UserDAO;
 import com.toedter.calendar.JDateChooser;
-import controller.SearchExportProducts;
-import controller.updateDataToTable;
+import controller.*;
 import model.ExportProducts;
 import model.User;
-import view.User.PhieuXuat.ChiTietPhieuXuatForm;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -27,6 +25,9 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 	private JComboBox cbx_luaChon;
 	private JComboBox cbx_TrangThai;
 	private User currentUser;
+	private UserBLL userBLL;
+	private ExportProductsBLL exportProductsBLL;
+	private BranchBLL branchBLL;
 
 
 
@@ -35,6 +36,9 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 	 */
 	public PhieuNhapBranchForm(User currentUser) {
 		this.currentUser = currentUser;
+		this.userBLL = new UserBLL();
+		this.exportProductsBLL = new ExportProductsBLL();
+		this.branchBLL = new BranchBLL();
 		setLayout(null);
 		setSize(1257,911);
 
@@ -232,8 +236,8 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 	}
 	@Override
 	public void updateTableDataFormDAO() {
-		int idBranch = UserDAO.getInstance().getMaChiNhanhByIDUser(currentUser.getIdUser());
-		ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+		int idBranch = userBLL.getMaChiNhanhByIDUser(currentUser.getIdUser());
+		ArrayList<ExportProducts>exportProducts = exportProductsBLL.selectAll();
 		ArrayList<ExportProducts>exportProducts_filter = new ArrayList<>(
 				exportProducts.stream().filter(item ->item.getMaChiNhanh()==idBranch).collect(Collectors.toList())
 		);
@@ -247,8 +251,8 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 		int i = 0;
 		for(ExportProducts exportProducts : t){
 			i++;
-			String diaChi = BrandDAO.getInstance().BranchByID(exportProducts.getMaChiNhanh()).getDiaChi();
-			String tenNguoiDung = UserDAO.getInstance().getUsetById(exportProducts.getManguoidung()).getFullName();
+			String diaChi = branchBLL.BranchByID(exportProducts.getMaChiNhanh()).getDiaChi();
+			String tenNguoiDung = userBLL.getUsetById(exportProducts.getManguoidung()).getFullName();
 			model.addRow(new Object[]{
 					i,
 					exportProducts.getMaPhieuXuat(),
@@ -269,7 +273,7 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 		}
 		int maPhieuXuat = Integer.parseInt(model.getValueAt(i_row,1)+"");
 		System.out.println(maPhieuXuat);
-		ExportProducts exportProducts = ExportProductsDAO.getInstance().ExportProductsByID(maPhieuXuat);
+		ExportProducts exportProducts = exportProductsBLL.ExportProductsByID(maPhieuXuat);
 		return exportProducts;
 	}
 	public void ChiTietMouseClicked() {
@@ -281,7 +285,7 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 		if(exportProducts_Selected.getTrangThai()==1 || exportProducts_Selected.getTrangThai()==2){
 			int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá phiếu xuất này hay không ", "xoá phiếu xuất", JOptionPane.YES_NO_OPTION);
 			if(luaChon==JOptionPane.YES_OPTION){
-				ExportProductsDAO.getInstance().delete(exportProducts_Selected);
+				exportProductsBLL.delete(exportProducts_Selected);
 			}
 		}else {
 			JOptionPane.showMessageDialog(this,"Bạn không thể xoá phiếu nhập khi đã bàn giao cho đơn vị vận chuyển !");
@@ -299,7 +303,7 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 		ArrayList<ExportProducts> result = new ArrayList<>();
 		SearchExportProducts searchExportProducts = new SearchExportProducts();
 		if(content_Search.equals("")){
-			ArrayList<ExportProducts>exportProducts = ExportProductsDAO.getInstance().selectAll();
+			ArrayList<ExportProducts>exportProducts = exportProductsBLL.selectAll();
 			return exportProducts;
 		}
 		content_Search = content_Search.toLowerCase();

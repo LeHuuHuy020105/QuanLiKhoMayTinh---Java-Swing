@@ -3,6 +3,7 @@ package view.User.QLTaiKhoanNguoiDung;
 import DAO.CustomerDAO;
 import DAO.UserDAO;
 import controller.CheckValidInput;
+import controller.CustomerBLL;
 import model.Customer;
 import model.User;
 
@@ -27,6 +28,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
     private QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm;
     private Customer customer_Selected;
     private CheckValidInput checkValidInput;
+    private CustomerBLL customerBLL;
 
     /**
      * Launch the application.
@@ -283,7 +285,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         if(checkValidInput.checkValidPhone(phone,"offline",customer_Selected.getMaKhachHang(),true)==false){
             return;
         }
-        CustomerDAO.getInstance().update(customer_Selected);
+        customerBLL.update(customer_Selected);
         this.dispose();
         qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
     }
@@ -298,7 +300,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
         customer_Selected.setPassword(password);
         customer_Selected.setEmail(email);
         customer_Selected.setLoaiTaiKhoan(cbx_LoaiTaiKhoan);
-        CustomerDAO.getInstance().update(customer_Selected);
+        customerBLL.update(customer_Selected);
         this.dispose();
         qlTaiKhoanNguoiDungForm.updateTableDataFormDAO();
     }
@@ -382,7 +384,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
 //    }
     public void fillData(){
         customer_Selected = qlTaiKhoanNguoiDungForm.getCustomerSelected();
-        String loaiTaiKhoan = CustomerDAO.getInstance().GetTypeCustomer(customer_Selected.getMaKhachHang());
+        String loaiTaiKhoan = customerBLL.GetTypeCustomer(customer_Selected.getMaKhachHang());
         System.out.println(loaiTaiKhoan);
         cbx_LoaiTK.setSelectedItem(loaiTaiKhoan);
         input_HoTen.setText(customer_Selected.getFullName());

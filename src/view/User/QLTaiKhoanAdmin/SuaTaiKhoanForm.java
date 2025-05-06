@@ -1,9 +1,12 @@
 package view.User.QLTaiKhoanAdmin;
 
-import DAO.BrandDAO;
+import DAO.BrachDAO;
 import DAO.RoleDAO;
 import DAO.UserDAO;
+import controller.BranchBLL;
 import controller.CheckValidInput;
+import controller.RoleBLL;
+import controller.UserBLL;
 import model.Branch;
 import model.Role;
 import model.User;
@@ -36,6 +39,9 @@ public class SuaTaiKhoanForm extends JFrame {
 	private JTextField textField_HoVaTen;
 	private JTextField textField_Sdt;
 	private CheckValidInput checkValidInput;
+	private UserBLL userBLL;
+	private BranchBLL branchBLL;
+	private RoleBLL roleBLL;
 
 
 	/**
@@ -47,6 +53,9 @@ public class SuaTaiKhoanForm extends JFrame {
 	 */
 	public SuaTaiKhoanForm(QLTaiKhoanForm qlTaiKhoanForm) {
 		this.qlTaiKhoanForm = qlTaiKhoanForm;
+		this.userBLL = new UserBLL();
+		this.branchBLL = new BranchBLL();
+		this.roleBLL = new RoleBLL();
 		currentUser = qlTaiKhoanForm.getCurrentUser();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 388, 786);
@@ -122,7 +131,7 @@ public class SuaTaiKhoanForm extends JFrame {
 		btnNewButton_2_1_1.setBounds(199, 698, 139, 41);
 		contentPane.add(btnNewButton_2_1_1);
 
-		String [] list_VaiTro = RoleDAO.getInstance().selectAllNameRole().toArray(new String[0]);
+		String [] list_VaiTro = roleBLL.selectAllNameRole().toArray(new String[0]);
 		cbx_VaiTro = new JComboBox(list_VaiTro	);
 		cbx_VaiTro.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -210,7 +219,7 @@ public class SuaTaiKhoanForm extends JFrame {
 	public void fillData(){
 		user_Selected = this.qlTaiKhoanForm.getUserSelected();
 		System.out.println(user_Selected);
-		String role = UserDAO.getInstance().getRoleByIDUser(user_Selected.getIdUser());
+		String role = userBLL.getRoleByIDUser(user_Selected.getIdUser());
 		textField_Email.setText(user_Selected.getEmail());
 		textField_TaiKhoan.setText(user_Selected.getUserName());
 		textField_TaiKhoan.setEditable(false);
@@ -223,7 +232,7 @@ public class SuaTaiKhoanForm extends JFrame {
 	public void setChiNhanh(){
 		String role = cbx_VaiTro.getSelectedItem().toString();
 		if(role.equals("Quản lí chi nhánh") || role.equals("Nhân viên bán hàng")){
-			ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+			ArrayList<Branch> branches = branchBLL.selectAll();
 			cbx_DiaChi.setModel(new DefaultComboBoxModel(dataCbxDiaChi(branches)));
 		}
 		else {
@@ -266,9 +275,9 @@ public class SuaTaiKhoanForm extends JFrame {
 		user_Selected.setEmail(email);
 		user_Selected.setPhone(phone);
 		user_Selected.setStatus(status);
-		UserDAO.getInstance().update(user_Selected);
+		userBLL.update(user_Selected);
 		System.out.println("Role " + role);
-		RoleDAO.getInstance().updateRoleUserByIdUser(user_Selected.getIdUser(),role.getId());
+		roleBLL.updateRoleUserByIdUser(user_Selected.getIdUser(),role.getId());
 		this.dispose();
 		qlTaiKhoanForm.updateTableDataFormDAO();
 	}
@@ -276,6 +285,6 @@ public class SuaTaiKhoanForm extends JFrame {
 		System.out.println("description "+description);
 		String [] data = description.split(" - ");
 		System.out.println("diachi "+data[1]);
-		return BrandDAO.getInstance().BranchByDiaChi(data[1]);
+		return branchBLL.BranchByDiaChi(data[1]);
 	}
 }

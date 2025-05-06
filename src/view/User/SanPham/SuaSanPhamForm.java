@@ -10,7 +10,7 @@ import DAO.CountryDAO;
 import DAO.LaptopDAO;
 import DAO.PCDAO;
 import DAO.ProducersDAO;
-import controller.ImageHelper;
+import controller.*;
 import model.Computer;
 import model.Country;
 import model.Laptop;
@@ -47,6 +47,10 @@ public class SuaSanPhamForm extends JFrame {
 	private JTextField textField_giaBan;
 	private byte[] hinhAnh ;
 	private JPanel panel_Image;
+	private ProducerBLL producerBLL;
+	private CountryBLL countryBLL;
+	private PcBLL pcBLL;
+	private LaptopBLL laptopBLL;
 
 	/**
 	 * Launch the application.
@@ -57,6 +61,10 @@ public class SuaSanPhamForm extends JFrame {
 	 */
 	public SuaSanPhamForm(SanPhamForm sanPhamForm) {
 		this.sanPhamForm = sanPhamForm;
+		this.producerBLL = new ProducerBLL();
+		this.pcBLL = new PcBLL();
+		this.laptopBLL = new LaptopBLL();
+		this.countryBLL = new CountryBLL();
 		hinhAnh=sanPhamForm.getComputerSelected().getHinhAnh();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1175, 578);
@@ -255,7 +263,7 @@ public class SuaSanPhamForm extends JFrame {
 		lblNewLabel_1_2_2_2.setBounds(888, 174, 116, 28);
 		contentPane.add(lblNewLabel_1_2_2_2);
 
-		ArrayList<Producer>producers = ProducersDAO.getInstance().selectAll();
+		ArrayList<Producer>producers = producerBLL.selectAll();
 		comboBox_nhaCungCap = new JComboBox();
 		for(Producer producer : producers){
 			comboBox_nhaCungCap.addItem(producer.getMaNhaCungCap());
@@ -263,7 +271,7 @@ public class SuaSanPhamForm extends JFrame {
 		comboBox_nhaCungCap.setBounds(888, 210, 202, 28);
 		contentPane.add(comboBox_nhaCungCap);
 
-		ArrayList<Country>list_country = CountryDAO.getInstance().selectAll();
+		ArrayList<Country>list_country = countryBLL.selectAll();
 		cbx_xuatXu = new JComboBox();
 		cbx_xuatXu.setBounds(10, 355, 202, 25);
 		contentPane.add(cbx_xuatXu);
@@ -346,13 +354,13 @@ public class SuaSanPhamForm extends JFrame {
 	public void cbxLoaiSanPhamMouseClicked() {
 		if(comboBox_loaiSanPham.getSelectedItem().equals("Laptop")) {
 			resetCBXLoaiSanPham();
-			int soLuongLaptop = LaptopDAO.getInstance().selectAll().size();
+//			int soLuongLaptop = LaptopDAO.getInstance().selectAll().size();
 			input_congSuatNguon.setEditable(false);
 			input_mainBoard.setEditable(false);
 		}
 		else if (comboBox_loaiSanPham.getSelectedItem().equals("PC")) {
 			resetCBXLoaiSanPham();
-			int soLuongPC = PCDAO.getInstance().selectAll().size();
+//			int soLuongPC = PCDAO.getInstance().selectAll().size();
 			input_kichThuocMan.setEditable(false);
 			input_dungLuongPin.setEditable(false);
 		}
@@ -450,7 +458,7 @@ public class SuaSanPhamForm extends JFrame {
 			// Nếu hợp lệ, thêm Laptop
 			Laptop laptop_update = new Laptop(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, dungLuongPin, kichThuocMan, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
-				LaptopDAO.getInstance().update(laptop_update);
+				laptopBLL.update(laptop_update);
 				this.dispose();
 				JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm Laptop thành công!");
 			} catch (Exception e) {
@@ -480,7 +488,7 @@ public class SuaSanPhamForm extends JFrame {
 			// Nếu hợp lệ, thêm PC
 			PC pc_update = new PC(cardManHinh, gia, 0, RAM, ROM, 0, CPU, tenMay, xuatXu, congSuatNguon, mainBoard, maNhaCungCap, dungLuongLuuTru,giaBan,hinhAnh);
 			try {
-				PCDAO.getInstance().update(pc_update);
+				pcBLL.update(pc_update);
 				this.dispose();
 				JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm PC thành công!");
 			} catch (Exception e) {

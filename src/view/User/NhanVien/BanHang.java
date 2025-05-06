@@ -1,10 +1,7 @@
 package view.User.NhanVien;
 
 import DAO.*;
-import controller.Notification;
-import controller.SearchProduct;
-import controller.updateDataToTable;
-import controller.writePDF;
+import controller.*;
 import model.*;
 import view.Icon;
 import view.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
@@ -33,6 +30,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private JLabel label_TotalPrice;
     private Customer customer;
     private JTextField textField_InfoCustomer;
+    private ProductsBLL productsBLL;
 
     /**
      * Create the panel.
@@ -319,7 +317,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         updateTableData(computers);
     }
     public ArrayList<Computer> InventoryBranchData(){
-        Branch branch = BrandDAO.getInstance().BranchByID(currentUser.getMaChiNhanh());
+        Branch branch = BrachDAO.getInstance().BranchByID(currentUser.getMaChiNhanh());
         ArrayList<Inventory> inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
         ArrayList<Computer> result = new ArrayList<>();
         for(Inventory item : inventories){
@@ -393,7 +391,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         model.setRowCount(0);
         DecimalFormat df = new DecimalFormat("#,###");
         for(DetailBill detailBill : detailBills){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
+            Computer computer =productsBLL.searchByIdProduct(detailBill.getMaMay());
             String tenNCC = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
             model.addRow(new Object[]{
                     computer.getMaMay(),
@@ -413,7 +411,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
-        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
     public DetailBill EntryFormByProductID(ArrayList<DetailBill> detailBills, Computer computer){
@@ -464,7 +462,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     public double CountTotalPrice(){
         double totalPrice = 0;
         for(DetailBill detailBill : this.detailBills){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailBill.getMaMay());
             double donGia = computer.getGia();
             int soLuong = detailBill.getSoLuong();
             totalPrice+=donGia*soLuong;
@@ -497,7 +495,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         for(DetailBill detailBill : detailBills){
             detailBill.setMaPhieu(maphieu);
             DetailBillDAO.getInstance().insert(detailBill);
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailBill.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailBill.getMaMay());
             computer.setSoLuong(computer.getSoLuong() - detailBill.getSoLuong());
             ProductsDAO.getInstance().update(computer);
             updateTableDataFormDAO();

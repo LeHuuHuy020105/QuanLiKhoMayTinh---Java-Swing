@@ -6,9 +6,9 @@ import model.Branch;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class BrandDAO implements DAOInterface<Branch>{
-    public static BrandDAO getInstance(){
-        return new BrandDAO();
+public class BrachDAO implements DAOInterface<Branch>{
+    public static BrachDAO getInstance(){
+        return new BrachDAO();
     }
     @Override
     public int insert(Branch branch) {

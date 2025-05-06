@@ -51,6 +51,8 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     private JButton btnNhapExcel;
     private JButton btnSua;
     private JButton btnXoa;
+    private UserBLL userBLL;
+    private CustomerBLL customerBLL;
 
     /**
      * Create the panel.
@@ -59,7 +61,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         this.banHang = banHang;
         this.currentUser = banHang.getCurrentUser();
         this.jChooser = new JFileChooser();
-        role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        role = userBLL.getRoleByIDUser(currentUser.getIdUser());
         Component();
         Permission();
     }
@@ -67,17 +69,19 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     public QLTaiKhoanNguoiDungForm(User currentUser) {
         this.currentUser = currentUser;
         this.jChooser = new JFileChooser();
-        role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        role = userBLL.getRoleByIDUser(currentUser.getIdUser());
         Component();
         Permission();
     }
 
     public void Permission() {
-        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        int roleUser = userBLL.getIDRoleByIDUser(currentUser.getIdUser());
         PermissionsDAO.applyPermissions(roleUser, "Tài khoản khách hàng", btn_ThemNCC, btnXoa, btnSua, null, btnXuatExcel, btnNhapExcel);
     }
 
     public void Component() {
+        this.userBLL = new UserBLL();
+        this.customerBLL = new CustomerBLL();
         getContentPane().setLayout(null);
         setSize(1257, 764);
         setLocationRelativeTo(null);
@@ -320,9 +324,9 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     public void updateTableDataFormDAO() {
         ArrayList<Customer> customers = null;
         if (role.equals("Nhân viên bán hàng")) {
-            customers = CustomerDAO.getInstance().selectAllOffline();
+            customers = customerBLL.selectAllOffline();
         } else {
-            customers = CustomerDAO.getInstance().selectAll();
+            customers = customerBLL.selectAll();
         }
 
         updateTableData(customers);
@@ -508,7 +512,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     public void XoaMouseClicked() {
         int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa tài khoản này hay không?", "Xóa tài khoản người dùng", JOptionPane.YES_NO_OPTION);
         if (luaChon == JOptionPane.YES_OPTION) {
-            int ketQua = CustomerDAO.getInstance().delete(getCustomerSelected());
+            int ketQua = customerBLL.delete(getCustomerSelected());
             if (ketQua == -1) {
                 JOptionPane.showMessageDialog(this, "Không thể xóa tài khoản vì khách hàng đã có hóa đơn liên quan!");
             } else if (ketQua > 0) {
@@ -536,7 +540,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
                 return null;
             }
             int maKH = Integer.parseInt(model.getValueAt(i_row, 1) + "");
-            customer = CustomerDAO.getInstance().findByID(maKH);
+            customer = customerBLL.findByID(maKH);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,9 +1,7 @@
 package view.User.QuanLiChiNhanh;
 
 import DAO.*;
-import controller.Notification;
-import controller.SearchProduct;
-import controller.updateDataToTable;
+import controller.*;
 import model.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -37,12 +35,22 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
     private JComboBox cbx_ChiNhanh;
     private User currentUser;
     private JFileChooser jFileChooser;
+    private UserBLL userBLL;
+    private ExportProductsBLL exportProductsBLL;
+    private DetailExportProductsBLL detailExportProductsBLL;
+    private BranchBLL branchBLL;
+    private ProductsBLL productsBLL;
     /**
      * Create the panel.
      */
     public NhapHangBranchForm(User currentUser) {
         this.currentUser = currentUser;
         this.jFileChooser = new JFileChooser();
+        this.userBLL = new UserBLL();
+        this.exportProductsBLL = new ExportProductsBLL();
+        this.detailExportProductsBLL = new DetailExportProductsBLL();
+        this.branchBLL = new BranchBLL();
+        this.productsBLL = new ProductsBLL();
         detailExportProducts = new ArrayList<>();
         setLayout(null);
         setSize(1257, 736);
@@ -211,15 +219,15 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         FillData();
     }
     public void FillData(){
-        int idBranch = UserDAO.getInstance().getMaChiNhanhByIDUser(currentUser.getIdUser());
-        Branch branch = BrandDAO.getInstance().BranchByID(idBranch);
+        int idBranch = userBLL.getMaChiNhanhByIDUser(currentUser.getIdUser());
+        Branch branch = branchBLL.BranchByID(idBranch);
         cbx_ChiNhanh.addItem(branch.getDiaChi());
         input_NguoiTaoPhieu.setText(currentUser.getFullName());
         input_NguoiTaoPhieu.setEditable(false);
     }
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers =productsBLL.selectAll();
         updateTableData(computers);
     }
 
@@ -250,7 +258,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 1) + "");
-        Computer computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        Computer computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
 
@@ -291,7 +299,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         model.setRowCount(0);
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailExportProducts1.getMaMay());
             String tenMay = computer.getTenMay();
             double donGia = computer.getGia();
             model.addRow(new Object[]{
@@ -309,10 +317,10 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
             int check = JOptionPane.showConfirmDialog( this, "Bạn có chắc chắn muốn nhập hàng ?", "Xác nhận nhập hàng", JOptionPane.YES_NO_OPTION);
             if(check==JOptionPane.YES_OPTION) {
                 String diaChi = cbx_ChiNhanh.getSelectedItem()+"";
-                Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);
+                Branch branch = branchBLL.BranchByDiaChi(diaChi);
                 int maChiNhanh = branch.getMaChiNhanh();
                 ExportProducts exportProducts = new ExportProducts(0,null,null,1,maChiNhanh,currentUser.getIdUser(),null);
-                int maPhieuXuat = ExportProductsDAO.getInstance().insertExportProduct(exportProducts);
+                int maPhieuXuat = exportProductsBLL.insertExportProduct(exportProducts);
                 updateDatabaseExportProducts(maPhieuXuat);
             }
         }
@@ -322,7 +330,7 @@ public class NhapHangBranchForm extends JPanel implements updateDataToTable<Comp
     public void updateDatabaseExportProducts(int maphieuxuat){
         for(DetailExportProducts detailExportProducts1 : detailExportProducts){
             detailExportProducts1.setMaPhieuXuat(maphieuxuat);
-            DetailExportProductsDAO.getInstance().insert(detailExportProducts1);
+            detailExportProductsBLL.insert(detailExportProducts1);
         }
     }
     public void resetXuatHang(){

@@ -1,10 +1,7 @@
 package view.User.TonKho;
 
 import DAO.*;
-import controller.Notification;
-import controller.SearchProduct;
-import controller.btnEffect;
-import controller.updateDataToTable;
+import controller.*;
 import model.*;
 import view.Icon;
 import view.User.SanPham.ChiTietSanPham;
@@ -39,12 +36,20 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
     private JComboBox cbx_TrangThai;
     private ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
     private User currentUser;
+    private UserBLL userBLL;
+    private BranchBLL branchBLL;
+    private ProductsBLL productsBLL;
+    private InventoryBLL inventoryBLL;
 
     /**
      * Create the panel.
      */
     public TonKhoForm(User currentUser) {
         this.currentUser = currentUser;
+        this.userBLL = new UserBLL();
+        this.branchBLL = new BranchBLL();
+        this.productsBLL = new ProductsBLL();
+        this.inventoryBLL = new InventoryBLL();
         setLayout(null);
         setSize(1257, 911);
         Box verticalBox = Box.createVerticalBox();
@@ -247,11 +252,11 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         Permission();
     }
     public void Permission(){
-        int roleUser = UserDAO.getInstance().getIDRoleByIDUser(currentUser.getIdUser());
+        int roleUser = userBLL.getIDRoleByIDUser(currentUser.getIdUser());
         PermissionsDAO.applyPermissions(roleUser,"Sản phẩm",btnNewButton,btnXoa,btnSua,btnXemChiTiet,btnXuatExcel,null);
     }
     public void fillData() {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = branchBLL.selectAll();
         cbx_ChiNhanh.addItem("Tất cả");
         for (Branch branch : branches) {
             String chiNhanh = branch.getTenChiNhanh() + "-" + branch.getDiaChi();
@@ -265,10 +270,10 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         for (String luaChon : cbxLuaChonValues) {
             cbx_TimKiem.addItem(luaChon);
         }
-        String role = UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser());
+        String role = userBLL.getRoleByIDUser(currentUser.getIdUser());
         if (role.equals("Quản lí chi nhánh")) {
-            int idBranch = UserDAO.getInstance().getMaChiNhanhByIDUser(currentUser.getIdUser());
-            Branch branch = BrandDAO.getInstance().BranchByID(idBranch);
+            int idBranch = userBLL.getMaChiNhanhByIDUser(currentUser.getIdUser());
+            Branch branch = branchBLL.BranchByID(idBranch);
             String diaChi = branch.getTenChiNhanh() + "-" + branch.getDiaChi();
             for (int i = 0; i < cbx_ChiNhanh.getItemCount(); i++) {
                 String item = cbx_ChiNhanh.getItemAt(i) + "";
@@ -283,7 +288,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers = productsBLL.selectAll();
         updateTableData(computers);
     }
 
@@ -319,7 +324,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         String keyword = input_TimKiem.getText().trim().toLowerCase();
 
         // Lấy danh sách tất cả sản phẩm
-        ArrayList<Computer> allComputers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> allComputers = productsBLL.selectAll();
 
         ArrayList<Computer> filteredComputers = new ArrayList<>();
 
@@ -344,8 +349,8 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         String[] data = cbx_ChiNhanhValue.split("-");
         System.out.println(data[0]);
         String diaChi = data[1];
-        Branch branch = BrandDAO.getInstance().BranchByDiaChi(diaChi);
-        ArrayList<Inventory> inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        Branch branch = branchBLL.BranchByDiaChi(diaChi);
+        ArrayList<Inventory> inventories = inventoryBLL.InventoryByBranch(branch);
         for (Inventory inventory : inventories) {
             if (inventory.getMaMay() == computer.getMaMay()) {
                 computer.setSoLuong(inventory.getSoLuong());
@@ -387,7 +392,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
             int maMay = Integer.parseInt(model.getValueAt(i_row, 0)+"");
 
-            computer_Selected = ProductsDAO.getInstance().searchByIDProduct(maMay);
+            computer_Selected = productsBLL.searchByIdProduct(maMay);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
             e.printStackTrace();

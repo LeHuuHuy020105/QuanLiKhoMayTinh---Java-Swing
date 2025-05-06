@@ -1,11 +1,9 @@
 package view.User.ChiNhanh;
 
-import DAO.BrandDAO;
-import DAO.ProducersDAO;
 import controller.CheckValidInput;
+import controller.ChiNhanhBLL;
 import controller.ValueAddress;
 import model.Branch;
-import model.Producer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -29,6 +27,7 @@ public class SuaChiNhanh extends JFrame {
 	private JTextField textField_tenChiNhanh;
 	private JTextArea textArea;
 	private CheckValidInput checkValidInput;
+	private ChiNhanhBLL chiNhanhBLL;
 
 	/**
 	 * Launch the application.
@@ -201,7 +200,7 @@ public class SuaChiNhanh extends JFrame {
 		String diaChi = ValueAddress.getValueAddressFrame(this,cbx_ThanhPho,cbx_Quan,cbx_Phuong,input_SoNha);
 		Branch branch = new Branch(diaChi,maCN,SDT,tenChiNhanh,tenQuan,thanhPho,moTa);
 		try {
-			BrandDAO.getInstance().update(branch);
+			chiNhanhBLL.update(branch);
 			this.dispose();
 			JOptionPane.showMessageDialog(this,"Cập nhật chi nhánh thành công !");
 			chiNhanhForm.updateTableDataFormDAO();

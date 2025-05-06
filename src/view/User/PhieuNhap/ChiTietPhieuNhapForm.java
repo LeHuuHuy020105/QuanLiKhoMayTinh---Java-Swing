@@ -3,6 +3,9 @@ package view.User.PhieuNhap;
 import DAO.DetailImportProductsDAO;
 import DAO.ProductsDAO;
 import DAO.UserDAO;
+import controller.DetailImportProductsBLL;
+import controller.ProductsBLL;
+import controller.UserBLL;
 import controller.writePDF;
 import model.Computer;
 import model.DetailImportProducts;
@@ -44,7 +47,9 @@ public class ChiTietPhieuNhapForm extends JFrame {
 	private JLabel label_vaiTroNguoiTaoPhieu;
 	private JLabel label_thoiDiemTaoPhieu;
 	private JLabel label_TongTien;
-
+	private DetailImportProductsBLL detailImportProductsBLL;
+	private ProductsBLL productsBLL;
+	private UserBLL userBLL;
 	/**
 	 * Launch the application.
 	 */
@@ -54,6 +59,9 @@ public class ChiTietPhieuNhapForm extends JFrame {
 	 */
 	public ChiTietPhieuNhapForm(PhieuNhapForm phieuNhapForm) {
 		this.phieuNhapForm = phieuNhapForm;
+		this.detailImportProductsBLL = new DetailImportProductsBLL();
+		this.productsBLL = new ProductsBLL();
+		this.userBLL = new UserBLL();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 903, 580);
 		setLocationRelativeTo(null);
@@ -160,16 +168,16 @@ public class ChiTietPhieuNhapForm extends JFrame {
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");
 		ImportProducts importProducts_selected = phieuNhapForm.getImportProductsSelected();
-		User user = UserDAO.getInstance().getUsetById(importProducts_selected.getManguoidung());
+		User user = userBLL.getUsetById(importProducts_selected.getManguoidung());
 		String tenNguoiTaoPhieu =user.getFullName();
-		String role = UserDAO.getInstance().getRoleByIDUser(user.getIdUser());
+		String role = userBLL.getRoleByIDUser(user.getIdUser());
 		label_maPhieuNhap.setText(importProducts_selected.getMaphieunhap()+"");
 		label_tenNguoiTaoPhieu.setText(tenNguoiTaoPhieu);
 		label_vaiTroNguoiTaoPhieu.setText(role);
 		label_thoiDiemTaoPhieu.setText(importProducts_selected.getTimestamp()+"");
 		String tongTien = df.format(importProducts_selected.getTongTien())+" VND";
 		label_TongTien.setText(tongTien);
-		ArrayList<DetailImportProducts>detailImportProducts = DetailImportProductsDAO.getInstance().selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());
+		ArrayList<DetailImportProducts>detailImportProducts = detailImportProductsBLL.selectAllByMaPhieuNhap(importProducts_selected.getMaphieunhap());
 		updateDataToTable(detailImportProducts);
 	}
 	public void updateDataToTable(ArrayList<DetailImportProducts>detailImportProducts){
@@ -179,7 +187,7 @@ public class ChiTietPhieuNhapForm extends JFrame {
 		int i = 0;
 		for(DetailImportProducts detailImportProducts1 : detailImportProducts){
 			i++;
-			Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+			Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
 			double thanhTien = detailImportProducts1.getSoluong()*computer.getGia();
 			System.out.println(df.format(thanhTien));
 			model.addRow(new Object[]{

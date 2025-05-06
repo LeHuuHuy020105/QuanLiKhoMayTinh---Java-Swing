@@ -1,6 +1,6 @@
 package view.User.Excel;
 
-import DAO.BrandDAO;
+import DAO.BrachDAO;
 import DAO.ProducersDAO;
 import DAO.ProductsDAO;
 import controller.Notification;
@@ -8,7 +8,6 @@ import model.Branch;
 import model.Computer;
 import model.Laptop;
 import model.Producer;
-import view.User.SanPham.SanPhamForm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -106,7 +105,7 @@ public class ConfirmDataExcel extends JFrame {
         }else {
             if(obj instanceof Branch){
                 Branch branch = (Branch)obj;
-                BrandDAO.getInstance().insert(branch);
+                BrachDAO.getInstance().insert(branch);
             }
             else if (obj instanceof Producer){
                 Producer producer = (Producer) obj;

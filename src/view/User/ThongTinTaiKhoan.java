@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
 import DAO.UserDAO;
 import controller.CheckValidInput;
+import controller.UserBLL;
 import model.User;
 
 public class ThongTinTaiKhoan extends JFrame {
@@ -17,9 +18,11 @@ public class ThongTinTaiKhoan extends JFrame {
     private User currentUser;
     private boolean isEdit = false;
     private CheckValidInput checkValidInput;
+    private UserBLL userBLL;
 
     public ThongTinTaiKhoan(User currentUser) {
         this.currentUser = currentUser;
+        this.userBLL = new UserBLL();
         setTitle("Thông Tin Người Dùng");
         setSize(856, 392);
         setLocationRelativeTo(null);
@@ -141,7 +144,7 @@ public class ThongTinTaiKhoan extends JFrame {
                     currentUser.setEmail(email);
                     currentUser.setPhone(phone);
 
-                    int ketQua = UserDAO.getInstance().update(currentUser);
+                    int ketQua = userBLL.update(currentUser);
                     if (ketQua > 0) {
                         JOptionPane.showMessageDialog(this, "Cập nhật thông tin cá nhân thành công!");
                         isEdit = false;

@@ -1,6 +1,5 @@
 package view.User.ChiNhanh;
 
-import DAO.BrandDAO;
 import controller.*;
 import model.Branch;
 import org.apache.poi.ss.usermodel.*;
@@ -35,6 +34,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
     private JFileChooser jFileChooser;
     private String[] columnNames;
     private JComboBox cbx_Search;
+    private ChiNhanhBLL chiNhanhBLL;
 
     /**
      * Create the panel.
@@ -255,7 +255,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Branch> branches = BrandDAO.getInstance().selectAll();
+        ArrayList<Branch> branches = chiNhanhBLL.selectAll();
         updateTableData(branches);
     }
 
@@ -427,7 +427,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
             int maCN = Integer.parseInt(model.getValueAt(i_row, 1) + "");
 
             // Tìm kiếm máy trong cơ sở dữ liệu
-            branch_Selected = BrandDAO.getInstance().BranchByID(maCN);
+            branch_Selected = chiNhanhBLL.selectByID(maCN);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
             e.printStackTrace();
@@ -437,7 +437,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            int ketQua = BrandDAO.getInstance().delete(getChiNhanhSelected());
+            int ketQua = chiNhanhBLL.delete(getChiNhanhSelected());
             if (ketQua == -1) {
                 JOptionPane.showMessageDialog(this, "Không thể xóa chi nhánh này vì đã có tham chiếu liên quan!");
             } else if (ketQua > 0) {

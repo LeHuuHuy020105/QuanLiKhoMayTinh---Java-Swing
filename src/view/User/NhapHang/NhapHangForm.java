@@ -4,10 +4,7 @@ import DAO.DetailImportProductsDAO;
 import DAO.ImportProductsDAO;
 import DAO.ProducersDAO;
 import DAO.ProductsDAO;
-import controller.Notification;
-import controller.SearchProduct;
-import controller.updateDataToTable;
-import controller.writePDF;
+import controller.*;
 import model.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -43,6 +40,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     private ArrayList<DetailImportProducts> detailImportProducts;
     private JLabel label_TotalPrice;
     private JFileChooser jFileChooser;
+    private ProductsBLL productsBLL;
+    private ImportProductsBLL importProductsBLL;
+    private ProducerBLL producerBLL;
+    private DetailImportProductsBLL detailImportProductsBLL;
 
     /**
      * Create the panel.
@@ -50,6 +51,10 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     public NhapHangForm(User user) {
         this.detailImportProducts = new ArrayList<>();
         jFileChooser = new JFileChooser();
+        this.productsBLL = new ProductsBLL();
+        this.producerBLL = new ProducerBLL();
+        this.detailImportProductsBLL = new DetailImportProductsBLL();
+        this.importProductsBLL = new ImportProductsBLL();
         this.currentUser = user;
         setLayout(null);
         setSize(1257, 735);
@@ -261,7 +266,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 int maMay = (int) row.getCell(0).getNumericCellValue();
                 int soLuong =  (int) row.getCell(1).getNumericCellValue();
                 DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,soLuong);
-                Computer computer_Search = ProductsDAO.getInstance().searchByIDProduct(maMay);
+                Computer computer_Search = productsBLL.searchByIdProduct(maMay);
                 if(computer_Search == null){
                     hasError = true;
                 }else {
@@ -325,7 +330,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        ArrayList<Computer> computers = productsBLL.selectAll();
         updateTableData(computers);
     }
 
@@ -335,7 +340,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         model.setRowCount(0);
         for (Computer computer : computers) {
-            String tenNCC = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
+            String tenNCC =producerBLL.producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
             model.addRow(
                     new Object[]{
                             computer.getMaMay(),
@@ -356,7 +361,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
-        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
     public void ThemMouseClicked() {
@@ -394,8 +399,8 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         model.setRowCount(0);
         DecimalFormat df = new DecimalFormat("#,###");
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
-            String tenNCC = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
+            Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
+            String tenNCC = producerBLL.producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
             model.addRow(new Object[]{
                     computer.getMaMay(),
                     computer.getTenMay(),
@@ -414,7 +419,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
-        computer = ProductsDAO.getInstance().searchByIDProduct(maMay);
+        computer = productsBLL.searchByIdProduct(maMay);
         return computer;
     }
     public DetailImportProducts EntryFormByProductID(ArrayList<DetailImportProducts> detailImportProducts, Computer computer){
@@ -462,7 +467,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     public double CountTotalPrice(){
         double totalPrice = 0;
         for(DetailImportProducts detailImportProducts1 : this.detailImportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
             double donGia = computer.getGia();
             int soLuong = detailImportProducts1.getSoluong();
             totalPrice+=donGia*soLuong;
@@ -483,7 +488,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
                 double TongTien =CountTotalPrice();
                 int maNguoiDung = currentUser.getIdUser();
                 ImportProducts importProducts = new ImportProducts(0,null,TongTien,maNguoiDung,1,null,null);
-                int maphieunhap = ImportProductsDAO.getInstance().insertImportProduct(importProducts);
+                int maphieunhap = importProductsBLL.insertImportProduct(importProducts);
                 updateDatabaseImportProducts(maphieunhap);
                 int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
                 if(check_pdf==JOptionPane.YES_OPTION){
@@ -501,7 +506,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
     public void updateDatabaseImportProducts(int maphieunhap){
         for(DetailImportProducts detailImportProducts1 : detailImportProducts){
             detailImportProducts1.setMaphieunhap(maphieunhap);
-            DetailImportProductsDAO.getInstance().insert(detailImportProducts1);
+            detailImportProductsBLL.insert(detailImportProducts1);
             updateTableDataFormDAO();
         }
     }
@@ -509,79 +514,6 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         detailImportProducts.clear();
         updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
         label_TotalPrice.setText("");
-    }
-    public void exportPDF(ArrayList<DetailImportProducts>detailImportProducts){
-//        try {
-//            com.itextpdf.text.Document document = new Document();
-//            PdfWriter.getInstance(document, new FileOutputStream("PhieuNhap.pdf"));
-//            document.open();
-//
-//            // Font setting
-//            BaseFont baseFont = BaseFont.createFont("times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//            com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 14, Font.BOLD);
-//            com.itextpdf.text.Font textFont = new com.itextpdf.text.Font(baseFont, 12);
-//
-//            // Title
-//            Paragraph title = new Paragraph("THÔNG TIN PHIẾU NHẬP", titleFont);
-//            title.setAlignment(Element.ALIGN_CENTER);
-//            document.add(title);
-//
-//            document.add(new Paragraph("\n"));
-//
-//
-//            int maPhieu = detailImportProducts.get(0).getMaphieunhap();
-//            ImportProducts importProducts = ImportProductsDAO.getInstance().getImportProductsByMaPhieuNhap(maPhieu);
-//            Timestamp thoiGian =importProducts .getTimestamp();
-//            String nguoiTao = UserDAO.getInstance().getUsetById(importProducts.getManguoidung()).getFullName();
-//
-//            // Information
-//            document.add(new Paragraph("Mã phiếu: " + maPhieu, textFont));
-//            document.add(new Paragraph("Thời gian tạo: " + thoiGian, textFont));
-//            document.add(new Paragraph("Người tạo: " + nguoiTao, textFont));
-//
-//            document.add(new Paragraph("\n"));
-//
-//            // Table
-//            PdfPTable table = new PdfPTable(5);
-//            table.setWidthPercentage(100);
-//            table.setWidths(new float[]{2, 5, 3, 2, 3});
-//
-//            String[] headers = {"Mã máy", "Tên máy", "Đơn giá", "SL", "Tổng tiền"};
-//            for (String header : headers) {
-//                PdfPCell cell = new PdfPCell(new Phrase(header, textFont));
-//                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-//                table.addCell(cell);
-//            }
-//            // Duyệt qua mảng detailImportProducts để tạo dữ liệu cho bảng
-//            DecimalFormat df = new DecimalFormat("#,###");
-//            for (DetailImportProducts detail : detailImportProducts) {
-//                Computer computer = ProductsDAO.getInstance().searchByIDProduct(detail.getMaMay());
-//                String tenMay = computer.getTenMay();
-//                String donGia = df.format(computer.getGia()) + " VND";
-//                int soLuong = detail.getSoluong();
-//                double tongTien = importProducts.getTongTien();
-//                String tongTienFormatted = df.format(tongTien) + " VND";
-//
-//                // Thêm dữ liệu vào bảng
-//                table.addCell(new PdfPCell(new Phrase(String.valueOf(detail.getMaMay()), textFont)));
-//                table.addCell(new PdfPCell(new Phrase(tenMay, textFont)));
-//                table.addCell(new PdfPCell(new Phrase(donGia, textFont)));
-//                table.addCell(new PdfPCell(new Phrase(String.valueOf(soLuong), textFont)));
-//                table.addCell(new PdfPCell(new Phrase(tongTienFormatted, textFont)));
-//            }
-//            document.add(table);
-//
-//            // Total amount
-//            document.add(new Paragraph("\nTổng thanh toán: "+importProducts.getTongTien() , textFont));
-//            document.close();
-//
-//            JOptionPane.showMessageDialog(null, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//        }
-        System.out.println("abc");
     }
 }
 

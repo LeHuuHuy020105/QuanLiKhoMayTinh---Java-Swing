@@ -37,6 +37,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     private JTable table_NCC;
     private JFileChooser jChooser = new JFileChooser();
     private JComboBox cbx_Search;
+    private ProducerBLL producerBLL;
 
     /**
      * Create the panel.
@@ -256,7 +257,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
 
     @Override
     public void updateTableDataFormDAO() {
-        ArrayList<Producer> producers = ProducersDAO.getInstance().selectAll();
+        ArrayList<Producer> producers = producerBLL.selectAll();
         updateTableData(producers);
     }
 
@@ -436,7 +437,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
     public void XoaMouseClicked(){
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá nhà cung cấp này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            int ketQua = ProducersDAO.getInstance().delete(getProducerSelected());
+            int ketQua = producerBLL.delete(getProducerSelected());
             if (ketQua == -1) {
                 JOptionPane.showMessageDialog(this, "Không thể xóa nhà cung cấp này vì đã có đơn nhập liên quan!");
             } else if (ketQua > 0) {
@@ -464,7 +465,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
                 return null;
             }
             String maNCC = model.getValueAt(i_row,1)+"";
-            producer = ProducersDAO.getInstance().producerByID(maNCC);
+            producer = producerBLL.producerByID(maNCC);
         } catch (Exception e) {
             e.printStackTrace();
         }
