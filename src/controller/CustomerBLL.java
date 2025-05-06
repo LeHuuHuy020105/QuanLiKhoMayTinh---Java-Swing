@@ -32,4 +32,7 @@ public class CustomerBLL {
     public int insert(Customer customer){
         return this.customerDAO.insert(customer);
     }
+    public Customer findByPhone(String phone){
+        return this.customerDAO.findByPhone(phone);
+    }
 }

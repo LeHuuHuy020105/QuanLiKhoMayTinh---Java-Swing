@@ -58,6 +58,8 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
      * Create the panel.
      */
     public QLTaiKhoanNguoiDungForm(BanHang banHang) {
+        this.userBLL = new UserBLL();
+        this.customerBLL = new CustomerBLL();
         this.banHang = banHang;
         this.currentUser = banHang.getCurrentUser();
         this.jChooser = new JFileChooser();
@@ -67,6 +69,8 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     }
 
     public QLTaiKhoanNguoiDungForm(User currentUser) {
+        this.userBLL = new UserBLL();
+        this.customerBLL = new CustomerBLL();
         this.currentUser = currentUser;
         this.jChooser = new JFileChooser();
         role = userBLL.getRoleByIDUser(currentUser.getIdUser());
@@ -80,8 +84,6 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
     }
 
     public void Component() {
-        this.userBLL = new UserBLL();
-        this.customerBLL = new CustomerBLL();
         getContentPane().setLayout(null);
         setSize(1257, 764);
         setLocationRelativeTo(null);
@@ -267,7 +269,7 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         btn_LamMoi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                LamMoiMouseClicked();
             }
         });
 
@@ -309,11 +311,17 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         updateTableDataFormDAO();
         setVisible(true);
     }
-
+    public void LamMoiMouseClicked(){
+        cbx_Search.setSelectedItem("Tất cả");
+        input_Search.setText("");
+        jTextFieldSearchKeyReleased();
+    }
     public void XacNhanKHMouseClicked() {
         Customer customer = getCustomerSelected();
-        banHang.fillInfoCustomer(customer);
-        this.dispose();
+        if (customer!=null){
+            banHang.fillInfoCustomer(customer);
+            this.dispose();
+        }
     }
 
     public void ThemNhaCungCapMouseClicked() {
@@ -535,14 +543,14 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
         try {
             DefaultTableModel model = (DefaultTableModel) table_NCC.getModel();
             int i_row = table_NCC.getSelectedRow();
-            if (i_row == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 nhà cung cấp !");
-                return null;
-            }
+//            if (i_row == -1) {
+//
+//                return null;
+//            }
             int maKH = Integer.parseInt(model.getValueAt(i_row, 1) + "");
             customer = customerBLL.findByID(maKH);
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 nhà khách hàng !");
         }
         return customer;
     }

@@ -92,6 +92,12 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         panel_5_1_1.add(input_Search);
 
         JButton btnNewButton_1 = new JButton("Làm mới");
+        btnNewButton_1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                LamMoiMouseClicked();
+            }
+        });
         btnNewButton_1.setIcon(new ImageIcon(Icon.refesh));
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(476, 9, 139, 30);
@@ -235,6 +241,11 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         add(lblNewLabel_1_1);
         updateTableDataFormDAO();
         loadNhaphangForm();
+    }
+    public void LamMoiMouseClicked(){
+        cbx_luaChon.setSelectedItem("Tất cả");
+        input_Search.setText("");
+        jTextFieldSearchKeyReleased();
     }
     public void loadNhaphangForm(){
         input_NguoiTaoPhieu.setText(currentUser.getFullName());

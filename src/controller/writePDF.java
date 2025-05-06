@@ -293,7 +293,7 @@ public class writePDF {
             Paragraph para3 = new Paragraph(new Phrase("Nhân viên: " + nhanVien.getFullName(), fontData));
             Paragraph para4 = new Paragraph();
             if (khachHang != null) {
-                para4.add(new Phrase("Khách hàng: " + khachHang.getFullName() + " - " + khachHang.getSoDienThoai(), fontData));
+                para4.add(new Phrase("Khách hàng: " + khachHang.getFullName(), fontData));
             } else {
                 para4.add(new Phrase("Khách hàng: Không xác định", fontData));
             }
@@ -344,7 +344,7 @@ public class writePDF {
             document.add(Chunk.NEWLINE);
 
             // Tổng thanh toán
-            Paragraph paraTongThanhToan = new Paragraph(new Phrase("Tổng thanh toán: " + formatter.format(bill.getThanhTien()) + "đ", fontData));
+            Paragraph paraTongThanhToan = new Paragraph(new Phrase("Tổng thanh toán: " + formatter.format(bill.getTongTien()) + "đ", fontData));
             paraTongThanhToan.setIndentationLeft(300);
             document.add(paraTongThanhToan);
 

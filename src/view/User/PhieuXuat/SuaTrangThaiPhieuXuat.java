@@ -33,6 +33,7 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
      * Create the frame.
      */
     public SuaTrangThaiPhieuXuat(PhieuXuatForm phieuXuatForm) {
+        this.inventoryBLL =new InventoryBLL();
         this.phieuXuatForm = phieuXuatForm;
         this.statusDeliveryBLL = new StatusDeliveryBLL();
         this.branchBLL = new BranchBLL();
@@ -129,6 +130,8 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
                     inventoryBLL.updateSoLuong(inventory_Valid);
                 } else {
                     Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(), item.getMaMay(), item.getSoLuong());
+                    System.out.println("----------");
+                    System.out.println(inventory);
                     inventoryBLL.insert(inventory);
                 }
             }

@@ -14,4 +14,7 @@ public class DetailBillBLL {
     public ArrayList<DetailBill>selectAllByMaPhieu(int maHoaDon){
         return this.detailBillDAO.selectAllByMaPhieu(maHoaDon);
     }
+    public int insert(DetailBill detailBill){
+        return this.detailBillDAO.insert(detailBill);
+    }
 }

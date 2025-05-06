@@ -40,6 +40,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
      * Create the panel.
      */
     public ChiNhanhForm() {
+        this.chiNhanhBLL = new ChiNhanhBLL();
         this.jFileChooser = new JFileChooser();
         setLayout(null);
         setSize(1257, 764);
@@ -219,7 +220,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
         btn_LamMoi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                LamMoiMouseClicked();
             }
         });
 
@@ -243,7 +244,11 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
         add(scrollPane);
         updateTableDataFormDAO();
     }
-
+    public void LamMoiMouseClicked(){
+        cbx_Search.setSelectedItem("Tất cả");
+        input_Search.setText("");
+        jTextFieldSearchKeyReleased();
+    }
     public void ThemNhaCungCapMouseClicked() {
         ThemChiNhanh themSanPham = new ThemChiNhanh(this);
         themSanPham.setVisible(true);

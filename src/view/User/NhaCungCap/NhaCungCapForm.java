@@ -43,6 +43,7 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
      * Create the panel.
      */
     public NhaCungCapForm() {
+        this.producerBLL = new ProducerBLL();
         setLayout(null);
         setSize(1257, 764);
         Box verticalBox = Box.createVerticalBox();

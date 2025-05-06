@@ -1,9 +1,12 @@
 package controller;
 
 import DAO.CountryDAO;
+import DAO.InventoryDAO;
 import DAO.ProducersDAO;
 import DAO.ProductsDAO;
+import model.Branch;
 import model.Computer;
+import model.Inventory;
 
 import java.util.ArrayList;
 
@@ -29,11 +32,57 @@ public class SearchProduct {
         return  ketQua;
     }
 
+    public ArrayList<Computer> searchChiNhanhTatCa(String content_Search , Branch branch) {
+        ArrayList<Computer>computers = new ArrayList<>();
+        ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        for(Inventory inventory : inventories){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computers.add(computer);
+        }
+        if(content_Search.equals("")){
+            return computers;
+        }
+        ArrayList<Computer> ketQua = new ArrayList<>();
+        content_Search = content_Search.toLowerCase();
+        for (Computer computer : computers) {
+            if (computer.getRam().toLowerCase().contains(content_Search)
+                    || computer.getTenMay().toLowerCase().contains(content_Search)
+                    || computer.getCardManHinh().toLowerCase().contains(content_Search)
+                    || computer.getMaNhaCungCap().toLowerCase().contains(content_Search)
+                    || computer.getRom().toLowerCase().contains(content_Search)
+                    || computer.getTenCpu().toLowerCase().contains(content_Search)
+                    || computer.getXuatXu().toLowerCase().contains(content_Search)) {
+                ketQua.add(computer);
+            }
+        }
+        return  ketQua;
+    }
+
 
 
     public ArrayList<Computer> searchTenMay(String content_Search) {
         System.out.println("tim kiem ten may");
         ArrayList<Computer> computers = ProductsDAO.getInstance().selectAll();
+        if(content_Search.equals("")){
+            return computers;
+        }
+        ArrayList<Computer> ketQua = new ArrayList<>();
+        content_Search = content_Search.toLowerCase();
+        for (Computer computer : computers) {
+            if (computer.getTenMay().toLowerCase().contains(content_Search)) {
+                ketQua.add(computer);
+            }
+        }
+        return ketQua;
+    }
+
+    public ArrayList<Computer> searchChiNhanhTenMay(String content_Search,Branch branch) {
+        ArrayList<Computer>computers = new ArrayList<>();
+        ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        for(Inventory inventory : inventories){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computers.add(computer);
+        }
         if(content_Search.equals("")){
             return computers;
         }
@@ -166,12 +215,52 @@ public class SearchProduct {
         }
         return ketQua;
     }
+
+    public ArrayList<Computer> searchChiNhanhMaMay(String content_Search,Branch branch) {
+        ArrayList<Computer>computers = new ArrayList<>();
+        ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        for(Inventory inventory : inventories){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computers.add(computer);
+        }
+        if(content_Search.equals("")){
+            return computers;
+        }
+        ArrayList<Computer> ketQua = new ArrayList<>();
+        double maMay = Double.parseDouble(content_Search);
+        for (Computer computer : computers) {
+            if (computer.getMaMay() == maMay) {
+                ketQua.add(computer);
+            }
+        }
+        return ketQua;
+    }
     public ArrayList<Computer>searchTenNhaCungCap(String tenNCC){
         tenNCC = tenNCC.toLowerCase();
         ArrayList<Computer>computers = ProductsDAO.getInstance().selectAll();
         if(tenNCC.equals("")){
             return computers;
         }
+        ArrayList<Computer> ketQua = new ArrayList<>();
+        for (Computer computer : computers){
+            String tennhacungcap = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
+            if(tennhacungcap.toLowerCase().contains(tenNCC)){
+                ketQua.add(computer);
+            }
+        }
+        return ketQua;
+    }
+    public ArrayList<Computer>searchChiNhanhTenNhaCungCap(String tenNCC,Branch branch){
+        ArrayList<Computer>computers = new ArrayList<>();
+        ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
+        for(Inventory inventory : inventories){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computers.add(computer);
+        }
+        if(tenNCC.equals("")){
+            return computers;
+        }
+        tenNCC = tenNCC.toLowerCase();
         ArrayList<Computer> ketQua = new ArrayList<>();
         for (Computer computer : computers){
             String tennhacungcap = ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap();
