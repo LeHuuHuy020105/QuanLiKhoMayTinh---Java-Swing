@@ -48,6 +48,10 @@ public class Query {
     public static String getMaChiNhanhByIDUser="select * from user_role,role where user_id =? AND user_role.role_id = role.id";
     public static String nameBtn_Menu= "select * from role_interfaceuser,role,interfaceuser where name =? AND role_interfaceuser.id = role.id AND role_interfaceuser.magiaodien=interfaceuser.magiaodien ";
     public static String selectAllNotAdmin="select * from user where id >? ";
+    public static String checkSDTUser = "select count(*) from user where phone = ?";
+    public static String checkDataAccount="SELECT COUNT(*) FROM user WHERE username = ?";
+    public static String checkEmailUser="SELECT COUNT(*) FROM user WHERE email = ?";
+
 
     //    District
     public static String selectAllByProvince = "Select * from district where province_id = ?";

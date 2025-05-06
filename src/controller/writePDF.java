@@ -284,7 +284,7 @@ public class writePDF {
             // Lấy thông tin hóa đơn
             Bill bill = BillDAO.getInstance().getBillByMaPhieu(maPhieu);
             User nhanVien = UserDAO.getInstance().getUsetById(bill.getMaNhanVien());
-            CustomerBLL khachHang = bill.getMaKhachHang() != 0 ? CustomerDAO.getInstance().findByID(bill.getMaKhachHang()) : null;
+            Customer khachHang = bill.getMaKhachHang() != 0 ? CustomerDAO.getInstance().findByID(bill.getMaKhachHang()) : null;
             Branch chiNhanh = BrachDAO.getInstance().BranchByID(bill.getMaChiNhanh());
 
             // Thông tin hóa đơn

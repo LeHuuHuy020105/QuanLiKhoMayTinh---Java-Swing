@@ -287,7 +287,7 @@ public class UserDAO implements DAOInterface<User>{
 
     public boolean checkSdt(String sdt){
         Connection c = JDBCUtil.getConnection();
-        String sql = "select count(*) from user where phone = ?";
+        String sql = Query.checkSDTUser;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
@@ -306,7 +306,7 @@ public class UserDAO implements DAOInterface<User>{
     }
     public boolean checkDataAccount(String account){
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT COUNT(*) FROM user WHERE username = ?";
+        String sql = Query.checkDataAccount;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ){
@@ -325,7 +325,7 @@ public class UserDAO implements DAOInterface<User>{
     }
     public boolean checkEmail(String email){
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        String sql = Query.checkEmailUser;
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ){

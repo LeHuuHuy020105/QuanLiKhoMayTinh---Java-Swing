@@ -45,6 +45,8 @@ public class Dashboard extends JFrame {
 
     public Dashboard(User currentUser) {
         this.currentUser = currentUser;
+        this.userBLL = new UserBLL();
+        System.out.println("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Phần mềm quản lí kho hàng máy tính");
         setBounds(100, 100, 1510, 764);

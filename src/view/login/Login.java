@@ -141,6 +141,7 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khoá !");
             }
         } catch (Exception e) {
+            System.out.println(e);
             JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu của bạn bị sai !");
         }
     }
