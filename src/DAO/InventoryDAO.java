@@ -1,8 +1,8 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Branch;
-import model.Inventory;
+import DTO.Branch;
+import DTO.Inventory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

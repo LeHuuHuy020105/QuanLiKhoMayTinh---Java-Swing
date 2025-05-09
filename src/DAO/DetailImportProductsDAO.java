@@ -1,12 +1,11 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.DetailImportProducts;
+import DTO.DetailImportProducts;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DetailImportProductsDAO implements DAOInterface<DetailImportProducts> {

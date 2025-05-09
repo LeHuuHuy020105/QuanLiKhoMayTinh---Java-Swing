@@ -1,7 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Role;
+import DTO.Role;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

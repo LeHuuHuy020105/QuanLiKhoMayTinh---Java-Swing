@@ -3,9 +3,8 @@ package DAO.Address;
 import DAO.DAOInterface;
 import DAO.Query;
 import database.JDBCUtil;
-import model.Address.District;
-import model.Address.Province;
-import model.Laptop;
+import DTO.Address.District;
+import DTO.Address.Province;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,7 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Branch;
+import DTO.Branch;
 
 import java.sql.*;
 import java.util.ArrayList;

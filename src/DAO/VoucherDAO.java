@@ -1,8 +1,8 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Customer;
-import model.Voucher;
+import DTO.Customer;
+import DTO.Voucher;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

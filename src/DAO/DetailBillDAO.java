@@ -1,7 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.DetailBill;
+import DTO.DetailBill;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

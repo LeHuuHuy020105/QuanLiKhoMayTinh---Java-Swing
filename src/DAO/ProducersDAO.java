@@ -1,7 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Producer;
+import DTO.Producer;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,10 +1,8 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Customer;
-import model.ImportProducts;
+import DTO.Customer;
 
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 

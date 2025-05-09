@@ -1,8 +1,8 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.ProductStatistics;
-import view.User.ThongKe.ThongKeSanPhamForm;
+import DTO.ProductStatistics;
+import GUI.User.ThongKe.ThongKeSanPhamForm;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

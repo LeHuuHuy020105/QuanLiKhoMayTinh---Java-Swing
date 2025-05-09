@@ -1,8 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.Laptop;
-import model.PC;
+import DTO.Laptop;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

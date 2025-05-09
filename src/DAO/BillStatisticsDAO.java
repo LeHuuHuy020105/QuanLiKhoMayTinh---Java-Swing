@@ -1,16 +1,13 @@
 package DAO;
 
-import com.toedter.calendar.JDateChooser;
 import database.JDBCUtil;
-import model.Bill;
-import model.BillStatistics;
+import DTO.BillStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import view.User.ThongKe.ThongKePhieuForm;
+import GUI.User.ThongKe.ThongKePhieuForm;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 

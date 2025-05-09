@@ -1,7 +1,7 @@
 package DAO;
 
 import database.JDBCUtil;
-import model.DetailExportProducts;
+import DTO.DetailExportProducts;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
