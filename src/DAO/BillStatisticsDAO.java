@@ -1,20 +1,26 @@
 package DAO;
 
+import com.toedter.calendar.JDateChooser;
 import database.JDBCUtil;
+import model.Bill;
 import model.BillStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import view.User.ThongKe.ThongKePhieuForm;
+
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillStatisticsDAO implements DAOInterface<BillStatistics>{
+public class BillStatisticsDAO implements DAOInterface<BillStatistics> {
     private static final Logger log = LoggerFactory.getLogger(BillStatisticsDAO.class);
-    public static BillStatisticsDAO getInstance(){
+
+    public static BillStatisticsDAO getInstance() {
         return new BillStatisticsDAO();
     }
+
     public BillStatisticsDAO() {
     }
 
@@ -45,7 +51,7 @@ public class BillStatisticsDAO implements DAOInterface<BillStatistics>{
             Connection connection = JDBCUtil.getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 BillStatistics statistics = new BillStatistics(resultSet.getInt("maphieu"), resultSet.getInt("manhanvien"), resultSet.getTimestamp("thoidiemtao").toLocalDateTime(), resultSet.getDouble("tongtien"));
                 result.add(statistics);
             }
@@ -61,9 +67,9 @@ public class BillStatisticsDAO implements DAOInterface<BillStatistics>{
             String sql = "select maphieu, manhanvien, thoidiemtao, tongtien from bills where machinhanh=?";
             Connection connection = JDBCUtil.getConnection();
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setInt(1,id);
+            pst.setInt(1, id);
             ResultSet resultSet = pst.executeQuery(sql);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 BillStatistics statistics = new BillStatistics(resultSet.getInt("maphieu"), resultSet.getInt("manhanvien"), resultSet.getTimestamp("thoidiemtao").toLocalDateTime(), resultSet.getDouble("tongtien"));
                 result.add(statistics);
             }
@@ -81,9 +87,7 @@ public class BillStatisticsDAO implements DAOInterface<BillStatistics>{
             Connection connection = JDBCUtil.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setObject(1, startDate.atStartOfDay());
-            System.out.println(startDate.atStartOfDay());
             preparedStatement.setObject(2, endDate.atTime(23, 59, 59));
-            System.out.println(endDate.atTime(23, 59, 59));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 BillStatistics statistics = new BillStatistics(resultSet.getInt("maphieu"), resultSet.getInt("manhanvien"), resultSet.getTimestamp("thoidiemtao").toLocalDateTime(), resultSet.getDouble("tongtien"));
@@ -110,5 +114,24 @@ public class BillStatisticsDAO implements DAOInterface<BillStatistics>{
                 break;
         }
         return result;
+    }
+
+    public int soldOrderCount(List<BillStatistics> list) {
+        int count = 0;
+        String sql = "SELECT b.tongtien, db.soluong FROM bills b JOIN detailbill db ON b.maphieu = db.maphieu where b.maphieu = ?";
+        Connection connection = JDBCUtil.getConnection();
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, list.get(i).getMaPhieu());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    count++;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
     }
 }

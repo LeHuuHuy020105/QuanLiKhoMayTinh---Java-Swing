@@ -3,13 +3,13 @@ package view.User.ThongKe;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		panel_5_1_1.setLayout(null);
 		verticalBox_1.add(panel_5_1_1);
 
-		String [] cbxLuaChonValues = new String[] {"Tất cả","Mã phiếu", "Người tạo"};
+		String[] cbxLuaChonValues = new String[]{"Tất cả", "Mã phiếu", "Người tạo"};
 		JComboBox optionsForSearch = new JComboBox(cbxLuaChonValues);
 		optionsForSearch.setBackground(UIManager.getColor("Button.background"));
 		optionsForSearch.setBounds(10, 11, 126, 30);
@@ -132,6 +132,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 			endPrice.setText("");
 			startDate.setDate(null);
 			endDate.setDate(null);
+			updateTableDataFormDAO();
 		});
 		panel_5_1_1.add(btnNewButton_1);
 
@@ -148,7 +149,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		startDate = new JDateChooser();
 		startDate.setBounds(87, 11, 165, 30);
 		startDate.addPropertyChangeListener((e) -> {
-			if(filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()) != null) {
+			if (filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()) != null) {
 				ArrayList<BillStatistics> result = filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()).stream().collect(Collectors.toCollection(ArrayList::new));
 				updateTableData(result);
 			}
@@ -169,7 +170,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		endDate.setBounds(435, 11, 165, 30);
 		endDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if(filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()) != null) {
+				if (filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()) != null) {
 					ArrayList<BillStatistics> result = filterByTime((String) optionsForSearch.getSelectedItem(), textField.getText()).stream().collect(Collectors.toCollection(ArrayList::new));
 					updateTableData(result);
 				}
@@ -195,16 +196,6 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		startPrice = new JTextField();
 		startPrice.setColumns(10);
 		startPrice.setBounds(52, 11, 177, 30);
-		startPrice.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if(!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
-					List<BillStatistics> result = filterByPrice((String) optionsForSearch.getSelectedItem(), startPrice.getText());
-					updateTableData(result.stream().collect(Collectors.toCollection(ArrayList::new)));
-				}
-			}
-		});
-		panel_5_1_1_2.add(startPrice);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Đến");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -214,12 +205,30 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		endPrice = new JTextField();
 		endPrice.setColumns(10);
 		endPrice.setBounds(324, 13, 177, 30);
+		startPrice.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
+					List<BillStatistics> result = filterByPrice((String) optionsForSearch.getSelectedItem(), textField.getText());
+					updateTableData(result.stream().collect(Collectors.toCollection(ArrayList::new)));
+				} else if (startPrice.getText().trim().equals("") && textField.getText().trim().equals("")) {
+					updateTableDataFormDAO();
+				} else if ((startPrice.getText().trim().equals("") || endPrice.getText().trim().equals("")) && !textField.getText().trim().equals("")) {
+					jTextFieldSearchKeyReleased((String) optionsForSearch.getSelectedItem(), textField.getText());
+				}
+			}
+		});
+		panel_5_1_1_2.add(startPrice);
 		endPrice.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
-					List<BillStatistics> result = filterByPrice((String) optionsForSearch.getSelectedItem(), endPrice.getText());
+				if (!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
+					List<BillStatistics> result = filterByPrice((String) optionsForSearch.getSelectedItem(), textField.getText());
 					updateTableData(result.stream().collect(Collectors.toCollection(ArrayList::new)));
+				} else if (endPrice.getText().trim().equals("") && textField.getText().trim().equals("")) {
+					updateTableDataFormDAO();
+				} else if ((endPrice.getText().trim().equals("") || startPrice.getText().trim().equals("")) && !textField.getText().trim().equals("")) {
+					jTextFieldSearchKeyReleased((String) optionsForSearch.getSelectedItem(), textField.getText());
 				}
 			}
 		});
@@ -268,21 +277,22 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 
 	@Override
 	public void updateTableDataFormDAO() {
-		ArrayList<BillStatistics>statistics = null;
-		if(UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser()).equals("Quản lí chi nhánh")){
+		ArrayList<BillStatistics> statistics = null;
+		if (UserDAO.getInstance().getRoleByIDUser(currentUser.getIdUser()).equals("Quản lí chi nhánh")) {
 			statistics = BillStatisticsDAO.getInstance().findAllBillsIdBranch(currentUser.getMaChiNhanh());
-		}else {
+		} else {
 			statistics = BillStatisticsDAO.getInstance().findAllBills();
 		}
+		updateStatus(statistics);
 		updateTableData(statistics);
 	}
 
 	@Override
-	public void updateTableData(ArrayList<BillStatistics> Statistics) {
+	public void updateTableData(ArrayList<BillStatistics> statistics) {
 		DecimalFormat df = new DecimalFormat("#,###");
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-		for (BillStatistics statistic : Statistics) {
+		for (BillStatistics statistic : statistics) {
 			model.addRow(
 					new Object[]{
 							statistic.getMaPhieu(),
@@ -295,9 +305,9 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 
 	public void jTextFieldSearchKeyReleased(String selectedOption, String searchString) {
 		ArrayList<BillStatistics> result = new ArrayList<>();
-		if(!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
+		if (!startPrice.getText().trim().equals("") && !endPrice.getText().trim().equals("")) {
 			result = filterByPrice(selectedOption, searchString).stream().collect(Collectors.toCollection(ArrayList::new));
-		} else if(startDate.getDate() != null && endDate.getDate() != null) {
+		} else if (startDate.getDate() != null && endDate.getDate() != null) {
 			result = filterByTime(selectedOption, searchString).stream().collect(Collectors.toCollection(ArrayList::new));
 		} else {
 			ArrayList<BillStatistics> list = statisticsDAO.findAllBills();
@@ -315,6 +325,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 					break;
 				}
 			}
+			updateStatus(result);
 		}
 		updateTableData(result);
 	}
@@ -364,39 +375,85 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 	}
 
 	public List<BillStatistics> filterByTime(String selectedOption, String searchString) {
-		if(startDate.getDate() == null || endDate.getDate() == null) return null;
+		if (startDate.getDate() == null || endDate.getDate() == null) return null;
 		LocalDate startLocalDate = startDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate endLocalDate = endDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		List<BillStatistics> result = new ArrayList<>();
-		if(startLocalDate.isAfter(endLocalDate)) {
+		if (startLocalDate.isAfter(endLocalDate)) {
 			startDate.setDate(null);
 			endDate.setDate(null);
 			return result;
 		}
 		result = (new BillStatisticsDAO()).findAllBillsByTime(startLocalDate, endLocalDate, selectedOption, searchString);
+		updateStatus(result);
 		return result;
 	}
 
 	public List<BillStatistics> filterByPrice(String selectedOption, String searchString) {
-		if(startPrice.getText().matches(".*[^0-9].*") || endPrice.getText().matches(".*[^0-9].*")) {
+		if (startPrice.getText().matches(".*[^0-9].*") || endPrice.getText().matches(".*[^0-9].*")) {
 			return null;
 		}
 		List<BillStatistics> result = filterByTime(selectedOption, searchString);
-		if(result == null) {
+		if (result == null && !textField.getText().trim().isBlank()) {
+			result = new ArrayList<>();
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			for (int row = 0; row < model.getRowCount(); row++) {
+				int maPhieu = Integer.parseInt(model.getValueAt(row, 0).toString());
+				int maNhanVien = Integer.parseInt(model.getValueAt(row, 1).toString());
+				LocalDateTime thoiGianTao = LocalDateTime.parse(model.getValueAt(row, 2).toString());
+				double tongTien = Double.parseDouble(model.getValueAt(row, 3).toString().replaceAll("[^0-9.]", ""));
+				BillStatistics billStatistics = new BillStatistics(maPhieu, maNhanVien, thoiGianTao, tongTien);
+				result.add(billStatistics);
+			}
+		} else if (result == null && textField.getText().isBlank()) {
 			result = new BillStatisticsDAO().findAllBills();
 		}
-		System.out.println(startPrice.getText() + " " + endPrice.getText());
-		for(int i = 0; i < result.size(); i++) {
-			if(result.get(i).getTongTien() < Double.parseDouble(startPrice.getText()) || result.get(i).getTongTien() > Double.parseDouble(endPrice.getText())) {
+		for (int i = 0; i < result.size(); i++) {
+			if (result.get(i).getTongTien() < Double.parseDouble(startPrice.getText()) || result.get(i).getTongTien() > Double.parseDouble(endPrice.getText())) {
 				result.remove(result.get(i));
 				i--;
 			}
 		}
-		for(BillStatistics statistics : result) {
-			System.out.println(statistics);
+		ThongKePhieuForm thongKePhieuForm = new ThongKePhieuForm();
+		switch (selectedOption) {
+			case "Tất cả": {
+				result = thongKePhieuForm.searchAll(result.stream().collect(Collectors.toCollection(ArrayList::new)), searchString);
+				break;
+			}
+			case "Mã phiếu": {
+				result = thongKePhieuForm.searchByMaPhieu(result.stream().collect(Collectors.toCollection(ArrayList::new)), searchString);
+				break;
+			}
+			case "Người tạo": {
+				result = thongKePhieuForm.searchByCreator(result.stream().collect(Collectors.toCollection(ArrayList::new)), searchString);
+				break;
+			}
+			default:
+				break;
 		}
+		updateStatus(result);
 		return result;
 	}
+
+	public void updateStatus(List<BillStatistics> list) {
+		JLabel soHoaDonLabel = ThongKeForm.getLblSnPhmTrong();
+		JLabel doanhThuLabel = ThongKeForm.getLblNhCungCp();
+		JLabel sanPhamBanRaLabel = ThongKeForm.getLblSnPhmTrong_2();
+		int soHoaDon = 0;
+		double doanhThu = 0;
+		int sanPhamBanRa = 0;
+		for (int i = 0; i < list.size(); i++) {
+			soHoaDon++;
+			doanhThu += list.get(i).getTongTien();
+		}
+		sanPhamBanRa = (new BillStatisticsDAO()).soldOrderCount(list);
+		DecimalFormat df = new DecimalFormat("#,###");
+		df.setGroupingSize(3);
+		soHoaDonLabel.setText("Số hóa đơn: " + soHoaDon);
+		doanhThuLabel.setText("Doanh thu: " + df.format(doanhThu) + " VND");
+		sanPhamBanRaLabel.setText("Sản phẩm bán ra: " + sanPhamBanRa);
+	}
+
 	public Bill getBillSelected() {
 		Bill bill_Selected = null;
 		try {
@@ -408,7 +465,7 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 				return null;
 			}
 
-			int maHD = Integer.parseInt(model.getValueAt(i_row, 0)+"");
+			int maHD = Integer.parseInt(model.getValueAt(i_row, 0) + "");
 
 			bill_Selected = BillDAO.getInstance().getBillByMaPhieu(maHD);
 		} catch (Exception e) {
@@ -417,7 +474,8 @@ public class ThongKePhieuForm extends JPanel implements updateDataToTable<BillSt
 		}
 		return bill_Selected;
 	}
-	public void XemChiTietHoaDonMouseClicked(){
+
+	public void XemChiTietHoaDonMouseClicked() {
 		ChiTietBillForm chiTietBillForm = new ChiTietBillForm(this);
 	}
 }

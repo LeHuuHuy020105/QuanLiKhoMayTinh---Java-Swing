@@ -31,6 +31,10 @@ public class ThongKeForm extends JPanel {
     private JPanel side_ThongKe_Phieu;
     private CardLayout cardLayout;
     private User currentUser;
+    private static JLabel lblSnPhmTrong = new JLabel("Số hóa đơn");
+    private static JLabel lblNhCungCp = new JLabel("Doanh thu");
+    private static JLabel lblSnPhmTrong_2 = new JLabel("Sản phẩm bán ra");
+
     /**
      * Create the panel.
      */
@@ -63,7 +67,7 @@ public class ThongKeForm extends JPanel {
         lblNewLabel.setBounds(121, 11, 68, 31);
         panel.add(lblNewLabel);
 
-        JLabel lblSnPhmTrong = new JLabel("Sản phẩm trong kho");
+//        lblSnPhmTrong = new JLabel("Số hóa đơn");
         lblSnPhmTrong.setForeground(new Color(255, 255, 255));
         lblSnPhmTrong.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblSnPhmTrong.setBounds(121, 57, 172, 31);
@@ -91,7 +95,7 @@ public class ThongKeForm extends JPanel {
         lblNewLabel_2.setBounds(121, 11, 68, 31);
         panel_1.add(lblNewLabel_2);
 
-        JLabel lblNhCungCp = new JLabel("Nhà cung cấp");
+//        lblNhCungCp = new JLabel("Doanh thu");
         lblNhCungCp.setForeground(Color.WHITE);
         lblNhCungCp.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblNhCungCp.setBounds(121, 57, 172, 31);
@@ -119,7 +123,7 @@ public class ThongKeForm extends JPanel {
         lblNewLabel_3.setBounds(121, 11, 68, 31);
         panel_2.add(lblNewLabel_3);
 
-        JLabel lblSnPhmTrong_2 = new JLabel("Sản phẩm trong kho");
+//        lblSnPhmTrong_2 = new JLabel("Sản phẩm bán ra");
         lblSnPhmTrong_2.setForeground(Color.WHITE);
         lblSnPhmTrong_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblSnPhmTrong_2.setBounds(121, 57, 172, 31);
@@ -186,6 +190,7 @@ public class ThongKeForm extends JPanel {
 
 
     }
+
     public void resetMenu() {
         side_ThongKe_SanPham.setBackground(default_sideColor);
         side_ThongKe_Phieu.setBackground(default_sideColor);
@@ -200,14 +205,25 @@ public class ThongKeForm extends JPanel {
         resetMenu();
         side_ThongKe_SanPham.setBackground(sideColor);
         panel_ThongKe_SanPham.setBackground(selectionColor);
-        cardLayout.show(cardPanel,"Thống kê sản phẩm");
+        cardLayout.show(cardPanel, "Thống kê sản phẩm");
     }
 
     public void ThongKePhieuMouseClicked() {
         resetMenu();
         side_ThongKe_Phieu.setBackground(sideColor);
         panel_ThongKe_Phieu.setBackground(selectionColor);
-        cardLayout.show(cardPanel,"Thống kê phiếu");
+        cardLayout.show(cardPanel, "Thống kê phiếu");
     }
 
+    public static JLabel getLblSnPhmTrong_2() {
+        return lblSnPhmTrong_2;
+    }
+
+    public static JLabel getLblNhCungCp() {
+        return lblNhCungCp;
+    }
+
+    public static JLabel getLblSnPhmTrong() {
+        return lblSnPhmTrong;
+    }
 }

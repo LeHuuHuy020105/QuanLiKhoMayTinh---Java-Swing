@@ -17,15 +17,22 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
+
+import DAO.BillStatisticsDAO;
 import DAO.ProductStatisticsDAO;
 import com.toedter.calendar.JDateChooser;
 import controller.updateDataToTable;
+import model.BillStatistics;
 import model.ProductStatistics;
 import model.User;
 import view.User.SanPham.SanPhamForm;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -54,16 +61,16 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 	public ThongKeSanPhamForm(User currentUser) {
 		this.currentUser = currentUser;
 		setLayout(null);
-		setSize( 1247, 504);
+		setSize(1247, 504);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 86, 1223, 407);
 		add(scrollPane);
 
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
-				new Object[][] {
+				new Object[][]{
 				},
-				new String[] {
+				new String[]{
 						"Mã máy", "Tên máy", "Số lượng", "Giá nhập", "Giá bán"
 				}
 		));
@@ -78,7 +85,7 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 		panel_5_1_1.setLayout(null);
 		verticalBox_1.add(panel_5_1_1);
 
-		String [] cbxLuaChonValues = new String[] {"Tất cả","Tên máy", "RAM", "CPU", "Dung lượng", "Card màn hình"};
+		String[] cbxLuaChonValues = new String[]{"Tất cả", "Tên máy", "RAM", "CPU", "Dung lượng", "Card màn hình"};
 		JComboBox optionsForSearch = new JComboBox(cbxLuaChonValues);
 		optionsForSearch.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -152,36 +159,48 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 		btnNewButton_1.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\refesh.png"));
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_1.setBounds(546, 11, 114, 30);
-		btnNewButton_1.addItemListener((e -> {
+		btnNewButton_1.addActionListener((e -> {
 			input_Search.setText("");
 			startDate.setDate(null);
 			endDate.setDate(null);
+			updateTableDataFormDAO();
 		}));
 		panel_5_1_1_1.add(btnNewButton_1);
 		updateTableDataFormDAO();
 
 	}
+
 	@Override
 	public void updateTableDataFormDAO() {
 		ArrayList<ProductStatistics> statistics = new ProductStatisticsDAO().findAllProducts();
 		updateTableData(statistics);
+		updateStatus();
 	}
 
 	@Override
-	public void updateTableData(ArrayList<ProductStatistics> Statistics) {
+	public void updateTableData(ArrayList<ProductStatistics> statistics) {
+		Map<String, ProductStatistics> map = new HashMap<>();
+		for (int i = 0; i < statistics.size(); i++) {
+			if (!map.containsKey(statistics.get(i).getTenMay())) {
+				map.put(statistics.get(i).getTenMay(), statistics.get(i));
+			} else {
+				ProductStatistics productStatistics = map.get(statistics.get(i).getTenMay());
+				productStatistics.setSoLuongBan(productStatistics.getSoLuongBan() + 1);
+			}
+		}
 		DecimalFormat df = new DecimalFormat("#,###");
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-		for (ProductStatistics statistic : Statistics) {
+		map.forEach((key, value) -> {
 			model.addRow(
 					new Object[]{
-							statistic.getMaMay(),
-							statistic.getTenMay(),
-							statistic.getSoLuongBan(),
-							df.format(statistic.getGiaNhap()) + " VND",
-							df.format(statistic.getGiaBan())+" VND",
+							value.getMaMay(),
+							value.getTenMay(),
+							value.getSoLuongBan(),
+							df.format(value.getGiaNhap() * value.getSoLuongBan()) + " VND",
+							df.format(value.getGiaBan() * value.getSoLuongBan()) + " VND",
 					});
-		}
+		});
 	}
 
 	public void jTextFieldSearchKeyReleased(String selectedOption, String searchString) {
@@ -215,9 +234,40 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 				}
 			}
 			updateTableData(result);
-		} else if(startDate.getDate() != null && endDate.getDate() != null) {
+			updateStatus();
+		} else if (startDate.getDate() != null && endDate.getDate() != null) {
 			filterByTime(selectedOption, searchString);
 		}
+	}
+
+	public void updateStatus() {
+		JLabel doanhThuLabel = ThongKeForm.getLblNhCungCp();
+		JLabel sanPhamBanRaLabel = ThongKeForm.getLblSnPhmTrong_2();
+		double doanhThu = 0;
+		int sanPhamBanRa = 0;
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for (int row = 0; row < model.getRowCount(); row++) {
+			sanPhamBanRa += Integer.parseInt(model.getValueAt(row, 2).toString());
+			doanhThu += Double.parseDouble(model.getValueAt(row, 4).toString().replaceAll("[^0-9.]", ""));
+		}
+		DecimalFormat df = new DecimalFormat("#,###");
+		df.setGroupingSize(3);
+		doanhThuLabel.setText("Doanh thu: " + df.format(doanhThu) + " VND");
+		sanPhamBanRaLabel.setText("Sản phẩm bán ra: " + sanPhamBanRa);
+	}
+
+	public void filterByTime(String selectedOption, String searchString) {
+		if (startDate.getDate() == null || endDate.getDate() == null) return;
+		LocalDate startLocalDate = startDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate endLocalDate = endDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		if (startLocalDate.isAfter(endLocalDate)) {
+			startDate.setDate(null);
+			endDate.setDate(null);
+			return;
+		}
+		ArrayList<ProductStatistics> result = statisticsDAO.findAllProductsByTime(startLocalDate, endLocalDate, selectedOption, searchString);
+		updateTableData(result);
+		updateStatus();
 	}
 
 	public ArrayList<ProductStatistics> searchAll(ArrayList<ProductStatistics> list, String searchString) {
@@ -254,7 +304,7 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 	}
 
 	public ArrayList<ProductStatistics> searchByCpu(ArrayList<ProductStatistics> list, String searchString) {
-		if(searchString.equals("")){
+		if (searchString.equals("")) {
 			return list;
 		}
 		ArrayList<ProductStatistics> result = new ArrayList<>();
@@ -268,7 +318,7 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 	}
 
 	public ArrayList<ProductStatistics> searchByRam(ArrayList<ProductStatistics> list, String searchString) {
-		if(searchString.equals("")){
+		if (searchString.equals("")) {
 			return list;
 		}
 		ArrayList<ProductStatistics> result = new ArrayList<>();
@@ -282,7 +332,7 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 	}
 
 	public ArrayList<ProductStatistics> searchByDungLuong(ArrayList<ProductStatistics> list, String searchString) {
-		if(searchString.equals("")){
+		if (searchString.equals("")) {
 			return list;
 		}
 		ArrayList<ProductStatistics> result = new ArrayList<>();
@@ -296,7 +346,7 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 	}
 
 	public ArrayList<ProductStatistics> searchByCard(ArrayList<ProductStatistics> list, String searchString) {
-		if(searchString.equals("")){
+		if (searchString.equals("")) {
 			return list;
 		}
 		ArrayList<ProductStatistics> result = new ArrayList<>();
@@ -307,18 +357,5 @@ public class ThongKeSanPhamForm extends JPanel implements updateDataToTable<Prod
 			}
 		}
 		return result;
-	}
-
-	public void filterByTime(String selectedOption, String searchString) {
-		if(startDate.getDate() == null || endDate.getDate() == null) return;
-		LocalDate startLocalDate = startDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		LocalDate endLocalDate = endDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		if(startLocalDate.isAfter(endLocalDate)) {
-			startDate.setDate(null);
-			endDate.setDate(null);
-			return;
-		}
-		ArrayList<ProductStatistics> result = statisticsDAO.findAllProductsByTime(startLocalDate, endLocalDate, selectedOption, searchString);
-		updateTableData(result);
 	}
 }
