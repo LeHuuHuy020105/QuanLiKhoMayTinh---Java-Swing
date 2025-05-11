@@ -1,6 +1,7 @@
 package GUI.User.NhapHang;
 
 import BLL.*;
+import DAO.ProductsDAO;
 import DTO.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -255,6 +256,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         }else {
             fillData(file);
         }
+        updateDBProductAdd(true,0);
     }
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);
@@ -399,6 +401,26 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
         input_SoLuong.setText("");
         setTotalPrice();
+        updateDBProductAdd(true,0);
+    }
+    public void updateDBProductAdd(boolean addProduct , int soLuong){
+        for(DetailImportProducts detailImportProducts1 : detailImportProducts){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts1.getMaMay());
+            if(addProduct){
+                computer.setSoLuong(computer.getSoLuong()-detailImportProducts1.getSoluong());
+            }else {
+                computer.setSoLuong(computer.getSoLuong()-soLuong);
+            }
+            ProductsDAO.getInstance().update(computer);
+        }
+        updateTableDataFormDAO();
+    }
+    public void updateDBProductDelete(DetailImportProducts detailImportProducts){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailImportProducts.getMaMay());
+            computer.setSoLuong(computer.getSoLuong()+detailImportProducts.getSoluong());
+            ProductsDAO.getInstance().update(computer);
+
+        updateTableDataFormDAO();
     }
     public void updateDataToTableNhapHangForm(ArrayList<DetailImportProducts> detailImportProducts, JTable jTable){
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
@@ -452,6 +474,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         }
         if(hasError)return;
         DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_selected);
+        updateDBProductAdd(false,soLuong-detailImportProducts1.getSoluong());
         detailImportProducts1.setSoluong(soLuong);
         updateDataToTableNhapHangForm(this.detailImportProducts,table_nhapHang);
         setTotalPrice();
@@ -466,6 +489,7 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         if(luaChon==JOptionPane.YES_OPTION){
             DetailImportProducts detailImportProducts1 =EntryFormByProductID(this.detailImportProducts,computer_Selected);
             this.detailImportProducts.remove(detailImportProducts1);
+            updateDBProductDelete(detailImportProducts1);
         }
         updateDataToTableNhapHangForm(detailImportProducts,table_nhapHang);
         setTotalPrice();

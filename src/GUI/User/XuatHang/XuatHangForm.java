@@ -1,7 +1,9 @@
 package GUI.User.XuatHang;
 
 import BLL.*;
+import DAO.ProductsDAO;
 import DTO.*;
+import GUI.Icon;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -139,11 +141,12 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\xuatexcel.png"));
+        btnNewButton.setIcon(new ImageIcon(Icon.nhapExcel));
         btnNewButton.setBounds(701, 601, 139, 41);
         add(btnNewButton);
 
         JButton btnSaSLng = new JButton("Sửa số lượng");
+        btnSaSLng.setIcon(new ImageIcon(Icon.edit));
         btnSaSLng.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SuaSoLuongMouseClicked();
@@ -155,6 +158,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         add(btnSaSLng);
 
         JButton btnXoSnPhm = new JButton("Xoá sản phẩm");
+        btnXoSnPhm.setIcon(new ImageIcon(Icon.delete));
         btnXoSnPhm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 XoaMouseClicked();
@@ -236,6 +240,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         if(luaChon==JOptionPane.YES_OPTION){
             DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_Selected);
             this.detailExportProducts.remove(detailExportProducts1);
+            updateDBProductDelete(detailExportProducts1);
         }
         updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
     }
@@ -264,6 +269,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         }
         if(hasError)return;
         DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_selected);
+        updateDBProductAdd(false,soLuong-detailExportProducts1.getSoLuong());
         detailExportProducts1.setSoLuong(soLuong);
         updateDataToTableXuatHangForm(this.detailExportProducts,table_XuatHang);
     }
@@ -277,6 +283,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         }else {
             fillData(file);
         }
+        updateDBProductAdd(true,0);
     }
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);
@@ -406,7 +413,29 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         }
         updateDataToTableXuatHangForm(this.detailExportProducts, table_XuatHang);
         input_SoLuong.setText("");
+        updateDBProductAdd(true,0);
     }
+
+    public void updateDBProductAdd(boolean addProduct , int soLuong){
+        for(DetailExportProducts detailExportProducts1 : detailExportProducts){
+            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
+            if(addProduct){
+                computer.setSoLuong(computer.getSoLuong()-detailExportProducts1.getSoLuong());
+            }else {
+                computer.setSoLuong(computer.getSoLuong()-soLuong);
+            }
+            ProductsDAO.getInstance().update(computer);
+        }
+        updateTableDataFormDAO();
+    }
+    public void updateDBProductDelete(DetailExportProducts detailExportProducts){
+        Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts.getMaMay());
+        computer.setSoLuong(computer.getSoLuong()+detailExportProducts.getSoLuong());
+        ProductsDAO.getInstance().update(computer);
+
+        updateTableDataFormDAO();
+    }
+
     public DetailExportProducts isValidProduct(DetailExportProducts detailExportProducts1,ArrayList<DetailExportProducts>detailExportProducts){
         for(DetailExportProducts detailExportProducts2 : detailExportProducts){
             if(detailExportProducts2.getMaMay()==detailExportProducts1.getMaMay()){
