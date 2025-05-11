@@ -15,8 +15,8 @@ public class InventoryBLL {
     public ArrayList<Inventory> InventoryByBranch(Branch branch){
         return this.inventoryDAO.InventoryByBranch(branch);
     }
-    public int updateSoLuong(Inventory inventory){
-        return this.inventoryDAO.updateSoLuong(inventory);
+    public int updateSoLuong(Inventory inventory,Branch branch){
+        return this.inventoryDAO.updateSoLuong(inventory,branch);
     }
     public int insert(Inventory inventory){
         return this.inventoryDAO.insert(inventory);

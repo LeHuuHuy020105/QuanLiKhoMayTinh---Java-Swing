@@ -126,7 +126,7 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
                     int soLuongKho = inventory_Valid.getSoLuong();
                     int soLuongNhap = item.getSoLuong();
                     inventory_Valid.setSoLuong(soLuongKho + soLuongNhap);
-                    inventoryBLL.updateSoLuong(inventory_Valid);
+                    inventoryBLL.updateSoLuong(inventory_Valid,branch);
                 } else {
                     Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(), item.getMaMay(), item.getSoLuong());
                     System.out.println("----------");

@@ -1,9 +1,15 @@
 package GUI.User.NhanVien;
 
 import BLL.*;
+import DAO.InventoryDAO;
+import DAO.ProductsDAO;
 import DTO.*;
 import GUI.Icon;
 import GUI.User.QLTaiKhoanNguoiDung.QLTaiKhoanNguoiDungForm;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -11,8 +17,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
@@ -29,6 +39,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private JLabel label_TotalPrice;
     private Customer customer;
     private JTextField textField_InfoCustomer;
+    private JFileChooser jFileChooser;
     private ProductsBLL productsBLL;
     private CustomerBLL customerBLL;
     private BranchBLL branchBLL;
@@ -36,6 +47,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     private ProducerBLL producerBLL;
     private DetailBillBLL detailBillBLL;
     private BillBLL billBLL;
+    private Branch currentBranch;
 
     /**
      * Create the panel.
@@ -50,6 +62,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         this.billBLL = new BillBLL();
         this.branchBLL = new BranchBLL();
         this.inventoryBLL = new InventoryBLL();
+        jFileChooser = new JFileChooser();
         setLayout(null);
         setSize(1257, 735);
 
@@ -134,6 +147,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         JButton btnNewButton = new JButton("Nhập Excel");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                NhapExcelMouseClicked();
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -261,6 +275,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         textField_InfoCustomer.setBounds(824, 107, 340, 27);
         add(textField_InfoCustomer);
 
+        currentBranch = branchBLL.BranchByID(currentUser.getMaChiNhanh());
         ArrayList<Customer> customers = customerBLL.selectAll();
         ArrayList<String> items = dataCustomer(customers);
         fillData();
@@ -305,14 +320,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         String input = input_Search.getText();
         ArrayList<Computer> computers = searchProduct(luaChon, input);
         updateTableData(computers);
-    }
-    public DetailBill isValidProduct(DetailBill detailBill, ArrayList<DetailBill>detailBills){
-        for(DetailBill item : detailBills){
-            if(item.getMaMay()==detailBill.getMaMay()){
-                return item;
-            }
-        }
-        return null;
     }
     public ArrayList<Computer> searchProduct(String luaChon, String content_Search) {
         ArrayList<Computer> result = new ArrayList<>();
@@ -414,6 +421,26 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
         input_SoLuong.setText("");
         setTotalPrice();
+        updateDBProductAdd(true,0);
+    }
+    public void updateDBProductAdd(boolean addProduct , int soLuong){
+        for(DetailBill detailBill : detailBills){
+            Inventory inventory = InventoryDAO.getInstance().InventoryByIDProduct(detailBill.getMaMay(),currentBranch);
+            if(addProduct){
+                inventory.setSoLuong(inventory.getSoLuong()-detailBill.getSoLuong());
+            }else {
+                inventory.setSoLuong(inventory.getSoLuong()-soLuong);
+            }
+            InventoryDAO.getInstance().updateSoLuong(inventory,currentBranch);
+        }
+        updateTableDataFormDAO();
+    }
+    public void updateDBProductDelete(DetailBill detailBill){
+        Inventory inventory = InventoryDAO.getInstance().InventoryByIDProduct(detailBill.getMaMay(),currentBranch);
+        inventory.setSoLuong(inventory.getSoLuong()+detailBill.getSoLuong());
+        InventoryDAO.getInstance().updateSoLuong(inventory,currentBranch);
+
+        updateTableDataFormDAO();
     }
     public void updateDataToTableBanHangForm(ArrayList<DetailBill> detailBills, JTable jTable){
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
@@ -471,6 +498,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         if(hasError)return;
 
         DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
+        updateDBProductAdd(false,soLuong-detailBill.getSoLuong());
         detailBill.setSoLuong(soLuong);
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
         setTotalPrice();
@@ -485,6 +513,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         if(luaChon==JOptionPane.YES_OPTION){
             DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
             this.detailBills.remove(detailBill);
+            updateDBProductDelete(detailBill);
         }
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         setTotalPrice();
@@ -523,13 +552,12 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         writePDF.getInstance().writeHoaDonKhachHang(maPhieu);
     }
     public void updateDatabaseInventory(){
-        Branch currentBranch = branchBLL.BranchByID(currentUser.getMaChiNhanh());
         ArrayList<Inventory>inventories = inventoryBLL.InventoryByBranch(currentBranch);
         for(DetailBill detailBill : detailBills){
             for (Inventory inventory :inventories){
                 if(inventory.getMaMay() == detailBill.getMaMay()){
                     inventory.setSoLuong(inventory.getSoLuong()-detailBill.getSoLuong()) ;
-                    inventoryBLL.updateSoLuong(inventory);
+                    inventoryBLL.updateSoLuong(inventory,currentBranch);
                 }
             }
         }
@@ -559,6 +587,70 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         detailBills.clear();
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         label_TotalPrice.setText("");
+    }
+    public void NhapExcelMouseClicked(){
+        jFileChooser.showOpenDialog(null);
+        File file = jFileChooser.getSelectedFile();
+        if(!file.getName().endsWith("xlsx")){
+            JOptionPane.showMessageDialog(null,"Vui lòng chọn file Excel.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }else {
+            fillData(file);
+        }
+        updateDBProductAdd(true,0);
+    }
+    public void fillData(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+            boolean hasError = false;
+            Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua dòng đầu tiên nếu là header
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int maMay = (int) row.getCell(0).getNumericCellValue();
+                int soLuong =  (int) row.getCell(1).getNumericCellValue();
+                DetailBill detailBill = new DetailBill(maMay,soLuong);
+                Computer computer_Search = productsBLL.searchByIdProduct(maMay);
+                if(computer_Search == null){
+                    hasError = true;
+                }else {
+                    if(soLuong>computer_Search.getSoLuong()){
+                        hasError = true;
+                    }
+                }
+                if(hasError==false){
+                    DetailBill detaiBill_isValid = isValidProduct(detailBill,detailBills);
+                    if(detaiBill_isValid==null){
+                        detailBills.add(detailBill);
+                    }else {
+                        detaiBill_isValid.setSoLuong(detaiBill_isValid.getSoLuong() + soLuong);
+                    }
+                }
+                updateDataToTableBanHangForm(detailBills,table_nhapHang);
+            }
+            if(hasError){
+                JOptionPane.showMessageDialog(this,"Tồn tại máy không có trong kho hoặc số lượng vượt quá kho !");
+            }
+            setTotalPrice();
+            JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        updateTableDataFormDAO();
+    }
+
+    public DetailBill isValidProduct(DetailBill detailBill, ArrayList<DetailBill>detailBills){
+        for(DetailBill item : detailBills){
+            if(item.getMaMay()==detailBill.getMaMay()){
+                return item;
+            }
+        }
+        return null;
     }
     public Customer getCustomer() {
         String text = textField_InfoCustomer.getText();

@@ -135,7 +135,6 @@ public void ThongTinTaiKhoanMouseClicked() {
         renderMenuBar(menuItems,panel_2);
     }
     public void renderMenuBar(ArrayList<String> menuItems , JPanel jPanel){
-        System.out.println("arr: "+menuItems);
         // Tạo các mục menu
         for (int i = 0; i < menuItems.size(); i++) {
             String item = menuItems.get(i);
