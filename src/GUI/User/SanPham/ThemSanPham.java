@@ -333,11 +333,15 @@ public class ThemSanPham extends JFrame {
 	public void cbxLoaiSanPhamMouseClicked() {
 		if(comboBox_loaiSanPham.getSelectedItem().equals("Laptop")) {
 			resetCBXLoaiSanPham();
+			input_congSuatNguon.setText("");
+			input_mainBoard.setText("");
 			input_congSuatNguon.setEditable(false);
 			input_mainBoard.setEditable(false);
 		}
 		else if (comboBox_loaiSanPham.getSelectedItem().equals("PC")) {
 			resetCBXLoaiSanPham();
+			input_kichThuocMan.setText("");
+			input_dungLuongPin.setText("");
 			input_kichThuocMan.setEditable(false);
 			input_dungLuongPin.setEditable(false);
 		}
@@ -464,9 +468,5 @@ public class ThemSanPham extends JFrame {
 			}
 		}
 		this.sanPhamForm.updateTableDataFormDAO();
-	}
-
-	public void closeWindow() {
-		this.dispose();
 	}
 }
