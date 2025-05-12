@@ -185,9 +185,10 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
     }
 
     public void XoaMouseClicked(){
+        User user = this.getUserSelected();
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
-            int ketQua = userBLL.delete(getCurrentUser());
+            int ketQua = userBLL.delete(user);
             if (ketQua == -1) {
                 JOptionPane.showMessageDialog(this, "Không thể xóa đã có tham chiếu liên quan!");
             } else if (ketQua > 0) {

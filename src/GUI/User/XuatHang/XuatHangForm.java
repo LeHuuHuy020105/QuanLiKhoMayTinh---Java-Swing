@@ -141,7 +141,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             }
         });
         btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton.setIcon(new ImageIcon(Icon.nhapExcel));
+        btnNewButton.setIcon(new ImageIcon(Icon.xuatExcel));
         btnNewButton.setBounds(701, 601, 139, 41);
         add(btnNewButton);
 
@@ -152,7 +152,6 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
                 SuaSoLuongMouseClicked();
             }
         });
-        btnSaSLng.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\edit.png"));
         btnSaSLng.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnSaSLng.setBounds(877, 601, 160, 41);
         add(btnSaSLng);
@@ -164,7 +163,6 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
                 XoaMouseClicked();
             }
         });
-        btnXoSnPhm.setIcon(new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\delete.png"));
         btnXoSnPhm.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnXoSnPhm.setBounds(1076, 601, 171, 41);
         add(btnXoSnPhm);

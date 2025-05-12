@@ -144,10 +144,6 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         add(btnNewButton);
 
         JButton btnSaSLng = new JButton("Sửa số lượng");
-        btnSaSLng.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
         btnSaSLng.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -160,10 +156,6 @@ public class NhapHangForm extends JPanel implements updateDataToTable<Computer> 
         add(btnSaSLng);
 
         JButton btn_XoaSanPham = new JButton("Xoá sản phẩm");
-        btn_XoaSanPham.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
         btn_XoaSanPham.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

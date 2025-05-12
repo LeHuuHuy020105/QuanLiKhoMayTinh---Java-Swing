@@ -67,17 +67,23 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
+            String sql_deleteDBUser_Role = "delete from user_role where user_id =?";
+            PreparedStatement pstUserRole = connection.prepareStatement(sql_deleteDBUser_Role);
+            pstUserRole.setInt(1,user.getIdUser());
+            pstUserRole.executeUpdate();
             String sql = Query.deleteUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,user.getIdUser());
             ketQua = pst.executeUpdate();
+            connection.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
+            System.out.println(e);
         } catch (Exception e) {
             e.printStackTrace();
             ketQua = -2;
         }
-        return 0;
+        return ketQua;
     }
 
     @Override
