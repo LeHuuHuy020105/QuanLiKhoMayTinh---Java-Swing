@@ -179,6 +179,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         JButton btnNewButton_1 = new JButton("Làm mới");
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                LamMoiMouseClicked();
             }
         });
         btnEffect.setIcon(btnNewButton_1,Icon.refesh);
@@ -250,6 +251,12 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
         updateTableDataFormDAO();
         fillData();
         Permission();
+    }
+    public void LamMoiMouseClicked(){
+        cbx_ChiNhanh.setSelectedItem("Tất cả");
+        cbx_TrangThai.setSelectedItem("Tất cả");
+        cbx_TimKiem.setSelectedItem("Tất cả");
+        applyFilters();
     }
     public void Permission(){
         int roleUser = userBLL.getIDRoleByIDUser(currentUser.getIdUser());

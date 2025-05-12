@@ -378,8 +378,8 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         }
     }
 
-    public Computer getComputerSelectedTableProduct() {
-        Computer computer = null;
+    public Inventory getComputerSelectedTableProduct() {
+        Inventory inventory = null;
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         int i_row = table_product.getSelectedRow();
         if (i_row == -1) {
@@ -387,8 +387,8 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             return null;
         }
         int maMay = Integer.parseInt(model.getValueAt(i_row, 0) + "");
-        computer = productsBLL.searchByIdProduct(maMay);
-        return computer;
+        inventory = InventoryDAO.getInstance().InventoryByIDProduct(maMay,currentBranch);
+        return inventory;
     }
 
     public void ThemMouseClicked() {
@@ -402,7 +402,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             hasError = true;
         }
         if(hasError)return;
-        Computer computer_selected = getComputerSelectedTableProduct();
+        Inventory computer_selected = getComputerSelectedTableProduct();
         int maMay =computer_selected.getMaMay();
 
         if(soLuong>computer_selected.getSoLuong()){
@@ -416,31 +416,16 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             this.detailBills.add(detailBill);
         }else {
             int soluong_valid = detailBill_isValid.getSoLuong();
-            detailBill_isValid.setSoLuong(soluong_valid+soLuong);
+            int newSoLuong = soluong_valid+soLuong;
+            if(newSoLuong>computer_selected.getSoLuong()){
+                JOptionPane.showMessageDialog(this, "Vượt quá số lượng trong kho!");
+                return;
+            }
+            detailBill_isValid.setSoLuong(newSoLuong);
         }
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
         input_SoLuong.setText("");
         setTotalPrice();
-        updateDBProductAdd(true,0);
-    }
-    public void updateDBProductAdd(boolean addProduct , int soLuong){
-        for(DetailBill detailBill : detailBills){
-            Inventory inventory = InventoryDAO.getInstance().InventoryByIDProduct(detailBill.getMaMay(),currentBranch);
-            if(addProduct){
-                inventory.setSoLuong(inventory.getSoLuong()-detailBill.getSoLuong());
-            }else {
-                inventory.setSoLuong(inventory.getSoLuong()-soLuong);
-            }
-            InventoryDAO.getInstance().updateSoLuong(inventory,currentBranch);
-        }
-        updateTableDataFormDAO();
-    }
-    public void updateDBProductDelete(DetailBill detailBill){
-        Inventory inventory = InventoryDAO.getInstance().InventoryByIDProduct(detailBill.getMaMay(),currentBranch);
-        inventory.setSoLuong(inventory.getSoLuong()+detailBill.getSoLuong());
-        InventoryDAO.getInstance().updateSoLuong(inventory,currentBranch);
-
-        updateTableDataFormDAO();
     }
     public void updateDataToTableBanHangForm(ArrayList<DetailBill> detailBills, JTable jTable){
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
@@ -495,10 +480,13 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
             hasError=true;
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
+        if(soLuong>computer_selected.getSoLuong()){
+            JOptionPane.showMessageDialog(this, "Vượt quá số lượng trong kho!");
+            hasError=true;
+        }
         if(hasError)return;
 
         DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
-        updateDBProductAdd(false,soLuong-detailBill.getSoLuong());
         detailBill.setSoLuong(soLuong);
         updateDataToTableBanHangForm(this.detailBills,table_nhapHang);
         setTotalPrice();
@@ -513,7 +501,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         if(luaChon==JOptionPane.YES_OPTION){
             DetailBill detailBill =EntryFormByProductID(this.detailBills,computer_selected);
             this.detailBills.remove(detailBill);
-            updateDBProductDelete(detailBill);
         }
         updateDataToTableBanHangForm(detailBills,table_nhapHang);
         setTotalPrice();
@@ -597,7 +584,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         }else {
             fillData(file);
         }
-        updateDBProductAdd(true,0);
     }
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);

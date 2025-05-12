@@ -240,7 +240,6 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         if(luaChon==JOptionPane.YES_OPTION){
             DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_Selected);
             this.detailExportProducts.remove(detailExportProducts1);
-            updateDBProductDelete(detailExportProducts1);
         }
         updateDataToTableXuatHangForm(detailExportProducts,table_XuatHang);
     }
@@ -267,9 +266,12 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             hasError=true;
             JOptionPane.showMessageDialog(this,Notification.isValidNumber);
         }
+        if(soLuong>computer_selected.getSoLuong()){
+            JOptionPane.showMessageDialog(this,"Quá số lượng trong kho !");
+            hasError=true;
+        }
         if(hasError)return;
         DetailExportProducts detailExportProducts1 =EntryFormByProductID(this.detailExportProducts,computer_selected);
-        updateDBProductAdd(false,soLuong-detailExportProducts1.getSoLuong());
         detailExportProducts1.setSoLuong(soLuong);
         updateDataToTableXuatHangForm(this.detailExportProducts,table_XuatHang);
     }
@@ -283,7 +285,6 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
         }else {
             fillData(file);
         }
-        updateDBProductAdd(true,0);
     }
     public void fillData(File file) {
         try (FileInputStream fis = new FileInputStream(file);
@@ -409,31 +410,15 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             this.detailExportProducts.add(detailExportProducts1);
         }else {
             int soluong_valid = detailExportProducts_isValid.getSoLuong();
-            detailExportProducts_isValid.setSoLuong(soluong_valid + soLuong);
+            int newSoLuong = soluong_valid + soLuong;
+            if(newSoLuong>computer_selected.getSoLuong()){
+                JOptionPane.showMessageDialog(this,"Quá số lượng trong kho !");
+                return;
+            }
+            detailExportProducts_isValid.setSoLuong(newSoLuong);
         }
         updateDataToTableXuatHangForm(this.detailExportProducts, table_XuatHang);
         input_SoLuong.setText("");
-        updateDBProductAdd(true,0);
-    }
-
-    public void updateDBProductAdd(boolean addProduct , int soLuong){
-        for(DetailExportProducts detailExportProducts1 : detailExportProducts){
-            Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts1.getMaMay());
-            if(addProduct){
-                computer.setSoLuong(computer.getSoLuong()-detailExportProducts1.getSoLuong());
-            }else {
-                computer.setSoLuong(computer.getSoLuong()-soLuong);
-            }
-            ProductsDAO.getInstance().update(computer);
-        }
-        updateTableDataFormDAO();
-    }
-    public void updateDBProductDelete(DetailExportProducts detailExportProducts){
-        Computer computer = ProductsDAO.getInstance().searchByIDProduct(detailExportProducts.getMaMay());
-        computer.setSoLuong(computer.getSoLuong()+detailExportProducts.getSoLuong());
-        ProductsDAO.getInstance().update(computer);
-
-        updateTableDataFormDAO();
     }
 
     public DetailExportProducts isValidProduct(DetailExportProducts detailExportProducts1,ArrayList<DetailExportProducts>detailExportProducts){
