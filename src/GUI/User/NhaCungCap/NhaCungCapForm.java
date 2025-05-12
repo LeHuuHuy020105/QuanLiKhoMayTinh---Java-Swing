@@ -366,10 +366,10 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
 
                 try {
                     // Lấy giá trị từ các ô
-                    String maNCC = getCellValueAsString(row.getCell(1));
-                    String tenNCC = getCellValueAsString(row.getCell(2));
-                    String diaChi = getCellValueAsString(row.getCell(3));
-                    String sdt = getCellValueAsString(row.getCell(4));
+                    String maNCC = getCellValueAsString(row.getCell(0));
+                    String tenNCC = getCellValueAsString(row.getCell(1));
+                    String diaChi = getCellValueAsString(row.getCell(2));
+                    String sdt = getCellValueAsString(row.getCell(3));
 
                     // Kiểm tra dữ liệu hợp lệ
                     if (maNCC.isEmpty() || tenNCC.isEmpty() || diaChi.isEmpty() || sdt.isEmpty()) {

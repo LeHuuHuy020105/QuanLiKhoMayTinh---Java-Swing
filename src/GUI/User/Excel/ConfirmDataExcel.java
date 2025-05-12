@@ -1,5 +1,6 @@
 package GUI.User.Excel;
 
+import BLL.CheckValidInput;
 import DAO.BrachDAO;
 import DAO.ProducersDAO;
 import DAO.ProductsDAO;
@@ -115,7 +116,7 @@ public class ConfirmDataExcel extends JFrame {
     }
 
 
-    public void insertObject(Object obj){
+    public boolean insertObject(Object obj){
         if (obj instanceof Computer){
             Computer computer = (Computer) obj;
             ProductsDAO.getInstance().insert(computer);
@@ -123,24 +124,32 @@ public class ConfirmDataExcel extends JFrame {
         }else {
             if(obj instanceof Branch){
                 Branch branch = (Branch)obj;
+                Boolean error=CheckValidInput.checkValidPhoneBranch(branch.getSoDienThoai(),0,false);
+                if(!error)return error;
                 BrachDAO.getInstance().insert(branch);
             }
             else if (obj instanceof Producer){
                 Producer producer = (Producer) obj;
+                Boolean error=CheckValidInput.checkValidPhoneProducer(producer.getSdt(),null,false);
+                if(!error)return error;
                 ProducersDAO.getInstance().insert(producer);
             }
         }
+        return true;
     }
     public void XacNhanMouseClicked() {
         if (data == null || data.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không có sản phẩm nào để thêm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        boolean error = true;
         int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc thêm ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
             for (Object obj : data) {
-               insertObject(obj);
+                error= insertObject(obj);
+                if(!error)return;
             }
+            if(!error)return;
             if(sanPhamForm != null){
                 sanPhamForm.updateTableDataFormDAO();
             }

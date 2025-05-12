@@ -186,6 +186,9 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
 
     public void XoaMouseClicked(){
         User user = this.getUserSelected();
+        if(user==null){
+            return;
+        }
         int luaChon = JOptionPane.showConfirmDialog(this,"Bạn có muốn xoá tài khoản này hay không ", "xoá nhà cung cấp", JOptionPane.YES_NO_OPTION);
         if(luaChon == JOptionPane.YES_OPTION){
             int ketQua = userBLL.delete(user);
@@ -255,6 +258,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         }
     }
     public void ThemTaiKhoanMouseClicked() {
+        System.out.println("aaaaa");
         ThemTaiKhoanForm themTaiKhoanForm = new ThemTaiKhoanForm(this);
         themTaiKhoanForm.setVisible(true);
     }

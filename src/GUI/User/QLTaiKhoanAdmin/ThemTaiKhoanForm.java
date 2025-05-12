@@ -27,7 +27,6 @@ public class ThemTaiKhoanForm extends JFrame {
 	private JPasswordField textField_MK;
 	private QLTaiKhoanForm qlTaiKhoanForm;
 	private CheckValidInput checkValidInput;
-	private User user_Selected;
 	private BranchBLL branchBLL;
 	private RoleBLL roleBLL;
 	private UserBLL userBLL;
@@ -41,7 +40,6 @@ public class ThemTaiKhoanForm extends JFrame {
 	 */
 	public ThemTaiKhoanForm(QLTaiKhoanForm qlTaiKhoanForm) {
 		this.qlTaiKhoanForm = qlTaiKhoanForm;
-		this.user_Selected = qlTaiKhoanForm.getUserSelected();
 		this.branchBLL = new BranchBLL();
 		this.roleBLL = new RoleBLL();
 		this.userBLL = new UserBLL();
@@ -208,7 +206,7 @@ public class ThemTaiKhoanForm extends JFrame {
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập đầy đủ thông tin !");
 			return;
 		}
-		if(!checkValidInput.checkValidAccountUser(username) || !checkValidInput.checkValidPhoneUser(phone,user_Selected.getIdUser(),false) || !checkValidInput.checkEmailUser(email,user_Selected.getIdUser(),false)){
+		if(!checkValidInput.checkValidAccountUser(username) || !checkValidInput.checkValidPhoneUser(phone,0,false) || !checkValidInput.checkEmailUser(email,0,false)){
 			return;
 		}
 		if(!chiNhanh.isEmpty()){

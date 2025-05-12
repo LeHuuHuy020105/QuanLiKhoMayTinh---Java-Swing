@@ -67,10 +67,10 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql_deleteDBUser_Role = "delete from user_role where user_id =?";
-            PreparedStatement pstUserRole = connection.prepareStatement(sql_deleteDBUser_Role);
-            pstUserRole.setInt(1,user.getIdUser());
-            pstUserRole.executeUpdate();
+//            String sql_deleteDBUser_Role = "delete from user_role where user_id =?";
+//            PreparedStatement pstUserRole = connection.prepareStatement(sql_deleteDBUser_Role);
+//            pstUserRole.setInt(1,user.getIdUser());
+//            pstUserRole.executeUpdate();
             String sql = Query.deleteUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,user.getIdUser());

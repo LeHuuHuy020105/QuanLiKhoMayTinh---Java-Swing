@@ -230,7 +230,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
         panel_5_1_1.add(btn_LamMoi);
 
         columnNames = new String[]{
-                "STT", "Mã chi nhánh","Tên chi nhánh", "Địa chỉ","Quận","Thành phố","SDT","Mô tả"
+                "STT", "Tên chi nhánh", "Địa chỉ","Quận","Thành phố","SDT","Mô tả"
         };
         table_CN = new JTable();
         table_CN.setFont(new Font("Tahoma", Font.PLAIN, 14));
