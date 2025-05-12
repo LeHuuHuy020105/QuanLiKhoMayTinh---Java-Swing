@@ -386,11 +386,6 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
 
 	private boolean matchTime(Timestamp dateStart, Timestamp dateEnd, ExportProducts exportProducts) {
 		// Chuyển đổi Timestamp thành LocalDate (chỉ lấy ngày, không lấy giờ phút giây)
-		System.out.println("Macht time");
-		System.out.println("1: "+ dateStart);
-		System.out.println("2: "+ dateEnd);
-		System.out.println("3: "+ exportProducts.getNgayNhanDonXuat());
-		System.out.println("4: "+ exportProducts.getThoiDiemHuyPhieu());
 		LocalDate startDate = (dateStart != null) ? dateStart.toLocalDateTime().toLocalDate() : null;
 		LocalDate endDate = (dateEnd != null) ? dateEnd.toLocalDateTime().toLocalDate() : null;
 		LocalDate productDate = (exportProducts.getNgayLenDonXuat() != null)
