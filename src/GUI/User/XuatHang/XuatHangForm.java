@@ -323,6 +323,7 @@ public class XuatHangForm extends JPanel implements updateDataToTable<Computer> 
             }
             if(hasError){
                 JOptionPane.showMessageDialog(this,"Tồn tại máy không có trong kho hoặc số lượng vượt quá kho !");
+                return;
             }
             JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
         } catch (IOException e) {

@@ -347,49 +347,94 @@ public class NhaCungCapForm extends JPanel implements updateDataToTable<Producer
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
-            Iterator<Row> rowIterator = sheet.iterator();
+            if (sheet == null) {
+                JOptionPane.showMessageDialog(null, "File Excel không có sheet nào!");
+                return;
+            }
 
-            // Bỏ qua dòng đầu tiên nếu là header
+            Iterator<Row> rowIterator = sheet.iterator();
+            // Bỏ qua dòng header
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
+
             ArrayList<Producer> producers = new ArrayList<>();
+            int rowNum = 1; // Đếm dòng để báo lỗi cụ thể
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                String maNCC = row.getCell(1).getStringCellValue();
-                String tenNCC = row.getCell(2).getStringCellValue();
-                String diaChi = row.getCell(3).getStringCellValue();
-                String sdt = row.getCell(4).getStringCellValue();
-                Producer producer = new Producer(diaChi,maNCC,sdt,tenNCC);
-                producers.add(producer);
+                rowNum++;
+
+                try {
+                    // Lấy giá trị từ các ô
+                    String maNCC = getCellValueAsString(row.getCell(1));
+                    String tenNCC = getCellValueAsString(row.getCell(2));
+                    String diaChi = getCellValueAsString(row.getCell(3));
+                    String sdt = getCellValueAsString(row.getCell(4));
+
+                    // Kiểm tra dữ liệu hợp lệ
+                    if (maNCC.isEmpty() || tenNCC.isEmpty() || diaChi.isEmpty() || sdt.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,
+                                "Dữ liệu không hợp lệ tại dòng " + rowNum + ". Vui lòng kiểm tra lại!");
+                        return;
+                    }
+
+                    // Tạo đối tượng Producer
+                    Producer producer = new Producer(diaChi, maNCC, sdt, tenNCC);
+                    producers.add(producer);
+
+                } catch (IllegalStateException e) {
+                    // Bắt lỗi khi ô không đúng định dạng (ví dụ: Numeric thay vì String)
+                    JOptionPane.showMessageDialog(null,
+                            "Dữ liệu không hợp lệ tại dòng " + rowNum + ": " + e.getMessage());
+                    return;
+                }
             }
-            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(producers, columnNames, "Chi nhánh");
+
+            // Nếu không có dữ liệu
+            if (producers.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "File Excel không chứa dữ liệu hợp lệ!");
+                return;
+            }
+
+            // Hiển thị xác nhận dữ liệu
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(producers, columnNames, "Nhà cung cấp",this);
+
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi đọc file Excel: " + e.getMessage());
             e.printStackTrace();
         }
+
         updateTableDataFormDAO();
     }
-    private String getCellValue(Cell cell) {
+
+    // Hàm hỗ trợ lấy giá trị ô dưới dạng chuỗi
+    private String getCellValueAsString(Cell cell) {
         if (cell == null) {
             return "";
         }
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue().trim();
-            case NUMERIC:
-                if (cell.getColumnIndex() == 1) { // Kiểm tra nếu cột Mã NCC
-                    return String.valueOf((long) cell.getNumericCellValue()); // Chuyển số thành chuỗi
-                } else {
-                    return String.valueOf(cell.getNumericCellValue()); // Số khác thì giữ nguyên
-                }
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA:
-                return cell.getCellFormula();
-            case BLANK:
-                return "";
-            default:
-                return "";
+
+        try {
+            switch (cell.getCellType()) {
+                case STRING:
+                    return cell.getStringCellValue().trim();
+                case NUMERIC:
+                    // Chuyển số thành chuỗi, giữ nguyên định dạng (đặc biệt cho số điện thoại)
+                    DataFormatter formatter = new DataFormatter();
+                    return formatter.formatCellValue(cell).trim();
+                case BOOLEAN:
+                    return String.valueOf(cell.getBooleanCellValue());
+                case FORMULA:
+                    try {
+                        return cell.getStringCellValue().trim();
+                    } catch (Exception e) {
+                        return String.valueOf(cell.getNumericCellValue()).trim();
+                    }
+                default:
+                    return "";
+            }
+        } catch (IllegalStateException e) {
+            // Nếu vẫn xảy ra lỗi khi lấy giá trị ô
+            throw new IllegalStateException("Không thể đọc giá trị ô: " + e.getMessage());
         }
     }
 

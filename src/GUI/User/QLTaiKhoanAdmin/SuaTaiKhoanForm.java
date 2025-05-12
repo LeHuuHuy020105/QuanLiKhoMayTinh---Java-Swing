@@ -216,7 +216,6 @@ public class SuaTaiKhoanForm extends JFrame {
 	}
 	public void fillData(){
 		user_Selected = this.qlTaiKhoanForm.getUserSelected();
-		System.out.println(user_Selected);
 		String role = userBLL.getRoleByIDUser(user_Selected.getIdUser());
 		textField_Email.setText(user_Selected.getEmail());
 		textField_TaiKhoan.setText(user_Selected.getUserName());
@@ -264,7 +263,6 @@ public class SuaTaiKhoanForm extends JFrame {
 			return;
 		}
 		if(!chiNhanh.isEmpty()){
-			System.out.println("chinhanh");
 			branch = getBranchSelected(chiNhanh);
 			user_Selected.setMaChiNhanh(branch.getMaChiNhanh());
 		}
@@ -274,15 +272,12 @@ public class SuaTaiKhoanForm extends JFrame {
 		user_Selected.setPhone(phone);
 		user_Selected.setStatus(status);
 		userBLL.update(user_Selected);
-		System.out.println("Role " + role);
 		roleBLL.updateRoleUserByIdUser(user_Selected.getIdUser(),role.getId());
 		this.dispose();
 		qlTaiKhoanForm.updateTableDataFormDAO();
 	}
 	public Branch getBranchSelected(String description){
-		System.out.println("description "+description);
 		String [] data = description.split(" - ");
-		System.out.println("diachi "+data[1]);
 		return branchBLL.BranchByDiaChi(data[1]);
 	}
 }

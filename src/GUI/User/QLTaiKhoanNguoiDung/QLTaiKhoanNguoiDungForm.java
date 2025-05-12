@@ -442,7 +442,6 @@ public class QLTaiKhoanNguoiDungForm extends JFrame implements updateDataToTable
                 Producer producer = new Producer(diaChi, maNCC, sdt, tenNCC);
                 producers.add(producer);
             }
-            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(producers, columnNames, "Chi nhánh");
         } catch (IOException e) {
             e.printStackTrace();
         }

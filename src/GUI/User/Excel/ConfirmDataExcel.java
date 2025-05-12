@@ -8,6 +8,9 @@ import DTO.Branch;
 import DTO.Computer;
 import DTO.Laptop;
 import DTO.Producer;
+import GUI.User.ChiNhanh.ChiNhanhForm;
+import GUI.User.NhaCungCap.NhaCungCapForm;
+import GUI.User.SanPham.SanPhamForm;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -25,6 +28,9 @@ public class ConfirmDataExcel extends JFrame {
     private JPanel contentPane;
     private JTable table_product;
     private ArrayList<Object> data;
+    private SanPhamForm sanPhamForm;
+    private ChiNhanhForm chiNhanhForm;
+    private NhaCungCapForm nhaCungCapForm;
 
     /**
      * Launch the application.
@@ -33,10 +39,22 @@ public class ConfirmDataExcel extends JFrame {
     /**
      * Create the frame.
      */
-    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title ) {
+    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title , SanPhamForm sanPhamForm) {
+        this.sanPhamForm = sanPhamForm;
+        init(data,columnNames,title);
+    }
+    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title , ChiNhanhForm chiNhanhForm) {
+        this.chiNhanhForm = chiNhanhForm;
+        init(data,columnNames,title);
+    }
+    public ConfirmDataExcel(ArrayList<?> data, String[] columnNames, String title , NhaCungCapForm nhaCungCapForm) {
+        this.nhaCungCapForm = nhaCungCapForm;
+        init(data,columnNames,title);
+    }
+    public void init(ArrayList<?> data, String[] columnNames, String title ){
         this.data = new ArrayList<>(data);
         setTitle(title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 982, 536);
         setLocationRelativeTo(null);
         contentPane = new JPanel();
@@ -56,7 +74,7 @@ public class ConfirmDataExcel extends JFrame {
                 Computer computer = (Computer) obj;
                 model.addRow(new Object[]{
                         ++i,computer.getTenMay(), computer.getSoLuong(),
-                        df.format(computer.getGia()), df.format(computer.getGiaBan()), computer.getTenCpu(),
+                        df.format(computer.getGia()), df.format(computer.getGiaBan()),computer.getCardManHinh() ,computer.getTenCpu(),
                         computer.getRam(), computer.getRom(), (computer instanceof Laptop) ? "Laptop" : "PC"
                 });
             } else if (obj instanceof Branch) {
@@ -80,12 +98,12 @@ public class ConfirmDataExcel extends JFrame {
 
         btn_Confirm = new JButton("Xác nhận");
         btn_Confirm.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 XacNhanMouseClicked();
-        	}
+            }
         });
-        
+
         btn_Confirm.setForeground(Color.WHITE);
         btn_Confirm.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btn_Confirm.setBorderPainted(false);
@@ -123,7 +141,15 @@ public class ConfirmDataExcel extends JFrame {
             for (Object obj : data) {
                insertObject(obj);
             }
-
+            if(sanPhamForm != null){
+                sanPhamForm.updateTableDataFormDAO();
+            }
+            if(chiNhanhForm != null){
+                chiNhanhForm.updateTableDataFormDAO();
+            }
+            if(nhaCungCapForm != null){
+                nhaCungCapForm.updateTableDataFormDAO();
+            }
             JOptionPane.showMessageDialog(this, Notification.success_ImportExcel);
             this.dispose();
         } else {

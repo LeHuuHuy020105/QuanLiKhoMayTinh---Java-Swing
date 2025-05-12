@@ -33,6 +33,7 @@ public class ThemNhaCungCap extends JFrame  {
 	 * Create the frame.
 	 */
 	public ThemNhaCungCap(NhaCungCapForm nhaCungCapForm) {
+		this.producerBLL = new ProducerBLL();
 		this.nhaCungCapForm = nhaCungCapForm;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 388, 720);

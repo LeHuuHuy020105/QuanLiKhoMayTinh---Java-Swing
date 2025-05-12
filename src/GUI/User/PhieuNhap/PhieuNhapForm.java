@@ -292,8 +292,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			String role = userBLL.getRoleByIDUser(user.getIdUser());
 			i++;
 			String trangThai = statusDeliveryBLL.selectByID(importProducts.getTrangThai());
-			System.out.println(importProducts.getTrangThai());
-			System.out.println(trangThai);
 			model.addRow(new Object[]{
 					i,
 					importProducts.getMaphieunhap(),
@@ -368,11 +366,9 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		// Lấy giá trị từ JDateChooser
 		if (date_Start.getDate() != null) {
 			dateStart = new Timestamp(date_Start.getDate().getTime());
-			System.out.println("Date Start: " + dateStart.toLocalDateTime().toLocalDate());
 		}
 		if (date_End.getDate() != null) {
 			dateEnd = new Timestamp(date_End.getDate().getTime());
-			System.out.println("Date End: " + dateEnd.toLocalDateTime().toLocalDate());
 		}
 
 		// Lấy danh sách tất cả sản phẩm
@@ -391,7 +387,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 			}
 		}
 
-		System.out.println("Mang: " + filteredImportProducts);
 		updateTableData(filteredImportProducts);
 	}
 
@@ -445,9 +440,6 @@ public class PhieuNhapForm extends JPanel implements updateDataToTable<ImportPro
 		}else {
 			matchesCancelDate =false;
 		}
-		System.out.print("iD: " + importProducts.getMaphieunhap()+" - ");
-		System.out.print(matchesDate+ " - ");
-		System.out.println(matchesCancelDate);
 
 		// Trả về true nếu ít nhất một trong hai timestamp phù hợp
 		return matchesDate || matchesCancelDate;

@@ -204,7 +204,6 @@ public class ThemTaiKhoanForm extends JFrame {
 		String phone = textField_SDT.getText();
 		Role role = roleBLL.getRoleCBX(cbx_Vaitro);
 		Branch branch = null;
-		System.out.println("chi nhanh "+ chiNhanh);
 		if(password.equals("") || email.equals("") || username.equals("")){
 			JOptionPane.showMessageDialog(this,"Vui lòng nhập đầy đủ thông tin !");
 			return;
@@ -213,7 +212,6 @@ public class ThemTaiKhoanForm extends JFrame {
 			return;
 		}
 		if(!chiNhanh.isEmpty()){
-			System.out.println("nulll-chinhanh");
 			branch = getBranchSelected(chiNhanh);
 			user.setMaChiNhanh(branch.getMaChiNhanh());
 		}
@@ -224,7 +222,6 @@ public class ThemTaiKhoanForm extends JFrame {
 		user.setStatus(1);
 		user.setEmail(email);
 		int idUser = userBLL.insert(user);
-		System.out.println("idUSer + "+ idUser);
 		int ketQua = roleBLL.insertRoleUser(idUser,role.getId());
 		if(ketQua>0){
 			JOptionPane.showMessageDialog(this,"Thêm tài khoản thành công !");
@@ -233,9 +230,7 @@ public class ThemTaiKhoanForm extends JFrame {
 		}
 	}
 	public Branch getBranchSelected(String description){
-		System.out.println("description "+description);
 		String [] data = description.split(" - ");
-		System.out.println("diachi "+data[1]);
 		return branchBLL.BranchByDiaChi(data[1]);
 	}
 }

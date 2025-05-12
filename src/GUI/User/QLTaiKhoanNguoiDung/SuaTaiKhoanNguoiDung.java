@@ -382,7 +382,6 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
     public void fillData(){
         customer_Selected = qlTaiKhoanNguoiDungForm.getCustomerSelected();
         String loaiTaiKhoan = customerBLL.GetTypeCustomer(customer_Selected.getMaKhachHang());
-        System.out.println(loaiTaiKhoan);
         cbx_LoaiTK.setSelectedItem(loaiTaiKhoan);
         input_HoTen.setText(customer_Selected.getFullName());
         input_SDT.setText(customer_Selected.getSoDienThoai());

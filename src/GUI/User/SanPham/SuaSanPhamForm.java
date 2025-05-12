@@ -360,7 +360,6 @@ public class SuaSanPhamForm extends JFrame {
 	}
 	public void hienThiThongTinSanPham(){
 		Computer computer_Selected = sanPhamForm.getComputerSelected();
-		System.out.println(computer_Selected);
 		label_IDproduct.setText(computer_Selected.getMaMay()+"");
 		input_tenSanPham.setText(computer_Selected.getTenMay());
 		input_gia.setText(computer_Selected.getGia()+"");

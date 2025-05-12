@@ -238,7 +238,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         panel_5_1_1.add(btnNewButton_1);
 
         columnNames = new String[]{
-                "Mã máy", "Tên máy", "Số lượng", "Đơn giá","Giá bán", "Bộ xử lí", "RAM", "Bộ nhớ", "Loại máy"
+                "Mã máy", "Tên máy", "Số lượng", "Đơn giá","Giá bán", "Bộ xử lí","CPU", "RAM", "Bộ nhớ", "Loại máy"
         };
         table_product = new JTable();
         table_product.setModel(new DefaultTableModel(
@@ -515,7 +515,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                 }
                 computers.add(computer);
             }
-            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(computers, columnNames, "Chi nhánh");
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(computers, columnNames, "Sản phẩm",this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -550,7 +550,6 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
             } else {
                 loaiMay = "PC";
             }
-            System.out.println(computer.getGia());
             model.addRow(
                     new Object[]{
                             computer.getMaMay(),
@@ -559,6 +558,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                             df.format(computer.getGia()) + " VND",
                             df.format(computer.getGiaBan())+" VND",
                             computer.getCardManHinh(),
+                            computer.getTenCpu(),
                             computer.getRam(),
                             computer.getDungLuongLuuTru(),
                             loaiMay

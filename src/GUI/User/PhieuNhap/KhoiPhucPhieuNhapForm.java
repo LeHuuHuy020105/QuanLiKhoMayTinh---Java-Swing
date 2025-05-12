@@ -194,7 +194,6 @@ public class KhoiPhucPhieuNhapForm extends JFrame {
             i++;
             Computer computer = productsBLL.searchByIdProduct(detailImportProducts1.getMaMay());
             double thanhTien = detailImportProducts1.getSoluong()*computer.getGia();
-            System.out.println(df.format(thanhTien));
             model.addRow(new Object[]{
                     i,
                     detailImportProducts1.getMaMay(),

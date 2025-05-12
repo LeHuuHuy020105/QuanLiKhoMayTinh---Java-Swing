@@ -269,7 +269,6 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 			return null;
 		}
 		int maPhieuXuat = Integer.parseInt(model.getValueAt(i_row,1)+"");
-		System.out.println(maPhieuXuat);
 		ExportProducts exportProducts = exportProductsBLL.ExportProductsByID(maPhieuXuat);
 		return exportProducts;
 	}
@@ -292,7 +291,6 @@ public class PhieuNhapBranchForm extends JPanel implements updateDataToTable<Exp
 		String luaChon = (String) cbx_luaChon.getSelectedItem();
 		String input = input_Search.getText();
 		ArrayList<ExportProducts> exportProducts = searchExportProducts(luaChon, input);
-		System.out.println(exportProducts);
 		updateTableData(exportProducts);
 	}
 

@@ -121,7 +121,6 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
         if (trangThai.equals("Hoàn thành")) {
             for (DetailExportProducts item : detailExportProducts) {
                 Inventory inventory_Valid = isValidProduct(inventories, item);
-                System.out.println(inventory_Valid);
                 if (inventory_Valid != null) {
                     int soLuongKho = inventory_Valid.getSoLuong();
                     int soLuongNhap = item.getSoLuong();
@@ -129,8 +128,6 @@ public class SuaTrangThaiPhieuXuat extends JFrame {
                     inventoryBLL.updateSoLuong(inventory_Valid,branch);
                 } else {
                     Inventory inventory = new Inventory(exportProducts.getMaChiNhanh(), item.getMaMay(), item.getSoLuong());
-                    System.out.println("----------");
-                    System.out.println(inventory);
                     inventoryBLL.insert(inventory);
                 }
             }

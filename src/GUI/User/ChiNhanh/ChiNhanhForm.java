@@ -376,7 +376,7 @@ public class ChiNhanhForm extends JPanel implements updateDataToTable<Branch>, E
                 Branch branch = new Branch(diaChi,moTa,sdt,tenCN,tenQuan,thanhPho);
                branches.add(branch);
             }
-            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(branches, columnNames, "Chi nhánh");
+            ConfirmDataExcel confirmDataExcel = new ConfirmDataExcel(branches, columnNames, "Chi nhánh",this);
         } catch (IOException e) {
             e.printStackTrace();
         }

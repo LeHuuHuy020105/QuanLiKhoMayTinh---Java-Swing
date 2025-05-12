@@ -237,7 +237,6 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
                 if (loaiTaiKhoan.equals("online")) {
                     ThemTaiKhoanOnline();
                 } else {
-                    System.out.println("them tk offf");
                     ThemTaiKhoanOffline();
                 }
             }
@@ -265,7 +264,6 @@ public class ThemTaiKhoanNguoiDung extends JFrame {
     }
 
     private void ThemTaiKhoanOffline() {
-        System.out.println("offf");
         String hoTen = input_HoTen.getText();
         String soDienThoai = input_SDT.getText();
         if (hoTen.isEmpty() || soDienThoai.isEmpty()) {

@@ -285,7 +285,6 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
             for (int i = 0; i < cbx_ChiNhanh.getItemCount(); i++) {
                 String item = cbx_ChiNhanh.getItemAt(i) + "";
                 if (item.contains(diaChi)) {
-                    System.out.println(item);
                     cbx_ChiNhanh.setSelectedItem(item);
                     cbx_ChiNhanh.setEnabled(false);
                 }
@@ -352,9 +351,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
     // Kiểm tra chi nhánh
     private boolean matchBranch(Computer computer, String branchFilter) {
         String cbx_ChiNhanhValue = cbx_ChiNhanh.getSelectedItem() + "";
-        System.out.println(cbx_ChiNhanhValue);
         String[] data = cbx_ChiNhanhValue.split("-");
-        System.out.println(data[0]);
         String diaChi = data[1];
         Branch branch = branchBLL.BranchByDiaChi(diaChi);
         ArrayList<Inventory> inventories = inventoryBLL.InventoryByBranch(branch);

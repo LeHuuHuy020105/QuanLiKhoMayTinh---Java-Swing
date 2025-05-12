@@ -119,7 +119,7 @@ public class SearchProduct {
         ArrayList<Computer> ketQua = new ArrayList<>();
         double donGia_search = Double.parseDouble(content_Search);
         for (Computer computer : computers) {
-            if (computer.getSoLuong() == donGia_search) {
+            if (computer.getGiaBan() == donGia_search) {
                 ketQua.add(computer);
             }
         }

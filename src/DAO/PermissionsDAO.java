@@ -21,7 +21,6 @@ public class PermissionsDAO {
             pst.setInt(1, idRole);
             pst.setString(2,tenGiaoDien);
             ResultSet rs = pst.executeQuery();
-            System.out.println(rs);
             while (rs.next()) {
                 int id = rs.getInt("magiaodien");
                 boolean canThem = rs.getInt("them") == 1;

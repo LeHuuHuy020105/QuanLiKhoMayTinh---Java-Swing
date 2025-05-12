@@ -251,7 +251,7 @@ public class writePDF {
                 pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(ctpx.getMaMay()), fontData)));
                 pdfTable.addCell(new PdfPCell(new Phrase(computer.getTenMay(), fontData)));
                 pdfTable.addCell(new PdfPCell(new Phrase(formatter.format(computer.getGia()) + "đ", fontData)));
-                pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(computer.getSoLuong()), fontData)));
+                pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(ctpx.getSoLuong()), fontData)));
                 pdfTable.addCell(new PdfPCell(new Phrase(String.valueOf(ProducersDAO.getInstance().producerByID(computer.getMaNhaCungCap()).getTenNhaCungCap()), fontData)));
             }
             document.add(pdfTable);

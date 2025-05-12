@@ -361,7 +361,6 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
 
     @Override
     public void updateTableData(ArrayList<Computer> computers) {
-        System.out.println(computers);
         DecimalFormat df = new DecimalFormat("#,###");
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         model.setRowCount(0);
@@ -563,11 +562,8 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
     public double totalPrice(){
         double tongTien = 0;
         for(DetailBill detailBill : detailBills){
-            System.out.println("------");
-            System.out.println(detailBill);
             tongTien+=detailBill.getSoLuong()*productsBLL.searchByIdProduct(detailBill.getMaMay()).getGiaBan();
         }
-        System.out.println(tongTien);
         return tongTien;
     }
     public void resetNhapHang(){
