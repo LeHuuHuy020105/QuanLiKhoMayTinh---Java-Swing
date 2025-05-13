@@ -300,6 +300,7 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
     @Override
     public void updateTableData(ArrayList<Computer> t) {
+        System.out.println(t);
         DecimalFormat df = new DecimalFormat("#,###");
         DefaultTableModel model = (DefaultTableModel) table_product.getModel();
         model.setRowCount(0);
@@ -350,11 +351,12 @@ public class TonKhoForm extends JPanel implements updateDataToTable<Computer> {
 
     // Kiểm tra chi nhánh
     private boolean matchBranch(Computer computer, String branchFilter) {
-        String cbx_ChiNhanhValue = cbx_ChiNhanh.getSelectedItem() + "";
-        String[] data = cbx_ChiNhanhValue.split("-");
+        String[] data = branchFilter.split("-");
         String diaChi = data[1];
         Branch branch = branchBLL.BranchByDiaChi(diaChi);
+        System.out.println("branch : " + branch);
         ArrayList<Inventory> inventories = inventoryBLL.InventoryByBranch(branch);
+        System.out.println("arr " +inventories);
         for (Inventory inventory : inventories) {
             if (inventory.getMaMay() == computer.getMaMay()) {
                 computer.setSoLuong(inventory.getSoLuong());

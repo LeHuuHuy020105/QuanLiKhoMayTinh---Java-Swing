@@ -4,6 +4,7 @@ import DAO.BrachDAO;
 import DAO.CustomerDAO;
 import DAO.ProducersDAO;
 import DAO.UserDAO;
+import DTO.Branch;
 
 import javax.swing.*;
 
@@ -119,6 +120,15 @@ public class CheckValidInput {
         boolean flag = BrachDAO.getInstance().checkName(name);
         if (flag == true) {
             JOptionPane.showMessageDialog(jFrame, "Tên chi nhánh đã tồn tại!");
+            return false;
+        }
+        return true;
+    }
+    public static boolean checkValidAddressBranch(String address){
+        Branch branch = BrachDAO.getInstance().BranchByDiaChi(address);
+        boolean flag = branch==null?false:true;
+        if (flag == true) {
+            JOptionPane.showMessageDialog(jFrame, "Địa chỉ chi nhánh đã tồn tại!");
             return false;
         }
         return true;

@@ -164,17 +164,8 @@ public class ThemChiNhanh extends JFrame {
             String SDT = input_SDT.getText().trim();
             String tenChiNhanh = textField_tenChiNhanh.getText();
             String diaChi = ValueAddress.getValueAddressFrame(this, cbx_ThanhPho, cbx_Quan, cbx_Phuong, input_SoNha);
-//			if (SDT.isEmpty() || diaChi.equals("N/A")) {
-//				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-//				return;
-//			}else {
-//				if(isValidNumberPhone(SDT)){
-//					JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại!");
-//					return;
-//				}
-//			}
 
-            if (!checkValidInput.checkValidPhoneBranch(SDT,0,false) || !checkValidInput.checkValidNameBranch(tenChiNhanh)) {
+            if (!checkValidInput.checkValidPhoneBranch(SDT,0,false) || !checkValidInput.checkValidNameBranch(tenChiNhanh) || !checkValidInput.checkValidAddressBranch(diaChi)) {
                 return;
             } else {
                 if (diaChi.equals("N/A")) {

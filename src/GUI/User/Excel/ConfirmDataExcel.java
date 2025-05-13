@@ -124,7 +124,10 @@ public class ConfirmDataExcel extends JFrame {
         }else {
             if(obj instanceof Branch){
                 Branch branch = (Branch)obj;
-                Boolean error=CheckValidInput.checkValidPhoneBranch(branch.getSoDienThoai(),0,false);
+                Boolean error=true;
+                if(!CheckValidInput.checkValidPhoneBranch(branch.getSoDienThoai(),0,false) || !CheckValidInput.checkValidNameBranch(branch.getTenChiNhanh()) || !CheckValidInput.checkValidAddressBranch(branch.getDiaChi())){
+                    error=false;
+                }
                 if(!error)return error;
                 BrachDAO.getInstance().insert(branch);
             }

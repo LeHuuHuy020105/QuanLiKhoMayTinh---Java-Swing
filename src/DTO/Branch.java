@@ -92,7 +92,11 @@ public class Branch {
         return "Branch{" +
                 "diaChi='" + diaChi + '\'' +
                 ", maChiNhanh=" + maChiNhanh +
+                ", tenChiNhanh='" + tenChiNhanh + '\'' +
+                ", tenQuan='" + tenQuan + '\'' +
+                ", thanhPho='" + thanhPho + '\'' +
                 ", soDienThoai='" + soDienThoai + '\'' +
+                ", moTa='" + moTa + '\'' +
                 '}';
     }
 }

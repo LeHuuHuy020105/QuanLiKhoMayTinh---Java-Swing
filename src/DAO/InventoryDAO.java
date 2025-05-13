@@ -80,6 +80,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
         return ketQua;
     }
     public ArrayList<Inventory> InventoryByBranch (Branch branch){
+        System.out.println("DAO" + branch);
         ArrayList<Inventory>ketQua = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
