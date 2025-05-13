@@ -26,21 +26,13 @@ public class SearchCustomer {
     public ArrayList<Customer> searchAll(String content_Search) {
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
         if (content_Search.equals("")) {
-            System.out.println("Rong");
             return customers;
         }
         ArrayList<Customer> ketQua = new ArrayList<>();
 
         content_Search = content_Search.toLowerCase().trim(); // Xóa khoảng trắng thừa
-        System.out.println("Tìm kiếm: " + content_Search);
-        System.out.println("Tổng số khách hàng: " + customers.size());
 
         for (Customer customer : customers) {
-            // In dữ liệu để debug
-            System.out.println("Username: " + customer.getUserName() +
-                    ", FullName: " + customer.getFullName() +
-                    ", DiaChi: " + customer.getDiaChi() +
-                    ", SoDienThoai: " + customer.getSoDienThoai());
 
             // Kiểm tra từng trường
             boolean match = false;
@@ -61,8 +53,6 @@ public class SearchCustomer {
                 ketQua.add(customer);
             }
         }
-
-        System.out.println("Kết quả tìm kiếm: " + ketQua.size() + " khách hàng");
         return ketQua;
     }
 
@@ -99,7 +89,6 @@ public class SearchCustomer {
     public ArrayList<Customer> searchTaiKhoan(String content_Search) {
         ArrayList<Customer> customers = CustomerDAO.getInstance().selectAll();
         if (content_Search.equals("")) {
-            System.out.println("Rong");
             return customers;
         }
         ArrayList<Customer> ketQua = new ArrayList<>();

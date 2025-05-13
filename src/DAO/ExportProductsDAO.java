@@ -24,7 +24,6 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             if (exportProducts.getTrangThai()==5){
                 sql ="update exportproducts set ngaylendon=?,trangthai=?,ngaynhandonxuat=CURRENT_TIMESTAMP,machinhanh=?,id=?, thoidiemhuyphieu=? where maphieuxuat =?";
             }
-            System.out.println(sql);
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setTimestamp(1,exportProducts.getNgayLenDonXuat());
             pst.setInt(2,exportProducts.getTrangThai());
@@ -49,6 +48,7 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,exportProducts.getMaPhieuXuat());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,6 +73,7 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
                 ExportProducts exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung,thoiDiemHuyPhieu);
                 ketQua.add(exportProducts);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +93,7 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
             var key = pst.getGeneratedKeys();
             key.next();
             ketQua= key.getInt(1);
-            System.out.println(key);
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,6 +116,7 @@ public class ExportProductsDAO implements DAOInterface<ExportProducts> {
                 Timestamp thoiDiemHuyPhieu = rs.getTimestamp("thoidiemhuyphieu");
                 exportProducts = new ExportProducts(maPhieuXuat,ngaylendon,null,trangThai,maChiNhanh,maNguoiDung,thoiDiemHuyPhieu);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }

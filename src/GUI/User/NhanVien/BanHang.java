@@ -634,12 +634,12 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         }
         return null;
     }
-    public Customer getCustomer() {
-        String text = textField_InfoCustomer.getText();
-        String[] split = text.split(" - ");
-        Customer customer = customerBLL.findByPhone(split[0]);
-        return customer;
-    }
+//    public Customer getCustomer() {
+//        String text = textField_InfoCustomer.getText();
+//        String[] split = text.split(" - ");
+//        Customer customer = customerBLL.findByPhone(split[0]);
+//        return customer;
+//    }
     public User getCurrentUser() {
         return currentUser;
     }

@@ -23,9 +23,9 @@ public class Query {
 
     //    Producer
     public static String insertProducer = "Insert into producer(manhacungcap,tennhacungcap,sodienthoai,diachi) VALUES (?,?,?,?)";
-    public static String updateProducer = "update " +
-            "Set tennhacungcap =?, diachi =? , sodienthoai =?" +
-            "from producer where manhacungcap =?";
+    public static String updateProducer = "UPDATE producer " +
+            "SET tennhacungcap = ?, diachi = ?, sodienthoai = ? " +
+            "WHERE manhacungcap = ?";
     public static String selectAllProducer = "Select * from producer";
     public static String producerByID = "select * from producer where manhacungcap =?";
     public static String deleteProducer = "delete from producer where manhacungcap =?";

@@ -49,6 +49,7 @@ public class ProductsDAO implements DAOInterface<Computer> {
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,computer.getMaMay());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }

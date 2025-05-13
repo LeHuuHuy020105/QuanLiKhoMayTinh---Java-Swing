@@ -22,7 +22,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
             pst.setString(3, producer.getSdt());
             pst.setString(4, producer.getDiaChi());
             ketQua = pst.executeUpdate();
-
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
             Connection connection = JDBCUtil.getConnection();
             String sql = Query.updateProducer;
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1,producer.getMaNhaCungCap());
+            pst.setString(1,producer.getTenNhaCungCap());
             pst.setString(2,producer.getDiaChi());
             pst.setString(3,producer.getSdt());
             pst.setString(4,producer.getMaNhaCungCap());
@@ -45,7 +45,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return ketQua;
     }
 
     @Override
@@ -57,6 +57,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1,producer.getMaNhaCungCap());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (SQLIntegrityConstraintViolationException e) {
             ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (Exception e) {
@@ -100,6 +101,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
             if (rs.next()) {
                 return rs.getString("sodienthoai");
             }
+            JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -161,6 +163,7 @@ public class ProducersDAO implements DAOInterface<Producer>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }

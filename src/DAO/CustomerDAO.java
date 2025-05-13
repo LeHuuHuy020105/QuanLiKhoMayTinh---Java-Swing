@@ -26,7 +26,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
             pst.setString(6, customer.getEmail());
             pst.setString(7, customer.getLoaiTaiKhoan());
             ketQua = pst.executeUpdate();
-
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,6 +58,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
             pst.setString(6,customer.getDiaChi());
             pst.setInt(7,customer.getMaKhachHang());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,6 +75,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
             pst.setString(2,customer.getSoDienThoai());
             pst.setInt(3,customer.getMaKhachHang());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,6 +88,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
              PreparedStatement pst = connection.prepareStatement("DELETE FROM customer WHERE makhachhang = ?")) {
             pst.setInt(1, customer.getMaKhachHang());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (SQLIntegrityConstraintViolationException e) {
             ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (SQLException e) {
@@ -115,6 +118,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
                 ketQua.add(customer);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,15 +126,16 @@ public class CustomerDAO implements DAOInterface<Customer>{
     }
     public String getPhoneByCustomerId(int idCustomer) {
         Connection c = JDBCUtil.getConnection();
-        String sql = "SELECT phone FROM producer WHERE makhachhang = ?";
+        String sql = "SELECT phone FROM customer WHERE makhachhang = ?";
         try (
                 PreparedStatement ps = c.prepareStatement(sql);
         ) {
             ps.setInt(1, idCustomer);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("sodienthoai");
+                return rs.getString("phone");
             }
+            JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -155,6 +160,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 String loaiTaiKhoan = rs.getString("loaitaikhoan");
                 customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -179,6 +185,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
                 ketQua.add(customer);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,6 +210,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                 Customer customer = new Customer(diaChi,email,hoVaTen,maKhachHang,matKhau,sdt,taiKhoan,loaiTaiKhoan);
                 ketQua.add(customer);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,6 +231,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }
@@ -243,6 +252,7 @@ public class CustomerDAO implements DAOInterface<Customer>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }

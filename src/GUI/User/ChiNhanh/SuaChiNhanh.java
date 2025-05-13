@@ -38,6 +38,7 @@ public class SuaChiNhanh extends JFrame {
 	 */
 	public SuaChiNhanh(ChiNhanhForm chiNhanhForm) {
 		this.chiNhanhForm = chiNhanhForm;
+		this.chiNhanhBLL = new ChiNhanhBLL();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 716,740);
 		setLocationRelativeTo(null);

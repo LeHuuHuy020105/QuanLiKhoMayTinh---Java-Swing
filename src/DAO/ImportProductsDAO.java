@@ -21,6 +21,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
             pst.setTimestamp(2, importProducts.getTimestamp());
             pst.setInt(3,importProducts.getManguoidung());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,6 +41,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
             var key = pst.getGeneratedKeys();
             key.next();
             ketQua= key.getInt(1);
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,6 +91,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
                 ImportProducts importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung,trangThai,thoiGianHuy,ngayNhanDon);
                 ketQua.add(importProducts);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,6 +115,7 @@ public class ImportProductsDAO implements DAOInterface<ImportProducts>{
                  Timestamp ngayNhanDon = rs.getTimestamp("ngaynhandon");
                  importProducts = new ImportProducts(maPhieuNhap,thoiGianTao,tongTien,maNguoiDung,trangThai,thoiGianHuy,ngayNhanDon);
              }
+             JDBCUtil.closeConnection(connection);
          } catch (Exception e) {
              e.printStackTrace();
          }

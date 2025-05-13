@@ -53,6 +53,7 @@ public class UserDAO implements DAOInterface<User>{
             pst.setString(6,user.getPhone());
             pst.setInt(7,user.getIdUser());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (SQLIntegrityConstraintViolationException e) {
             ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (Exception e) {
@@ -67,15 +68,11 @@ public class UserDAO implements DAOInterface<User>{
         int ketQua = 0;
         try {
             Connection connection = JDBCUtil.getConnection();
-//            String sql_deleteDBUser_Role = "delete from user_role where user_id =?";
-//            PreparedStatement pstUserRole = connection.prepareStatement(sql_deleteDBUser_Role);
-//            pstUserRole.setInt(1,user.getIdUser());
-//            pstUserRole.executeUpdate();
             String sql = Query.deleteUser;
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1,user.getIdUser());
             ketQua = pst.executeUpdate();
-            connection.close();
+            JDBCUtil.closeConnection(connection);
         } catch (SQLIntegrityConstraintViolationException e) {
             ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
             System.out.println(e);
@@ -106,6 +103,7 @@ public class UserDAO implements DAOInterface<User>{
                 User user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
                 ketQua.add(user);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,16 +137,17 @@ public class UserDAO implements DAOInterface<User>{
 	}
 
     public String getPhoneByUserId(int idUser) {
-        Connection c = JDBCUtil.getConnection();
-        String sql = Query.getPhoneByUserId;
-        try (
-                PreparedStatement ps = c.prepareStatement(sql);
-        ) {
+
+        try {
+            Connection c = JDBCUtil.getConnection();
+            String sql = Query.getPhoneByUserId;
+            PreparedStatement ps = c.prepareStatement(sql);
             ps.setInt(1, idUser);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getString("phone");
             }
+            JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -165,6 +164,7 @@ public class UserDAO implements DAOInterface<User>{
             if (rs.next()) {
                 return rs.getString("email");
             }
+            JDBCUtil.closeConnection(c);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -285,6 +285,7 @@ public class UserDAO implements DAOInterface<User>{
                 User user = new User(email,fullname,idUser,machinhanh,password,phone,status,username);
                 ketQua.add(user);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -305,6 +306,7 @@ public class UserDAO implements DAOInterface<User>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }
@@ -324,6 +326,7 @@ public class UserDAO implements DAOInterface<User>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }
@@ -343,6 +346,7 @@ public class UserDAO implements DAOInterface<User>{
                     return true;
                 }
             }
+            JDBCUtil.closeConnection(c);
         }catch (SQLException e) {
             e.printStackTrace();
         }

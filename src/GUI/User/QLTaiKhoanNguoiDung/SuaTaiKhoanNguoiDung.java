@@ -47,6 +47,7 @@ public class SuaTaiKhoanNguoiDung extends JFrame {
 //    }
     public SuaTaiKhoanNguoiDung(QLTaiKhoanNguoiDungForm qlTaiKhoanNguoiDungForm){
         this.qlTaiKhoanNguoiDungForm = qlTaiKhoanNguoiDungForm;
+        this.customerBLL = new CustomerBLL();
         init();
     }
 

@@ -38,6 +38,7 @@ public class LaptopDAO implements DAOInterface<Laptop> {
             pst.setDouble(16, laptop.getGiaBan());
             pst.setBytes(17, laptop.getHinhAnh());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
 
         } catch (Exception e) {
             e.printStackTrace();

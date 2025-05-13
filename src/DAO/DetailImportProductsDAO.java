@@ -23,6 +23,7 @@ public class DetailImportProductsDAO implements DAOInterface<DetailImportProduct
             pst.setInt(2, detailImportProducts.getMaMay());
             pst.setInt(3,detailImportProducts.getSoluong());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,6 +59,7 @@ public class DetailImportProductsDAO implements DAOInterface<DetailImportProduct
                 DetailImportProducts detailImportProducts1 = new DetailImportProducts(maMay,maPhieuNhap,soLuong);
                 ketQua.add(detailImportProducts1);
             }
+            JDBCUtil.closeConnection(connection);
         } catch (Exception e) {
             e.printStackTrace();
         }

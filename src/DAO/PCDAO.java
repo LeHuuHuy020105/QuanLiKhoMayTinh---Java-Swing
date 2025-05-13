@@ -37,6 +37,7 @@ public class PCDAO implements DAOInterface<PC> {
             pst.setDouble(16, pc.getGiaBan());
             pst.setBytes(17, pc.getHinhAnh());
             ketQua = pst.executeUpdate();
+            JDBCUtil.closeConnection(connection);
 
         } catch (Exception e) {
             e.printStackTrace();
