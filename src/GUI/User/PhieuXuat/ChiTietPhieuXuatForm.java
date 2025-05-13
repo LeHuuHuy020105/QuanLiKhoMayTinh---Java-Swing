@@ -3,22 +3,15 @@ package GUI.User.PhieuXuat;
 import BLL.*;
 import DTO.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -69,7 +62,7 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		panel.setBounds(0, 0, 887, 49);
 		contentPane.add(panel);
 		
-		JLabel lblNewLabel = new JLabel("CHI TIẾT PHIẾU NHẬP");
+		JLabel lblNewLabel = new JLabel("CHI TIẾT PHIẾU XUẤT");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel.setBounds(0, 0, 887, 49);
@@ -163,7 +156,10 @@ public class ChiTietPhieuXuatForm extends JFrame {
 		hienThiThongTinPhieuNhap();
 	}
 	public void XuatPDFPhieuXuat() {
-		writePDF.getInstance().writePhieuXuat(this.phieuXuatForm.getExportProductsSelected().getMaPhieuXuat());
+		int check_pdf = JOptionPane.showConfirmDialog(this,"Bạn muốn xuấT PDF không ?","Xác nhận xuất PDF",JOptionPane.YES_NO_OPTION);
+		if(check_pdf==JOptionPane.YES_OPTION){
+			writePDF.getInstance().writePhieuXuat(this.phieuXuatForm.getExportProductsSelected().getMaPhieuXuat());
+		}
 	}
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");

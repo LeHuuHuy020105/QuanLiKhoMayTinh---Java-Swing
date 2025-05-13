@@ -9,22 +9,15 @@ import DTO.DetailImportProducts;
 import DTO.ImportProducts;
 import DTO.User;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -155,7 +148,10 @@ public class ChiTietPhieuNhapForm extends JFrame {
 		hienThiThongTinPhieuNhap();
 	}
 	public void XuatPDFPhieuNhap() {
-		writePDF.getInstance().writePhieuNhap(this.phieuNhapForm.getImportProductsSelected().getMaphieunhap());
+		int check_pdf = JOptionPane.showConfirmDialog(this, "Bạn muốn xuất pdf không ?", "Xác nhận xuất PDF", JOptionPane.YES_NO_OPTION);
+		if(check_pdf==JOptionPane.YES_OPTION) {
+			writePDF.getInstance().writePhieuNhap(this.phieuNhapForm.getImportProductsSelected().getMaphieunhap());
+		}
 	}
 	public void hienThiThongTinPhieuNhap(){
 		DecimalFormat df = new DecimalFormat("#,###");

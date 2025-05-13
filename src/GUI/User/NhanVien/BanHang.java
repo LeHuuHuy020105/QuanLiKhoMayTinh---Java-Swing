@@ -532,7 +532,7 @@ public class BanHang extends JPanel implements updateDataToTable<Computer> {
         bill = new Bill(currentUser.getMaChiNhanh(),customer.getMaKhachHang(),currentUser.getIdUser(),null,0,totalPrice(),"offline");
         int maPhieu = billBLL.insertBill(bill);
         updateDatabaseDetailBill(maPhieu);
-        JOptionPane.showMessageDialog(this,"Nhập hàng thành công !");
+        JOptionPane.showMessageDialog(this,"Thanh toán thành công !");
         updateDatabaseInventory();
         resetNhapHang();
         writePDF.getInstance().writeHoaDonKhachHang(maPhieu);
