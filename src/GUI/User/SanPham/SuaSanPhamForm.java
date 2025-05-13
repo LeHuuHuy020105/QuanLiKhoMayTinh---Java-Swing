@@ -394,12 +394,11 @@ public class SuaSanPhamForm extends JFrame {
 		String RAM = input_RAM.getText().trim();
 		String ROM = input_ROM.getText().trim();
 		String cardManHinh = input_cardDoHoa.getText().trim();
-		double dungLuongLuuTru = Double.parseDouble(input_dungLuongLuuTru.getText().trim());
+		double dungLuongLuuTru = 0;
 		String xuatXu =  (String) cbx_xuatXu.getSelectedItem();
 		String maNhaCungCap = (String) comboBox_nhaCungCap.getSelectedItem();
 
 		double gia = 0, kichThuocMan = 0,giaBan =0;
-		dungLuongLuuTru = 0;
 		int congSuatNguon = 0;
 
 		// Kiểm tra tên sản phẩm
