@@ -419,6 +419,7 @@ public class SuaSanPhamForm extends JFrame {
 
 		// Kiểm tra dung lượng lưu trữ (double)
 		try {
+			dungLuongLuuTru = Double.parseDouble(input_dungLuongLuuTru.getText().trim());
 			if (dungLuongLuuTru <= 0) throw new NumberFormatException();
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(this, "Vui lòng nhập dung lượng lưu trữ hợp lệ (số dương)!");
