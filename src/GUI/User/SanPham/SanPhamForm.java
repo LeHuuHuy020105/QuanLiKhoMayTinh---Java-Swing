@@ -539,7 +539,17 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
                 JOptionPane.YES_NO_OPTION);
         if(luaChon==JOptionPane.YES_OPTION){
             Computer computer_Selected = getComputerSelected();
-            productsBLL.delete(computer_Selected);
+            int ketQua = productsBLL.delete(computer_Selected);
+            if (ketQua == -1) {
+                JOptionPane.showMessageDialog(this, "Không thể xóa sản phẩm này vì đã có đơn liên quan!");
+            } else if (ketQua > 0) {
+                updateTableDataFormDAO();
+                JOptionPane.showMessageDialog(this, "Xóa thành công!");
+            } else if (ketQua == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm để xóa!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định khi xóa sản phẩm !");
+            }
             updateTableDataFormDAO();
         }
     }

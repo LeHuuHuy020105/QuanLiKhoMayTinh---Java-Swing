@@ -37,6 +37,7 @@ public class SearchProduct {
         ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
         for(Inventory inventory : inventories){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computer.setSoLuong(inventory.getSoLuong());
             computers.add(computer);
         }
         if(content_Search.equals("")){
@@ -81,6 +82,7 @@ public class SearchProduct {
         ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
         for(Inventory inventory : inventories){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computer.setSoLuong(inventory.getSoLuong());
             computers.add(computer);
         }
         if(content_Search.equals("")){
@@ -221,6 +223,7 @@ public class SearchProduct {
         ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
         for(Inventory inventory : inventories){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computer.setSoLuong(inventory.getSoLuong());
             computers.add(computer);
         }
         if(content_Search.equals("")){
@@ -255,6 +258,7 @@ public class SearchProduct {
         ArrayList<Inventory>inventories = InventoryDAO.getInstance().InventoryByBranch(branch);
         for(Inventory inventory : inventories){
             Computer computer = ProductsDAO.getInstance().searchByIDProduct(inventory.getMaMay());
+            computer.setSoLuong(inventory.getSoLuong());
             computers.add(computer);
         }
         if(tenNCC.equals("")){

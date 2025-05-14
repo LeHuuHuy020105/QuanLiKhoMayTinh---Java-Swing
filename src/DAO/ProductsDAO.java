@@ -8,6 +8,7 @@ import DTO.PC;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class ProductsDAO implements DAOInterface<Computer> {
@@ -50,8 +51,11 @@ public class ProductsDAO implements DAOInterface<Computer> {
             pst.setInt(1,computer.getMaMay());
             ketQua = pst.executeUpdate();
             JDBCUtil.closeConnection(connection);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            ketQua = -1; // Giá trị đặc biệt biểu thị lỗi khóa ngoại
         } catch (Exception e) {
             e.printStackTrace();
+            ketQua =-2;
         }
         return ketQua;
     }
