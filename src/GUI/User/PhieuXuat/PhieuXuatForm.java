@@ -189,7 +189,7 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
         input_TimKiem.setBounds(156, 11, 366, 30);
         panel_5_1_1.add(input_TimKiem);
 
-        JButton btnNewButton_1 = new JButton("Làm mới");
+        JButton btnNewButton_1 = new JButton("");
         btnEffect.setIcon(btnNewButton_1, Icon.refesh);
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton_1.setBounds(546, 9, 114, 30);
@@ -256,14 +256,26 @@ public class PhieuXuatForm extends JPanel implements updateDataToTable<ExportPro
         scrollPane.setBounds(10, 216, 1247, 684);
         add(scrollPane);
 
+
         table_PhieuXuatHang = new JTable();
-        table_PhieuXuatHang.setModel(new DefaultTableModel(
-                new Object[][]{
-                },
+
+        // Tạo DefaultTableModel tùy chỉnh
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
                 new String[]{
-                        "STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo", "Thời gian hoàn thành", "Địa chỉ", "Tình trạng đơn", "Thời gian huỷ"
+                        "STT", "Mã phiếu xuất", "Người tạo", "Thời gian tạo",
+                        "Thời gian hoàn thành", "Địa chỉ", "Tình trạng đơn", "Thời gian huỷ"
                 }
-        ));
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Không cho phép chỉnh sửa bất kỳ ô nào
+            }
+        };
+
+        // Gán model cho JTable
+        table_PhieuXuatHang.setModel(model);
+
         scrollPane.setViewportView(table_PhieuXuatHang);
         Permission();
         updateTableDataFormDAO();

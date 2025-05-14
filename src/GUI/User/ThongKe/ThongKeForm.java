@@ -61,16 +61,16 @@ public class ThongKeForm extends JPanel {
         cardPanel.add(thongKeSanPhamForm, "Thống kê sản phẩm");
         cardPanel.add(thongKePhieuForm, "Thống kê phiếu");
 
-        JLabel lblNewLabel = new JLabel("26");
-        lblNewLabel.setForeground(new Color(255, 255, 255));
-        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
-        lblNewLabel.setBounds(121, 11, 68, 31);
-        panel.add(lblNewLabel);
+//        JLabel lblNewLabel = new JLabel("26");
+//        lblNewLabel.setForeground(new Color(255, 255, 255));
+//        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+//        lblNewLabel.setBounds(121, 11, 68, 31);
+//        panel.add(lblNewLabel);
 
 //        lblSnPhmTrong = new JLabel("Số hóa đơn");
         lblSnPhmTrong.setForeground(new Color(255, 255, 255));
-        lblSnPhmTrong.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblSnPhmTrong.setBounds(121, 57, 172, 31);
+        lblSnPhmTrong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblSnPhmTrong.setBounds(50, 45, 172, 31);
         panel.add(lblSnPhmTrong);
 
         JLabel lblNewLabel_1 = new JLabel("");
@@ -89,16 +89,16 @@ public class ThongKeForm extends JPanel {
         panel_1.setBounds(448, 11, 367, 110);
         add(panel_1);
 
-        JLabel lblNewLabel_2 = new JLabel("8");
-        lblNewLabel_2.setForeground(Color.WHITE);
-        lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 24));
-        lblNewLabel_2.setBounds(121, 11, 68, 31);
-        panel_1.add(lblNewLabel_2);
+//        JLabel lblNewLabel_2 = new JLabel("8");
+//        lblNewLabel_2.setForeground(Color.WHITE);
+//        lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 24));
+//        lblNewLabel_2.setBounds(121, 11, 68, 31);
+//        panel_1.add(lblNewLabel_2);
 
 //        lblNhCungCp = new JLabel("Doanh thu");
         lblNhCungCp.setForeground(Color.WHITE);
-        lblNhCungCp.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNhCungCp.setBounds(121, 57, 172, 31);
+        lblNhCungCp.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblNhCungCp.setBounds(50, 45, 300, 31);
         panel_1.add(lblNhCungCp);
 
         JLabel lblNewLabel_1_1 = new JLabel("");
@@ -117,16 +117,16 @@ public class ThongKeForm extends JPanel {
         panel_2.setBounds(866, 11, 367, 110);
         add(panel_2);
 
-        JLabel lblNewLabel_3 = new JLabel("26");
-        lblNewLabel_3.setForeground(Color.WHITE);
-        lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 24));
-        lblNewLabel_3.setBounds(121, 11, 68, 31);
-        panel_2.add(lblNewLabel_3);
+//        JLabel lblNewLabel_3 = new JLabel("26");
+//        lblNewLabel_3.setForeground(Color.WHITE);
+//        lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 24));
+//        lblNewLabel_3.setBounds(121, 11, 68, 31);
+//        panel_2.add(lblNewLabel_3);
 
 //        lblSnPhmTrong_2 = new JLabel("Sản phẩm bán ra");
         lblSnPhmTrong_2.setForeground(Color.WHITE);
-        lblSnPhmTrong_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblSnPhmTrong_2.setBounds(121, 57, 172, 31);
+        lblSnPhmTrong_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblSnPhmTrong_2.setBounds(50, 45, 172, 31);
         panel_2.add(lblSnPhmTrong_2);
 
         JLabel lblNewLabel_1_2 = new JLabel("");
@@ -134,7 +134,7 @@ public class ThongKeForm extends JPanel {
         lblNewLabel_1_2.setFont(new Font("Tahoma", Font.BOLD, 24));
         lblNewLabel_1_2.setBounds(10, 11, 89, 74);
         ImageIcon originalIcon_2 = new ImageIcon("D:\\WEB\\FontEnd & BackEnd\\BackEnd\\Java Core\\Swing\\Project\\QLKhoHangMayTinh\\src\\icon\\nhacungcap.png");
-        Image scaledImage_2 = originalIcon_2.getImage().getScaledInstance(lblNewLabel_3.getWidth(), lblNewLabel_3.getHeight(), Image.SCALE_SMOOTH);
+        Image scaledImage_2 = originalIcon_2.getImage().getScaledInstance(121, 11, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon_2 = new ImageIcon(scaledImage_1);
         lblNewLabel_1_2.setIcon(resizedIcon_2);
         panel_2.add(lblNewLabel_1_2);

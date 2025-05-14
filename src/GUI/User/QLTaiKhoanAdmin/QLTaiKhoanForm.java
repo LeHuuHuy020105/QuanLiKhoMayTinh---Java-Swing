@@ -158,7 +158,7 @@ public class QLTaiKhoanForm extends JPanel implements updateDataToTable<User> {
         textField.setBounds(156, 11, 325, 30);
         panel_5_1_1.add(textField);
 
-        JButton btnNewButton_1 = new JButton("Làm mới");
+        JButton btnNewButton_1 = new JButton("");
         btnEffect.setIcon(btnNewButton_1,Icon.refesh);
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {

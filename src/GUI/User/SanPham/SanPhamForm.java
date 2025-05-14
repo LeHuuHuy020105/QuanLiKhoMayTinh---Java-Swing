@@ -226,7 +226,7 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         input_Search.setBounds(156, 11, 325, 30);
         panel_5_1_1.add(input_Search);
 
-        JButton btnNewButton_1 = new JButton("Làm mới");
+        JButton btnNewButton_1 = new JButton("");
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 updateTableDataFormDAO();
@@ -237,15 +237,27 @@ public class SanPhamForm extends JPanel implements updateDataToTable<Computer>,E
         btnNewButton_1.setBounds(491, 9, 114, 30);
         panel_5_1_1.add(btnNewButton_1);
 
-        columnNames = new String[]{
-                "Mã máy", "Tên máy", "Số lượng", "Đơn giá","Giá bán", "Bộ xử lí","CPU", "RAM", "Bộ nhớ", "Loại máy"
+        String[] columnNames = new String[]{
+                "Mã máy", "Tên máy", "Số lượng", "Đơn giá", "Giá bán",
+                "Bộ xử lí", "CPU", "RAM", "Bộ nhớ", "Loại máy"
         };
+
+        // Tạo JTable
         table_product = new JTable();
-        table_product.setModel(new DefaultTableModel(
-                new Object[][]{
-                },
+
+        // Tạo DefaultTableModel với isCellEditable trả về false
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
                 columnNames
-        ));
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Không cho phép chỉnh sửa bất kỳ ô nào
+            }
+        };
+
+        // Gán model cho JTable
+        table_product.setModel(model);
 
         JScrollPane scrollPane = new JScrollPane(table_product);
         scrollPane.setBounds(10, 126, 1247, 774);
